@@ -12,22 +12,31 @@ Get started with Smicolon Claude Code Infrastructure in under 2 minutes!
 # Step 1: Add the Smicolon marketplace
 /plugin marketplace add smicolon https://github.com/smicolon/claude-infra
 
-# Step 2: Install the plugin
-/plugin install smicolon-standards
+# Step 2: Install plugins for your tech stack
+/plugin install smi-django        # Django backend (5 agents)
+/plugin install smi-nextjs        # Next.js frontend (4 agents)
+/plugin install smi-architect        # System architecture (1 agent)
 
 # Step 3: Verify installation
 /help
 ```
 
-That's it! All 14 agents are now available in ALL your projects automatically.
+That's it! Only the agents you need are now available in ALL your projects automatically.
 
 **Start using immediately:**
 ```bash
 # In any project directory
 claude
 
-# Try an agent
+# Try an agent (from installed plugins)
 @django-architect "Design a user authentication system"
+@nextjs-architect "Design a dashboard layout"
+@system-architect "Create an ERD for our database"
+```
+
+**Want everything?** Install all plugins:
+```bash
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
 ```
 
 ---
@@ -70,27 +79,33 @@ The installer will:
 
 ## What You Get
 
-### 14 Specialized Agents
+### 5 Independent Plugins with 14 Agents Total
 
-**Backend:**
-- `@django-architect` - Django system architecture
-- `@django-builder` - Django feature implementation
-- `@django-feature-based` - Large-scale Django architecture
-- `@django-tester` - Django testing (90%+ coverage)
-- `@django-reviewer` - Django security review
-- `@nestjs-architect` - NestJS architecture
-- `@nestjs-builder` - NestJS implementation
-- `@nestjs-tester` - NestJS testing
+**smi-django** (5 agents):
+- `@django-architect` - System architecture
+- `@django-builder` - Feature implementation
+- `@django-feature-based` - Large-scale architecture
+- `@django-tester` - Testing (90%+ coverage)
+- `@django-reviewer` - Security review
 
-**Frontend:**
-- `@nextjs-architect` - Next.js/React architecture
-- `@nextjs-modular` - Large-scale Next.js modular architecture
-- `@nuxtjs-architect` - Nuxt.js/Vue 3 architecture
-- `@frontend-visual` - Visual QA (Playwright + Figma MCP)
-- `@frontend-tester` - Frontend testing (unit/integration/E2E/a11y)
+**smi-nestjs** (3 agents):
+- `@nestjs-architect` - Backend architecture
+- `@nestjs-builder` - Feature implementation
+- `@nestjs-tester` - Testing
 
-**System:**
-- `@system-architect` - Eraser.io diagram-as-code (ERD, flowcharts, cloud, sequence, BPMN)
+**smi-nextjs** (4 agents):
+- `@nextjs-architect` - Frontend architecture
+- `@nextjs-modular` - Large-scale modular architecture
+- `@frontend-visual` - Visual QA (Playwright + Figma)
+- `@frontend-tester` - Testing (unit/integration/E2E/a11y)
+
+**smi-nuxtjs** (3 agents):
+- `@nuxtjs-architect` - Vue 3 architecture
+- `@frontend-visual` - Visual QA (Playwright + Figma)
+- `@frontend-tester` - Testing
+
+**smi-architect** (1 agent):
+- `@system-architect` - Eraser.io diagrams (ERD, flowcharts, cloud, sequence, BPMN)
 
 ### Automatic Convention Enforcement
 

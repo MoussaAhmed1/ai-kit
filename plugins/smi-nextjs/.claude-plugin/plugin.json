@@ -1,0 +1,39 @@
+{
+  "name": "smi-nextjs",
+  "displayName": "Smicolon Next.js",
+  "version": "1.0.0",
+  "description": "Smicolon company standards for Next.js/React projects with 4 specialized agents including visual QA and testing",
+  "author": {
+    "name": "Smicolon",
+    "email": "dev@smicolon.com",
+    "url": "https://github.com/smicolon"
+  },
+  "homepage": "https://github.com/smicolon/claude-infra",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smicolon/claude-infra"
+  },
+  "keywords": [
+    "nextjs",
+    "react",
+    "frontend",
+    "typescript",
+    "testing",
+    "architecture",
+    "visual-qa",
+    "accessibility",
+    "standards"
+  ],
+  "agents": [
+    "nextjs-architect",
+    "nextjs-modular",
+    "frontend-visual",
+    "frontend-tester"
+  ],
+  "hooks": [
+    "user-prompt-submit-hook",
+    "post-write-hook",
+    "post-write-visual-hook"
+  ],
+  "license": "MIT"
+}

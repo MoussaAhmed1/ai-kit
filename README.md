@@ -18,25 +18,29 @@ This repository provides Claude Code agents and hooks that automatically enforce
 
 ### 🎉 Recommended: Plugin Installation
 
-Install as a Claude Code plugin for automatic updates and easy management:
+Install individual plugins based on your tech stack:
 
 ```bash
 # Add the Smicolon marketplace (one-time setup)
-/plugin marketplace add smicolon-marketplace https://github.com/smicolon/claude-infra
+/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
 
-# Install the plugin
-/plugin install smicolon-standards
+# Install what you need
+/plugin install smi-django        # Django backend
+/plugin install smi-nestjs        # NestJS backend
+/plugin install smi-nextjs        # Next.js frontend
+/plugin install smi-nuxtjs        # Nuxt.js frontend
+/plugin install smi-architect        # System architecture diagrams
 
 # Verify - agents are immediately available!
 /help
 ```
 
 **Benefits:**
-- ✅ Automatic updates across all projects
-- ✅ Zero manual setup
-- ✅ Centralized version management
-- ✅ Easy team distribution via marketplace
-- ✅ Plugin discovery through registry
+- ✅ Install only what you need
+- ✅ Independent versioning per stack
+- ✅ Automatic updates
+- ✅ Smaller, faster installs
+- ✅ Mix and match (e.g., Django + Next.js)
 
 See [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md) for complete plugin installation guide.
 
@@ -270,18 +274,38 @@ Violations are flagged immediately with fix suggestions.
 Repository structure:
 
 ```
-claude-infra/
-├── .claude-plugin/       # Plugin manifest
-├── agents/               # 14 specialized agents
-├── hooks/                # Enforcement hooks
-├── scripts/
-│   └── install.sh        # Smart installer (backwards compatibility)
-├── templates/            # Project templates
-│   ├── django-project/
-│   ├── nestjs-project/
-│   ├── nextjs-project/
-│   └── nuxtjs-project/
-└── marketplace-registry.json
+claude-infra/                     # Marketplace repository
+├── .claude-plugin/
+│   └── marketplace.json          # Marketplace listing all plugins
+├── plugins/                      # Individual plugins
+│   ├── smi-django/
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   ├── agents/              # 5 Django agents
+│   │   ├── hooks/               # Django-specific hooks
+│   │   └── README.md
+│   ├── smi-nestjs/
+│   │   ├── .claude-plugin/
+│   │   ├── agents/              # 3 NestJS agents
+│   │   ├── hooks/
+│   │   └── README.md
+│   ├── smi-nextjs/
+│   │   ├── .claude-plugin/
+│   │   ├── agents/              # 4 Next.js agents
+│   │   ├── hooks/
+│   │   └── README.md
+│   ├── smi-nuxtjs/
+│   │   ├── .claude-plugin/
+│   │   ├── agents/              # 3 Nuxt.js agents
+│   │   ├── hooks/
+│   │   └── README.md
+│   └── smi-architect/
+│       ├── .claude-plugin/
+│       ├── agents/              # 1 System architect agent
+│       └── README.md
+├── scripts/                      # Legacy script installation
+├── templates/                    # Project templates
+└── README.md
 ```
 
 After global installation (legacy `~/.smicolon/`):
@@ -466,10 +490,10 @@ bash /path/to/claude-infra/scripts/install.sh
 
 ## Support
 
-- Documentation: This file and agent files in `.claude/agents/`
+- Documentation: This file and plugin-specific README files
 - Issues: Create issues in the repository
 - Updates:
-  - Plugin install: `/plugin update smicolon-standards`
+  - Plugin install: `/plugin update smi-django` (or other plugin names)
   - Script install: `cd ~/.smicolon && git pull`
 
 ## License

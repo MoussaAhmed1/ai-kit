@@ -1,0 +1,62 @@
+{
+  "name": "smicolon-marketplace",
+  "displayName": "Smicolon Plugin Marketplace",
+  "version": "1.0.0",
+  "description": "Official marketplace for Smicolon development tools and standards",
+  "owner": {
+    "name": "Smicolon Development Team",
+    "email": "dev@smicolon.com",
+    "url": "https://github.com/smicolon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smicolon/claude-infra"
+  },
+  "plugins": [
+    {
+      "name": "smi-django",
+      "displayName": "Smicolon Django",
+      "version": "1.0.0",
+      "description": "Company standards for Django projects with 5 specialized agents and automatic convention enforcement",
+      "source": "./plugins/smi-django",
+      "author": "Smicolon",
+      "keywords": ["django", "python", "backend", "testing", "architecture"]
+    },
+    {
+      "name": "smi-nestjs",
+      "displayName": "Smicolon NestJS",
+      "version": "1.0.0",
+      "description": "Company standards for NestJS/TypeScript backend projects with 3 specialized agents",
+      "source": "./plugins/smi-nestjs",
+      "author": "Smicolon",
+      "keywords": ["nestjs", "typescript", "backend", "testing", "architecture"]
+    },
+    {
+      "name": "smi-nextjs",
+      "displayName": "Smicolon Next.js",
+      "version": "1.0.0",
+      "description": "Company standards for Next.js/React projects with 4 specialized agents including visual QA",
+      "source": "./plugins/smi-nextjs",
+      "author": "Smicolon",
+      "keywords": ["nextjs", "react", "frontend", "typescript", "visual-qa", "accessibility"]
+    },
+    {
+      "name": "smi-nuxtjs",
+      "displayName": "Smicolon Nuxt.js",
+      "version": "1.0.0",
+      "description": "Company standards for Nuxt.js/Vue 3 projects with specialized agents including visual QA",
+      "source": "./plugins/smi-nuxtjs",
+      "author": "Smicolon",
+      "keywords": ["nuxtjs", "vue", "vue3", "frontend", "typescript", "visual-qa", "accessibility"]
+    },
+    {
+      "name": "smi-architect",
+      "displayName": "Smicolon Architect",
+      "version": "1.0.0",
+      "description": "System architecture and diagram-as-code with Eraser.io integration",
+      "source": "./plugins/smi-architect",
+      "author": "Smicolon",
+      "keywords": ["architecture", "diagrams", "eraser", "erd", "flowchart", "cloud-architecture"]
+    }
+  ]
+}

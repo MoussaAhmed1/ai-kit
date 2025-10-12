@@ -1,0 +1,31 @@
+{
+  "name": "smi-architect",
+  "displayName": "Smicolon Architect",
+  "version": "1.0.0",
+  "description": "Smicolon company standards for system architecture and diagram-as-code with Eraser.io integration",
+  "author": {
+    "name": "Smicolon",
+    "email": "dev@smicolon.com",
+    "url": "https://github.com/smicolon"
+  },
+  "homepage": "https://github.com/smicolon/claude-infra",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smicolon/claude-infra"
+  },
+  "keywords": [
+    "architecture",
+    "diagrams",
+    "eraser",
+    "erd",
+    "flowchart",
+    "sequence-diagram",
+    "cloud-architecture",
+    "bpmn",
+    "system-design"
+  ],
+  "agents": [
+    "system-architect"
+  ],
+  "license": "MIT"
+}
