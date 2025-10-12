@@ -1,0 +1,29 @@
+{
+  "name": "Smicolon Nuxt.js Project Template",
+  "version": "1.0.0",
+  "conventions": {
+    "typescript": {
+      "strict": true,
+      "no_any": true
+    },
+    "vue": {
+      "version": "3",
+      "composition_api": true,
+      "script_setup": true
+    },
+    "forms": {
+      "validation": "zod",
+      "library": "vee-validate"
+    },
+    "data_fetching": {
+      "composables": ["useFetch", "useAsyncData"],
+      "error_handling": "required"
+    },
+    "state": "pinia",
+    "styling": "tailwind"
+  },
+  "smicolon": {
+    "enabled": true,
+    "enforce_conventions": true
+  }
+}

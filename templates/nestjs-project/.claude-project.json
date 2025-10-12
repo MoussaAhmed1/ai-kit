@@ -1,0 +1,34 @@
+{
+  "name": "Smicolon NestJS Project Template",
+  "version": "1.0.0",
+  "conventions": {
+    "typescript": {
+      "strict": true,
+      "no_any": true
+    },
+    "imports": {
+      "style": "absolute-from-barrel-exports",
+      "pattern": "import { Entity } from 'src/path'"
+    },
+    "entities": {
+      "primary_key": "uuid",
+      "timestamps": true,
+      "soft_delete": true,
+      "orm": "typeorm"
+    },
+    "validation": {
+      "dtos": "class-validator",
+      "transform": "class-transformer"
+    },
+    "architecture": {
+      "dependency_injection": true,
+      "guards_required": true,
+      "swagger": true
+    }
+  },
+  "smicolon": {
+    "enabled": true,
+    "enforce_conventions": true,
+    "backend": "nestjs"
+  }
+}

@@ -1,0 +1,39 @@
+# Smicolon Claude Code Infrastructure
+# Git ignore file
+
+# Local development
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Test directories
+test/
+tmp/
+*.tmp
+
+# Build artifacts
+dist/
+*.tar.gz
+*.zip
+
+# Claude Code - ignore local settings and test installations
+.claude/settings.local.json
+.claude/agents/
+.claude/hooks/
+.claude/custom/
+
+# Keep CLAUDE.md (documentation for contributors)
+!.claude/CLAUDE.md
+
+# OS files
+Thumbs.db
+.directory
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs
+*.log

@@ -1,0 +1,21 @@
+{
+  "name": "Smicolon Django Project Template",
+  "version": "1.0.0",
+  "conventions": {
+    "imports": "absolute-only",
+    "models": {
+      "primary_key": "uuid",
+      "timestamps": true,
+      "soft_delete": true
+    },
+    "architecture": {
+      "business_logic": "services",
+      "views": "thin",
+      "type_hints": "required"
+    }
+  },
+  "smicolon": {
+    "enabled": true,
+    "enforce_conventions": true
+  }
+}

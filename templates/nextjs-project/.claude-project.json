@@ -1,0 +1,23 @@
+{
+  "name": "Smicolon Next.js Project Template",
+  "version": "1.0.0",
+  "conventions": {
+    "typescript": {
+      "strict": true,
+      "no_any": true
+    },
+    "forms": {
+      "validation": "zod",
+      "library": "react-hook-form"
+    },
+    "api": {
+      "client": "tanstack-query",
+      "error_handling": "required"
+    },
+    "styling": "tailwind"
+  },
+  "smicolon": {
+    "enabled": true,
+    "enforce_conventions": true
+  }
+}

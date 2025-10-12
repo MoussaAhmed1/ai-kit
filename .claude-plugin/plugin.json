@@ -1,0 +1,45 @@
+{
+  "name": "smicolon-standards",
+  "displayName": "Smicolon Development Standards",
+  "version": "1.0.0",
+  "description": "Company-wide development standards enforcement for Django, NestJS, Next.js, and Nuxt.js projects with specialized agents and hooks",
+  "author": "Smicolon",
+  "homepage": "https://github.com/smicolon/claude-infra",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smicolon/claude-infra"
+  },
+  "keywords": [
+    "django",
+    "nestjs",
+    "nextjs",
+    "nuxtjs",
+    "testing",
+    "architecture",
+    "code-review",
+    "standards",
+    "conventions"
+  ],
+  "agents": [
+    "django-architect",
+    "django-builder",
+    "django-feature-based",
+    "django-tester",
+    "django-reviewer",
+    "nestjs-architect",
+    "nestjs-builder",
+    "nestjs-tester",
+    "nextjs-architect",
+    "nextjs-modular",
+    "nuxtjs-architect",
+    "frontend-visual",
+    "frontend-tester",
+    "system-architect"
+  ],
+  "hooks": [
+    "user-prompt-submit-hook",
+    "post-write-hook",
+    "post-write-visual-hook"
+  ],
+  "license": "MIT"
+}
