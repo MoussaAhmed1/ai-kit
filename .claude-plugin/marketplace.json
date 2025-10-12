@@ -19,7 +19,11 @@
       "version": "1.0.0",
       "description": "Company standards for Django projects with 5 specialized agents and automatic convention enforcement",
       "source": "./plugins/smi-django",
-      "author": "Smicolon",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
       "keywords": ["django", "python", "backend", "testing", "architecture"]
     },
     {
@@ -28,7 +32,11 @@
       "version": "1.0.0",
       "description": "Company standards for NestJS/TypeScript backend projects with 3 specialized agents",
       "source": "./plugins/smi-nestjs",
-      "author": "Smicolon",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
       "keywords": ["nestjs", "typescript", "backend", "testing", "architecture"]
     },
     {
@@ -37,8 +45,19 @@
       "version": "1.0.0",
       "description": "Company standards for Next.js/React projects with 4 specialized agents including visual QA",
       "source": "./plugins/smi-nextjs",
-      "author": "Smicolon",
-      "keywords": ["nextjs", "react", "frontend", "typescript", "visual-qa", "accessibility"]
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "keywords": [
+        "nextjs",
+        "react",
+        "frontend",
+        "typescript",
+        "visual-qa",
+        "accessibility"
+      ]
     },
     {
       "name": "smi-nuxtjs",
@@ -46,8 +65,20 @@
       "version": "1.0.0",
       "description": "Company standards for Nuxt.js/Vue 3 projects with specialized agents including visual QA",
       "source": "./plugins/smi-nuxtjs",
-      "author": "Smicolon",
-      "keywords": ["nuxtjs", "vue", "vue3", "frontend", "typescript", "visual-qa", "accessibility"]
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "keywords": [
+        "nuxtjs",
+        "vue",
+        "vue3",
+        "frontend",
+        "typescript",
+        "visual-qa",
+        "accessibility"
+      ]
     },
     {
       "name": "smi-architect",
@@ -55,8 +86,19 @@
       "version": "1.0.0",
       "description": "System architecture and diagram-as-code with Eraser.io integration",
       "source": "./plugins/smi-architect",
-      "author": "Smicolon",
-      "keywords": ["architecture", "diagrams", "eraser", "erd", "flowchart", "cloud-architecture"]
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "keywords": [
+        "architecture",
+        "diagrams",
+        "eraser",
+        "erd",
+        "flowchart",
+        "cloud-architecture"
+      ]
     }
   ]
 }
