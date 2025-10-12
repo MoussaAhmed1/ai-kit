@@ -10,7 +10,9 @@
 
 ```bash
 # 1. Add Smicolon marketplace
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
+# or
+/plugin marketplace add smicolon/claude-infra
 
 # 2. Install plugins for your tech stack
 /plugin install smi-django          # Django (5 agents)
@@ -47,6 +49,7 @@ Done! Agents are now available in **all your projects** automatically.
 ## 5 Available Plugins
 
 ### 🐍 smi-django (5 agents + 3 commands)
+
 Django backend development with Python
 
 ```bash
@@ -54,6 +57,7 @@ Django backend development with Python
 ```
 
 **Agents:**
+
 - `@django-architect` - System architecture design
 - `@django-builder` - Feature implementation
 - `@django-feature-based` - Large-scale feature-based architecture
@@ -61,11 +65,13 @@ Django backend development with Python
 - `@django-reviewer` - Security and code review
 
 **Commands:**
+
 - `/model-create` - Create Django models with Smicolon conventions
 - `/api-endpoint` - Generate complete REST API endpoints
 - `/test-generate` - Generate comprehensive tests (90%+ coverage)
 
 ### 🦅 smi-nestjs (3 agents + 1 command)
+
 NestJS backend development with TypeScript
 
 ```bash
@@ -73,14 +79,17 @@ NestJS backend development with TypeScript
 ```
 
 **Agents:**
+
 - `@nestjs-architect` - Backend architecture design
 - `@nestjs-builder` - Feature implementation
 - `@nestjs-tester` - Test writing
 
 **Commands:**
+
 - `/module-create` - Create complete NestJS modules
 
 ### ⚛️ smi-nextjs (4 agents + 1 command)
+
 Next.js frontend development with React
 
 ```bash
@@ -88,15 +97,18 @@ Next.js frontend development with React
 ```
 
 **Agents:**
+
 - `@nextjs-architect` - Frontend architecture
 - `@nextjs-modular` - Large-scale modular architecture
 - `@frontend-visual` - Visual QA (Playwright + Figma MCP)
 - `@frontend-tester` - Testing (unit/integration/E2E/accessibility)
 
 **Commands:**
+
 - `/component-create` - Create React/Next.js components
 
 ### 💚 smi-nuxtjs (3 agents)
+
 Nuxt.js frontend development with Vue 3
 
 ```bash
@@ -104,11 +116,13 @@ Nuxt.js frontend development with Vue 3
 ```
 
 **Agents:**
+
 - `@nuxtjs-architect` - Vue 3 architecture
 - `@frontend-visual` - Visual QA (Playwright + Figma MCP)
 - `@frontend-tester` - Testing (unit/integration/E2E/accessibility)
 
 ### 🏗️ smi-architect (1 agent + 1 command)
+
 System architecture and diagram-as-code
 
 ```bash
@@ -116,9 +130,11 @@ System architecture and diagram-as-code
 ```
 
 **Agent:**
+
 - `@system-architect` - Eraser.io diagrams (ERD, flowcharts, cloud, sequence, BPMN)
 
 **Commands:**
+
 - `/diagram-create` - Create system diagrams with Eraser.io
 
 ---
@@ -128,6 +144,7 @@ System architecture and diagram-as-code
 ### Specialized Agents (14 total)
 
 Each plugin includes agents specialized for that tech stack with deep knowledge of:
+
 - Architecture patterns
 - Best practices
 - Testing strategies
@@ -137,6 +154,7 @@ Each plugin includes agents specialized for that tech stack with deep knowledge 
 ### Interactive Commands (6 total)
 
 Slash commands provide step-by-step interactive workflows:
+
 - `/model-create` - Django model generation
 - `/api-endpoint` - Complete API endpoint scaffolding
 - `/test-generate` - Comprehensive test generation
@@ -147,12 +165,14 @@ Slash commands provide step-by-step interactive workflows:
 ### Multi-Agent Workflows
 
 Pre-built orchestration workflows in `workflows/`:
+
 - `feature-development.md` - End-to-end feature development (6 phases)
 - `code-review.md` - Comprehensive code review workflow (6 phases)
 
 ### Automatic Convention Enforcement
 
 Hooks automatically enforce company standards:
+
 - ✅ Import patterns (absolute imports with aliases)
 - ✅ Model structure (UUID, timestamps, soft deletes)
 - ✅ Type safety (strict TypeScript, Python type hints)
@@ -163,6 +183,7 @@ Hooks automatically enforce company standards:
 ### Visual QA Integration
 
 Frontend plugins integrate with:
+
 - **Playwright MCP** - Automated browser testing
 - **Figma MCP** - Design comparison and validation
 
@@ -268,6 +289,7 @@ smicolon-init
 ### Django Standards
 
 **Import Pattern:**
+
 ```python
 # ✅ CORRECT - Absolute modular imports with aliases
 import users.models as _models
@@ -281,6 +303,7 @@ from users.models import User
 ```
 
 **Model Pattern:**
+
 ```python
 import uuid
 from django.db import models
@@ -293,6 +316,7 @@ class YourModel(models.Model):
 ```
 
 **Required:**
+
 - UUID primary keys
 - Timestamps (created_at, updated_at)
 - Soft deletes (is_deleted)
@@ -303,34 +327,37 @@ class YourModel(models.Model):
 ### NestJS Standards
 
 **Import Pattern:**
+
 ```typescript
 // ✅ CORRECT - Absolute imports from barrel exports
-import { User } from 'src/users/entities'
-import { UsersService } from 'src/users/services'
+import { User } from "src/users/entities";
+import { UsersService } from "src/users/services";
 
 // ❌ WRONG
-import { User } from './entities/user.entity'
+import { User } from "./entities/user.entity";
 ```
 
 **Entity Pattern:**
+
 ```typescript
-@Entity('users')
+@Entity("users")
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 
   @DeleteDateColumn()
-  deletedAt?: Date
+  deletedAt?: Date;
 }
 ```
 
 **Required:**
+
 - UUID primary keys
 - Timestamps (createdAt, updatedAt)
 - Soft deletes (deletedAt)
@@ -341,6 +368,7 @@ export class User {
 ### Frontend Standards (Next.js/Nuxt.js)
 
 **Next.js:**
+
 - TypeScript strict mode (no `any`)
 - Zod validation for all forms
 - TanStack Query for API calls
@@ -349,6 +377,7 @@ export class User {
 - WCAG 2.1 AA accessibility
 
 **Nuxt.js:**
+
 - TypeScript strict mode
 - Vue 3 Composition API (`<script setup lang="ts">`)
 - VeeValidate + Zod for forms
@@ -393,24 +422,27 @@ claude-infra/                     # Smicolon Marketplace
 
 Create `.claude/custom/project-context.md` in your project:
 
-```markdown
+````markdown
 # My Project
 
 ## Tech Stack
+
 - Django 5.0 + PostgreSQL
 - Next.js 15 + TypeScript
 
 ## Custom Rules
+
 - Use Redis for session storage
 - All API endpoints require JWT
 - Rate limiting: 100 requests/minute
 
 ## Environment
+
 \```bash
 python manage.py migrate
 npm run dev
 \```
-```
+````
 
 ### Company-Wide Customization
 
@@ -462,16 +494,19 @@ git pull
 ### Create Your Own Marketplace
 
 1. **Fork this repository**
+
    ```bash
    git clone https://github.com/smicolon/claude-infra.git your-company-standards
    ```
 
 2. **Customize**
+
    - Edit `plugins/*/agents/` for your conventions
    - Modify `plugins/*/hooks/` for your standards
    - Update `.claude-plugin/marketplace.json`
 
 3. **Distribute**
+
    ```bash
    # Push to your GitHub
    git push origin main
@@ -531,6 +566,7 @@ chmod +x .claude/hooks/*.sh
 ### Wrong project type detected?
 
 Script installation only - re-run installer:
+
 ```bash
 bash /path/to/claude-infra/scripts/install.sh
 # Manually select project type
@@ -539,6 +575,7 @@ bash /path/to/claude-infra/scripts/install.sh
 ### Need different agents?
 
 Install additional plugins:
+
 ```bash
 # Add frontend to Django project
 /plugin install smi-nextjs
