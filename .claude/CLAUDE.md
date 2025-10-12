@@ -13,17 +13,20 @@ This repository is a **Claude Code Marketplace** providing 5 independent plugins
 ```
 claude-infra/                     # Smicolon Marketplace
 ├── .claude-plugin/
-│   └── marketplace.json          # Marketplace manifest listing all 5 plugins
+│   └── marketplace.json          # Single source of truth - all plugin configuration
 ├── plugins/
-│   ├── smi-django/               # Django plugin (5 agents)
-│   │   ├── .claude-plugin/plugin.json
-│   │   ├── agents/
-│   │   ├── hooks/
+│   ├── smi-django/               # Django plugin (5 agents, 3 commands)
+│   │   ├── agents/               # Agent definitions
+│   │   ├── commands/             # Slash commands
+│   │   ├── hooks/                # Auto-injection hooks
 │   │   └── README.md
-│   ├── smi-nestjs/               # NestJS plugin (3 agents)
-│   ├── smi-nextjs/               # Next.js plugin (4 agents)
-│   ├── smi-nuxtjs/               # Nuxt.js plugin (3 agents)
-│   └── smi-architect/            # System architecture plugin (1 agent)
+│   ├── smi-nestjs/               # NestJS plugin (3 agents, 1 command)
+│   ├── smi-nextjs/               # Next.js plugin (4 agents, 1 command)
+│   ├── smi-nuxtjs/               # Nuxt.js plugin (3 agents, 0 commands)
+│   └── smi-architect/            # System architecture plugin (1 agent, 1 command)
+├── workflows/                    # Multi-agent orchestration workflows
+│   ├── feature-development.md
+│   └── code-review.md
 ├── scripts/
 │   └── install.sh                # Legacy script installation only
 ├── templates/                    # Project templates with pre-configured conventions
@@ -133,6 +136,87 @@ smicolon-init
 ### Agent Usage Pattern
 
 Agents are invoked with `@agent-name` syntax in Claude Code. They enforce specific conventions for each framework through detailed prompt engineering. Each plugin's agents are only available when that plugin is installed.
+
+## Command System
+
+Each plugin includes specialized slash commands that provide interactive workflows for common development tasks.
+
+### Command Categories
+
+**smi-django Commands:**
+- `/model-create` - Create Django models following Smicolon conventions
+- `/api-endpoint` - Create complete REST API endpoints (serializer, service, view, tests)
+- `/test-generate` - Generate comprehensive tests (90%+ coverage target)
+
+**smi-nestjs Commands:**
+- `/module-create` - Create complete NestJS modules (entity, DTOs, service, controller)
+
+**smi-nextjs Commands:**
+- `/component-create` - Create React/Next.js components (UI, forms, server components)
+
+**smi-architect Commands:**
+- `/diagram-create` - Create system diagrams using Eraser.io (ERD, cloud, sequence, flowcharts)
+
+### Command Usage Pattern
+
+Commands are invoked with `/command-name` syntax. They provide step-by-step interactive workflows:
+
+```bash
+# Create a Django model
+/model-create
+
+# Create an API endpoint
+/api-endpoint
+
+# Generate tests
+/test-generate
+
+# Create a system diagram
+/diagram-create
+```
+
+## Workflow System
+
+Multi-agent orchestration workflows that coordinate specialized agents for complex tasks.
+
+### Available Workflows
+
+**feature-development.md** - Complete feature development from architecture to deployment
+- Phase 1: Architecture & Design
+- Phase 2: Backend Implementation
+- Phase 3: Frontend Implementation
+- Phase 4: Testing (90%+ coverage)
+- Phase 5: Code Review & Security
+- Phase 6: Documentation & Deployment
+
+**code-review.md** - Comprehensive code review workflow
+- Phase 1: Convention Compliance
+- Phase 2: Security Review
+- Phase 3: Performance Review
+- Phase 4: Testing Coverage
+- Phase 5: Code Quality
+- Phase 6: Documentation
+
+### Workflow Usage Example
+
+```bash
+# Full feature development workflow
+# 1. Architecture
+@system-architect "Create ERD for user authentication"
+@django-architect "Design auth API with JWT"
+
+# 2. Implementation
+@django-builder "Implement authentication endpoints"
+
+# 3. Testing
+@django-tester "Generate comprehensive auth tests"
+
+# 4. Review
+@django-reviewer "Security audit of authentication"
+
+# 5. Visual verification (if frontend)
+@frontend-visual "Verify login page design"
+```
 
 ## Hook System
 
@@ -362,8 +446,7 @@ claude @frontend-visual
 
 ### Core Configuration
 
-- `.claude-plugin/marketplace.json` - Marketplace manifest listing all 5 plugins
-- `plugins/smi-django/.claude-plugin/plugin.json` - Django plugin manifest (example)
+- `.claude-plugin/marketplace.json` - Single source of truth for all plugin configuration
 - `plugins/smi-django/hooks/user-prompt-submit-hook.sh` - Convention injection logic (most critical)
 - `plugins/smi-django/agents/django-architect.md` - Example agent structure and conventions
 - `scripts/install.sh` - Legacy installation logic and project detection
@@ -386,7 +469,7 @@ claude @frontend-visual
 1. Choose the appropriate plugin (e.g., `plugins/smi-django/`)
 2. Create agent file in `plugins/smi-django/agents/{role}.md`
 3. Follow existing agent structure (role definition, conventions, deliverables)
-4. Update `plugins/smi-django/.claude-plugin/plugin.json` to register the agent
+4. Update `.claude-plugin/marketplace.json` to register the agent in the plugin's `agents` array
 5. Update plugin's README.md to document new agent
 6. Update root README.md to reflect new agent count
 7. Update CHANGELOG.md with the addition
@@ -398,17 +481,17 @@ claude @frontend-visual
 2. Update corresponding hook in `plugins/*/hooks/user-prompt-submit-hook.sh`
 3. Test with sample project
 4. Update plugin's README.md if visible changes
-5. Increment plugin version in `plugins/*/.claude-plugin/plugin.json`
+5. Increment plugin version in `.claude-plugin/marketplace.json`
 6. Update CHANGELOG.md
 
 ### Creating New Plugins
 
 1. Create `plugins/smi-{name}/` directory
-2. Add `.claude-plugin/plugin.json` with plugin metadata
-3. Create `agents/` directory with agent files
+2. Create `agents/` directory with agent files
+3. Create `commands/` directory with command files (if needed)
 4. Create `hooks/` directory with hook scripts (if needed)
 5. Create plugin README.md
-6. Update `.claude-plugin/marketplace.json` to register the plugin
+6. Add plugin configuration to `.claude-plugin/marketplace.json` in the `plugins` array
 7. Update root README.md to document the new plugin
 8. Update CHANGELOG.md
 
@@ -474,7 +557,8 @@ Old/experimental code goes in `archive/` directory. Do not delete - useful for r
 
 ### Version Management
 
-- Each plugin has independent versioning in `plugins/*/.claude-plugin/plugin.json`
-- Marketplace version in `.claude-plugin/marketplace.json`
+- Each plugin has independent versioning in `.claude-plugin/marketplace.json` (in each plugin object)
+- Marketplace version in `.claude-plugin/marketplace.json` (at root level)
 - Version history documented in `CHANGELOG.md`
 - Semantic versioning recommended (MAJOR.MINOR.PATCH)
+- Test your own work, and make sure it's working please

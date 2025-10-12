@@ -46,7 +46,7 @@ Done! Agents are now available in **all your projects** automatically.
 
 ## 5 Available Plugins
 
-### 🐍 smi-django (5 agents)
+### 🐍 smi-django (5 agents + 3 commands)
 Django backend development with Python
 
 ```bash
@@ -60,7 +60,12 @@ Django backend development with Python
 - `@django-tester` - Test writing (90%+ coverage target)
 - `@django-reviewer` - Security and code review
 
-### 🦅 smi-nestjs (3 agents)
+**Commands:**
+- `/model-create` - Create Django models with Smicolon conventions
+- `/api-endpoint` - Generate complete REST API endpoints
+- `/test-generate` - Generate comprehensive tests (90%+ coverage)
+
+### 🦅 smi-nestjs (3 agents + 1 command)
 NestJS backend development with TypeScript
 
 ```bash
@@ -72,7 +77,10 @@ NestJS backend development with TypeScript
 - `@nestjs-builder` - Feature implementation
 - `@nestjs-tester` - Test writing
 
-### ⚛️ smi-nextjs (4 agents)
+**Commands:**
+- `/module-create` - Create complete NestJS modules
+
+### ⚛️ smi-nextjs (4 agents + 1 command)
 Next.js frontend development with React
 
 ```bash
@@ -84,6 +92,9 @@ Next.js frontend development with React
 - `@nextjs-modular` - Large-scale modular architecture
 - `@frontend-visual` - Visual QA (Playwright + Figma MCP)
 - `@frontend-tester` - Testing (unit/integration/E2E/accessibility)
+
+**Commands:**
+- `/component-create` - Create React/Next.js components
 
 ### 💚 smi-nuxtjs (3 agents)
 Nuxt.js frontend development with Vue 3
@@ -97,7 +108,7 @@ Nuxt.js frontend development with Vue 3
 - `@frontend-visual` - Visual QA (Playwright + Figma MCP)
 - `@frontend-tester` - Testing (unit/integration/E2E/accessibility)
 
-### 🏗️ smi-architect (1 agent)
+### 🏗️ smi-architect (1 agent + 1 command)
 System architecture and diagram-as-code
 
 ```bash
@@ -106,6 +117,9 @@ System architecture and diagram-as-code
 
 **Agent:**
 - `@system-architect` - Eraser.io diagrams (ERD, flowcharts, cloud, sequence, BPMN)
+
+**Commands:**
+- `/diagram-create` - Create system diagrams with Eraser.io
 
 ---
 
@@ -119,6 +133,22 @@ Each plugin includes agents specialized for that tech stack with deep knowledge 
 - Testing strategies
 - Security requirements
 - Performance optimization
+
+### Interactive Commands (6 total)
+
+Slash commands provide step-by-step interactive workflows:
+- `/model-create` - Django model generation
+- `/api-endpoint` - Complete API endpoint scaffolding
+- `/test-generate` - Comprehensive test generation
+- `/module-create` - NestJS module scaffolding
+- `/component-create` - React/Next.js component creation
+- `/diagram-create` - System diagram generation
+
+### Multi-Agent Workflows
+
+Pre-built orchestration workflows in `workflows/`:
+- `feature-development.md` - End-to-end feature development (6 phases)
+- `code-review.md` - Comprehensive code review workflow (6 phases)
 
 ### Automatic Convention Enforcement
 
@@ -333,17 +363,20 @@ export class User {
 ```
 claude-infra/                     # Smicolon Marketplace
 ├── .claude-plugin/
-│   └── marketplace.json          # Lists all 5 plugins
+│   └── marketplace.json          # Single source of truth - all plugin config
 ├── plugins/
 │   ├── smi-django/               # Django plugin
-│   │   ├── .claude-plugin/plugin.json
 │   │   ├── agents/              # 5 agents
+│   │   ├── commands/            # 3 slash commands
 │   │   ├── hooks/               # 3 hooks
 │   │   └── README.md
 │   ├── smi-nestjs/               # NestJS plugin
 │   ├── smi-nextjs/               # Next.js plugin
 │   ├── smi-nuxtjs/               # Nuxt.js plugin
 │   └── smi-architect/            # System architecture plugin
+├── workflows/                    # Multi-agent orchestration workflows
+│   ├── feature-development.md
+│   └── code-review.md
 ├── scripts/
 │   └── install.sh                # Legacy script installation
 ├── templates/                    # Project templates

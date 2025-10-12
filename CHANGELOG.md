@@ -2,6 +2,74 @@
 
 All notable changes to Smicolon Claude Code Infrastructure will be documented in this file.
 
+## [2.1.0] - 2025-10-12
+
+### Added
+
+#### Commands System
+- ✅ **Slash Commands** - Interactive workflows for common development tasks
+- ✅ **6 Total Commands** across plugins:
+  - `/model-create` - Django model creation with Smicolon conventions
+  - `/api-endpoint` - Complete REST API endpoint generation (serializer, service, view, tests)
+  - `/test-generate` - Comprehensive test generation (90%+ coverage target)
+  - `/module-create` - NestJS module scaffolding (entity, DTOs, service, controller)
+  - `/component-create` - React/Next.js component creation (UI, forms, server components)
+  - `/diagram-create` - System diagram generation with Eraser.io
+
+#### Workflows System
+- ✅ **Multi-Agent Orchestration Workflows** in `workflows/` directory:
+  - `feature-development.md` - End-to-end feature development (Architecture → Implementation → Testing → Review → Deployment)
+  - `code-review.md` - Comprehensive code review (Conventions → Security → Performance → Testing → Quality → Documentation)
+
+### Changed
+
+#### Architecture Simplification
+- **Simplified plugin structure** - Removed individual `plugin.json` files from each plugin
+- **Single source of truth** - All plugin configuration now in `.claude-plugin/marketplace.json`
+- **Cleaner directories** - Plugin folders only contain agents/, commands/, hooks/, and README.md
+
+**Before:**
+```
+plugins/smi-django/
+├── .claude-plugin/plugin.json  ❌ Removed
+├── agents/
+└── hooks/
+```
+
+**After:**
+```
+plugins/smi-django/
+├── agents/
+├── commands/                    ✅ New
+└── hooks/
+```
+
+#### Enhanced Marketplace Manifest
+- Added `category` field for each plugin (backend/frontend/architecture)
+- Added `commands` array listing available slash commands
+- Added `agents` array with file paths
+- Added `license`, `homepage`, and `repository` fields for each plugin
+
+### Benefits
+
+#### For Users
+- ✅ **Interactive commands** - Step-by-step workflows for common tasks
+- ✅ **Pre-built workflows** - Multi-agent orchestration for complex features
+- ✅ **Cleaner structure** - Easier to understand and navigate
+
+#### For Maintainers
+- ✅ **Single source of truth** - Update one file instead of 6
+- ✅ **Better organization** - Commands separated from agents
+- ✅ **Workflow documentation** - Best practices captured in reusable workflows
+
+### Documentation
+
+- Updated README.md with commands and workflows sections
+- Updated CLAUDE.md with complete command and workflow documentation
+- Updated directory structure diagrams
+
+---
+
 ## [2.0.0] - 2025-10-12
 
 ### BREAKING CHANGE: Marketplace Architecture

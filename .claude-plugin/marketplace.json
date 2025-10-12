@@ -3,6 +3,7 @@
   "displayName": "Smicolon Plugin Marketplace",
   "version": "1.0.0",
   "description": "Official marketplace for Smicolon development tools and standards",
+  "license": "MIT",
   "owner": {
     "name": "Smicolon Development Team",
     "email": "dev@smicolon.com",
@@ -24,7 +25,26 @@
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "keywords": ["django", "python", "backend", "testing", "architecture"]
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/smicolon/claude-infra"
+      },
+      "license": "MIT",
+      "category": "backend",
+      "keywords": ["django", "python", "backend", "testing", "architecture"],
+      "agents": [
+        "agents/django-architect.md",
+        "agents/django-builder.md",
+        "agents/django-feature-based.md",
+        "agents/django-tester.md",
+        "agents/django-reviewer.md"
+      ],
+      "commands": [
+        "commands/model-create.md",
+        "commands/api-endpoint.md",
+        "commands/test-generate.md"
+      ]
     },
     {
       "name": "smi-nestjs",
@@ -37,7 +57,22 @@
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "keywords": ["nestjs", "typescript", "backend", "testing", "architecture"]
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/smicolon/claude-infra"
+      },
+      "license": "MIT",
+      "category": "backend",
+      "keywords": ["nestjs", "typescript", "backend", "testing", "architecture"],
+      "agents": [
+        "agents/nestjs-architect.md",
+        "agents/nestjs-builder.md",
+        "agents/nestjs-tester.md"
+      ],
+      "commands": [
+        "commands/module-create.md"
+      ]
     },
     {
       "name": "smi-nextjs",
@@ -50,6 +85,13 @@
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/smicolon/claude-infra"
+      },
+      "license": "MIT",
+      "category": "frontend",
       "keywords": [
         "nextjs",
         "react",
@@ -57,6 +99,15 @@
         "typescript",
         "visual-qa",
         "accessibility"
+      ],
+      "agents": [
+        "agents/nextjs-architect.md",
+        "agents/nextjs-modular.md",
+        "agents/frontend-visual.md",
+        "agents/frontend-tester.md"
+      ],
+      "commands": [
+        "commands/component-create.md"
       ]
     },
     {
@@ -70,6 +121,13 @@
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/smicolon/claude-infra"
+      },
+      "license": "MIT",
+      "category": "frontend",
       "keywords": [
         "nuxtjs",
         "vue",
@@ -78,7 +136,13 @@
         "typescript",
         "visual-qa",
         "accessibility"
-      ]
+      ],
+      "agents": [
+        "agents/nuxtjs-architect.md",
+        "agents/frontend-visual.md",
+        "agents/frontend-tester.md"
+      ],
+      "commands": []
     },
     {
       "name": "smi-architect",
@@ -91,6 +155,13 @@
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/smicolon/claude-infra"
+      },
+      "license": "MIT",
+      "category": "architecture",
       "keywords": [
         "architecture",
         "diagrams",
@@ -98,6 +169,12 @@
         "erd",
         "flowchart",
         "cloud-architecture"
+      ],
+      "agents": [
+        "agents/system-architect.md"
+      ],
+      "commands": [
+        "commands/diagram-create.md"
       ]
     }
   ]
