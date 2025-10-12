@@ -28,16 +28,16 @@
       "category": "backend",
       "keywords": ["django", "python", "backend", "testing", "architecture"],
       "agents": [
-        "./plugins/smi-django/agents/django-architect.md",
-        "./plugins/smi-django/agents/django-builder.md",
-        "./plugins/smi-django/agents/django-feature-based.md",
-        "./plugins/smi-django/agents/django-tester.md",
-        "./plugins/smi-django/agents/django-reviewer.md"
+        "./agents/django-architect.md",
+        "./agents/django-builder.md",
+        "./agents/django-feature-based.md",
+        "./agents/django-tester.md",
+        "./agents/django-reviewer.md"
       ],
       "commands": [
-        "./plugins/smi-django/commands/model-create.md",
-        "./plugins/smi-django/commands/api-endpoint.md",
-        "./plugins/smi-django/commands/test-generate.md"
+        "./commands/model-create.md",
+        "./commands/api-endpoint.md",
+        "./commands/test-generate.md"
       ]
     },
     {
@@ -57,12 +57,12 @@
       "category": "backend",
       "keywords": ["nestjs", "typescript", "backend", "testing", "architecture"],
       "agents": [
-        "./plugins/smi-nestjs/agents/nestjs-architect.md",
-        "./plugins/smi-nestjs/agents/nestjs-builder.md",
-        "./plugins/smi-nestjs/agents/nestjs-tester.md"
+        "./agents/nestjs-architect.md",
+        "./agents/nestjs-builder.md",
+        "./agents/nestjs-tester.md"
       ],
       "commands": [
-        "./plugins/smi-nestjs/commands/module-create.md"
+        "./commands/module-create.md"
       ]
     },
     {
@@ -89,13 +89,13 @@
         "accessibility"
       ],
       "agents": [
-        "./plugins/smi-nextjs/agents/nextjs-architect.md",
-        "./plugins/smi-nextjs/agents/nextjs-modular.md",
-        "./plugins/smi-nextjs/agents/frontend-visual.md",
-        "./plugins/smi-nextjs/agents/frontend-tester.md"
+        "./agents/nextjs-architect.md",
+        "./agents/nextjs-modular.md",
+        "./agents/frontend-visual.md",
+        "./agents/frontend-tester.md"
       ],
       "commands": [
-        "./plugins/smi-nextjs/commands/component-create.md"
+        "./commands/component-create.md"
       ]
     },
     {
@@ -123,9 +123,9 @@
         "accessibility"
       ],
       "agents": [
-        "./plugins/smi-nuxtjs/agents/nuxtjs-architect.md",
-        "./plugins/smi-nuxtjs/agents/frontend-visual.md",
-        "./plugins/smi-nuxtjs/agents/frontend-tester.md"
+        "./agents/nuxtjs-architect.md",
+        "./agents/frontend-visual.md",
+        "./agents/frontend-tester.md"
       ],
       "commands": []
     },
@@ -153,10 +153,10 @@
         "cloud-architecture"
       ],
       "agents": [
-        "./plugins/smi-architect/agents/system-architect.md"
+        "./agents/system-architect.md"
       ],
       "commands": [
-        "./plugins/smi-architect/commands/diagram-create.md"
+        "./commands/diagram-create.md"
       ]
     }
   ]
