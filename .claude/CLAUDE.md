@@ -4,48 +4,85 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-This repository provides Claude Code infrastructure for enforcing Smicolon company-wide development standards across Django, NestJS, Next.js, and Nuxt.js projects. It includes specialized agents and hooks that automatically inject conventions and validate code.
+This repository is a **Claude Code Marketplace** providing 5 independent plugins for enforcing Smicolon company-wide development standards across Django, NestJS, Next.js, Nuxt.js, and system architecture. Each plugin includes specialized agents and hooks that automatically inject conventions and validate code.
 
 ## Core Architecture
 
 ### Directory Structure
 
 ```
-claude-infra/
-├── .claude-plugin/       # Plugin manifest for Claude Code
-├── agents/               # 14 specialized agent prompts
-├── hooks/                # Pre-prompt and post-write validation hooks
-├── scripts/              # Installation scripts (legacy compatibility)
-├── templates/            # Project templates with pre-configured conventions
-├── marketplace-registry.json  # Plugin marketplace configuration
-└── .claude/              # Local Claude Code configuration (not committed)
+claude-infra/                     # Smicolon Marketplace
+├── .claude-plugin/
+│   └── marketplace.json          # Marketplace manifest listing all 5 plugins
+├── plugins/
+│   ├── smi-django/               # Django plugin (5 agents)
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── agents/
+│   │   ├── hooks/
+│   │   └── README.md
+│   ├── smi-nestjs/               # NestJS plugin (3 agents)
+│   ├── smi-nextjs/               # Next.js plugin (4 agents)
+│   ├── smi-nuxtjs/               # Nuxt.js plugin (3 agents)
+│   └── smi-architect/            # System architecture plugin (1 agent)
+├── scripts/
+│   └── install.sh                # Legacy script installation only
+├── templates/                    # Project templates with pre-configured conventions
+└── .claude/                      # Local Claude Code configuration (not committed)
 ```
 
 ### Installation Methods
 
 **Recommended: Plugin Installation**
-- Install as Claude Code plugin via `/plugin install smicolon-standards`
-- Automatic updates across all projects
+- Install as Claude Code plugins via marketplace
+- Install only what you need (e.g., just Django or just Next.js)
+- Automatic updates per plugin
+- Independent versioning
 - Zero manual setup required
-- Centralized version management
+
+```bash
+# Add marketplace
+/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+
+# Install specific plugins
+/plugin install smi-django          # Django only (5 agents)
+/plugin install smi-nextjs          # Next.js only (4 agents)
+/plugin install smi-architect       # System diagrams (1 agent)
+
+# Or install all
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+```
 
 **Alternative: Script Installation (Legacy)**
 - Global install: Copies to `~/.smicolon/`
-- Project install: Copies/symlinks to project's `.claude/agents/` and `.claude/hooks/`
+- Project install: Copies/symlinks to project's `.claude/`
 - Manual updates via `git pull`
+- Used for local development and testing only
 
 ## Installation System
 
-### Installation System
+### Plugin Installation (Recommended)
 
-**Plugin Installation (Recommended):**
+Users can install individual plugins from the marketplace based on their tech stack needs:
+
 ```bash
-# Add marketplace and install
+# Add Smicolon marketplace (one-time)
 /plugin marketplace add smicolon https://github.com/smicolon/claude-infra
-/plugin install smicolon-standards
+
+# Install specific plugins
+/plugin install smi-django          # Django backend (5 agents)
+/plugin install smi-nestjs          # NestJS backend (3 agents)
+/plugin install smi-nextjs          # Next.js frontend (4 agents)
+/plugin install smi-nuxtjs          # Nuxt.js frontend (3 agents)
+/plugin install smi-architect       # System architecture (1 agent)
+
+# Update plugins
+/plugin update smi-django
 ```
 
-**Script Installation (Legacy):**
+### Script Installation (Legacy)
+
+Only used for local development and testing:
+
 ```bash
 # Global installation
 bash scripts/install.sh --global
@@ -58,44 +95,52 @@ smicolon-init
 ### Installation Flow (Script Method)
 
 1. Detects project type (Django/NestJS/Next.js/Nuxt.js) via file inspection
-2. Copies relevant agents from `agents/` directory
-3. Copies hooks from `hooks/` directory (conditional execution based on project type)
+2. Copies relevant agents from `plugins/*/agents/` directories
+3. Copies hooks from `plugins/*/hooks/` directories (conditional execution based on project type)
 4. Creates `.claude/custom/project-context.md` with project-specific template
 5. Updates `.gitignore` to exclude `.claude/custom/private/`
 
 ## Agent System
 
-### Agent Categories (14 Total)
+### Agent Categories (14 Total Across 5 Plugins)
 
-**Django** (5 agents):
+**smi-django Plugin** (5 agents):
 - `@django-architect` - Architecture design
 - `@django-builder` - Feature implementation
 - `@django-feature-based` - Large-scale feature-based architecture
 - `@django-tester` - Test writing (90%+ coverage target)
 - `@django-reviewer` - Security and code review
 
-**NestJS** (3 agents):
+**smi-nestjs Plugin** (3 agents):
 - `@nestjs-architect` - Backend architecture
 - `@nestjs-builder` - Feature implementation
 - `@nestjs-tester` - Test writing
 
-**Frontend** (5 agents):
+**smi-nextjs Plugin** (4 agents):
 - `@nextjs-architect` - Next.js/React architecture
 - `@nextjs-modular` - Large-scale Next.js modular architecture
-- `@nuxtjs-architect` - Nuxt.js/Vue 3 architecture
 - `@frontend-visual` - Visual QA with Playwright MCP + Figma MCP
 - `@frontend-tester` - Frontend testing (unit, integration, E2E, accessibility)
 
-**System Architecture** (1 agent):
+**smi-nuxtjs Plugin** (3 agents):
+- `@nuxtjs-architect` - Nuxt.js/Vue 3 architecture
+- `@frontend-visual` - Visual QA with Playwright MCP + Figma MCP (shared with Next.js)
+- `@frontend-tester` - Frontend testing (shared with Next.js)
+
+**smi-architect Plugin** (1 agent):
 - `@system-architect` - Eraser.io diagram-as-code specialist (ERD, flowcharts, cloud, sequence, BPMN)
 
 ### Agent Usage Pattern
 
-Agents are invoked with `@agent-name` syntax in Claude Code. They enforce specific conventions for each framework through detailed prompt engineering.
+Agents are invoked with `@agent-name` syntax in Claude Code. They enforce specific conventions for each framework through detailed prompt engineering. Each plugin's agents are only available when that plugin is installed.
 
 ## Hook System
 
+Each backend plugin (smi-django, smi-nestjs) includes hooks that automatically enforce conventions:
+
 ### user-prompt-submit-hook.sh
+
+Located in `plugins/*/hooks/user-prompt-submit-hook.sh`
 
 Runs **before** Claude processes prompts. Detects project type and injects framework-specific conventions into every prompt:
 
@@ -113,9 +158,13 @@ Runs **before** Claude processes prompts. Detects project type and injects frame
 
 ### post-write-hook.sh
 
+Located in `plugins/*/hooks/post-write-hook.sh`
+
 Runs **after** Claude writes files. Validates generated code against conventions (implementation depends on framework detection).
 
 ### post-write-visual-hook.sh
+
+Located in `plugins/smi-nextjs/hooks/` and `plugins/smi-nuxtjs/hooks/`
 
 Specialized hook for visual testing workflows with Playwright MCP.
 
@@ -191,12 +240,20 @@ import { User } from '../entities'
 
 **Plugin Method (Recommended):**
 ```bash
-# Install plugin
+# Add Smicolon marketplace
 /plugin marketplace add smicolon https://github.com/smicolon/claude-infra
-/plugin install smicolon-standards
 
-# Update plugin
-/plugin update smicolon-standards
+# Install specific plugins
+/plugin install smi-django          # Django only
+/plugin install smi-nextjs          # Next.js only
+/plugin install smi-architect       # System architecture only
+
+# Or install all
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+
+# Update plugins
+/plugin update smi-django
+/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
 ```
 
 **Script Method (Legacy):**
@@ -214,36 +271,26 @@ cd ~/.smicolon
 git pull
 ```
 
-### Project Installation (Direct)
+### Project Installation (Direct - Legacy Only)
 
 ```bash
-# In a project directory
+# In a project directory (for local testing)
 bash /path/to/claude-infra/scripts/install.sh
-```
-
-### Distribution and Publishing
-
-```bash
-# Create distribution package
-bash scripts/package.sh
-
-# Publish to production channel
-bash scripts/publish.sh production
-
-# Publish to dev channel
-bash scripts/publish.sh dev
 ```
 
 ### Testing Installation
 
 ```bash
-# Test in a Django project
+# Test plugin installation
+/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin install smi-django
+/help  # Should show @django-* agents
+
+# Test script installation (legacy)
 cd test-django-project
 bash /path/to/claude-infra/scripts/install.sh
 ls .claude/agents/  # Should show django-*.md files
-
-# Verify hooks are executable
-ls -la .claude/hooks/
+ls -la .claude/hooks/  # Verify hooks are executable
 ```
 
 ## Project Type Detection Logic
@@ -257,34 +304,17 @@ Used by `install.sh` and hooks to determine which agents and conventions to appl
 
 ## Distribution System
 
-### Publishing Workflow
+The repository uses GitHub-native distribution via Claude Code's plugin system. No packaging or publishing scripts are needed:
 
-1. **Build**: `bash scripts/package.sh` creates `dist/smicolon-claude-{channel}-{date}.tar.gz`
-2. **Publish**: `bash scripts/publish.sh {channel}` distributes via configured method
-3. **Install**: Teams use `curl -fsSL {url}/quick-install.sh | bash`
+1. **Development**: Make changes to plugins in `plugins/` directory
+2. **Commit**: Commit and push changes to GitHub
+3. **Distribution**: Users install/update directly from GitHub via `/plugin marketplace add` and `/plugin install`
 
-### Configuration Variables
-
-```bash
-# Rsync method
-export SMICOLON_PUBLISH_METHOD=rsync
-export SMICOLON_PUBLISH_HOST=user@server.com
-export SMICOLON_PUBLISH_PATH=/var/www/smicolon-claude
-
-# S3 method
-export SMICOLON_PUBLISH_METHOD=s3
-export SMICOLON_S3_BUCKET=s3://bucket/smicolon-claude
-
-# Local method (testing)
-export SMICOLON_PUBLISH_METHOD=local
-```
-
-### Channels
-
-- `production` - Stable releases
-- `dev` - Development/testing
-- `beta` - Beta testing
-- Custom channels supported
+**Benefits:**
+- No build or packaging step required
+- Automatic updates via Claude Code plugin system
+- Independent versioning per plugin
+- Git-based version control
 
 ## Git Worktree Pattern
 
@@ -332,64 +362,80 @@ claude @frontend-visual
 
 ### Core Configuration
 
-- `hooks/user-prompt-submit-hook.sh` - Convention injection logic (most critical)
-- `scripts/install.sh` - Installation logic and project detection
-- `agents/django-architect.md` - Example agent structure and conventions
-- `.claude-plugin/plugin.json` - Plugin manifest for Claude Code
-- `marketplace-registry.json` - Plugin marketplace configuration
+- `.claude-plugin/marketplace.json` - Marketplace manifest listing all 5 plugins
+- `plugins/smi-django/.claude-plugin/plugin.json` - Django plugin manifest (example)
+- `plugins/smi-django/hooks/user-prompt-submit-hook.sh` - Convention injection logic (most critical)
+- `plugins/smi-django/agents/django-architect.md` - Example agent structure and conventions
+- `scripts/install.sh` - Legacy installation logic and project detection
 
 ### Documentation
 
-- `README.md` - User-facing documentation
-- `STRUCTURE.md` - Repository organization
-- `MCP_SETUP.md` - Playwright MCP setup
-- `INDEX.md` - Quick navigation
+- `README.md` - Complete user-facing documentation (Quick Start, installation, usage, conventions)
+- `CHANGELOG.md` - Version history and breaking changes
+- `MCP_SETUP.md` - Playwright + Figma MCP integration setup
+- `plugins/*/README.md` - Plugin-specific documentation
 
 ### Not Committed
 
 - `.claude/` in repository root (local development only)
-- `dist/` directory (generated packages)
 
 ## Development Workflow
 
 ### Adding New Agents
 
-1. Create agent file in `agents/{framework}-{role}.md`
-2. Follow existing agent structure (role definition, conventions, deliverables)
-3. Update `.claude-plugin/plugin.json` to register the agent
-4. Update `scripts/install.sh` installation logic (for script method compatibility)
-5. Update README.md to document new agent
-6. Test installation in sample project
+1. Choose the appropriate plugin (e.g., `plugins/smi-django/`)
+2. Create agent file in `plugins/smi-django/agents/{role}.md`
+3. Follow existing agent structure (role definition, conventions, deliverables)
+4. Update `plugins/smi-django/.claude-plugin/plugin.json` to register the agent
+5. Update plugin's README.md to document new agent
+6. Update root README.md to reflect new agent count
+7. Update CHANGELOG.md with the addition
+8. Test plugin installation in sample project
 
 ### Modifying Conventions
 
-1. Edit agent files in `agents/` directory
-2. Update corresponding hook in `hooks/user-prompt-submit-hook.sh`
+1. Edit agent files in `plugins/*/agents/` directory
+2. Update corresponding hook in `plugins/*/hooks/user-prompt-submit-hook.sh`
 3. Test with sample project
-4. Update README.md if visible changes
-5. Increment plugin version in `.claude-plugin/plugin.json`
+4. Update plugin's README.md if visible changes
+5. Increment plugin version in `plugins/*/.claude-plugin/plugin.json`
+6. Update CHANGELOG.md
+
+### Creating New Plugins
+
+1. Create `plugins/smi-{name}/` directory
+2. Add `.claude-plugin/plugin.json` with plugin metadata
+3. Create `agents/` directory with agent files
+4. Create `hooks/` directory with hook scripts (if needed)
+5. Create plugin README.md
+6. Update `.claude-plugin/marketplace.json` to register the plugin
+7. Update root README.md to document the new plugin
+8. Update CHANGELOG.md
 
 ### Testing Changes
 
 ```bash
-# Test global install
+# Test plugin installation
+/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin install smi-django
+/help  # Verify agents appear
+
+# Test script install (legacy)
 bash scripts/install.sh --global
 cd /tmp/test-project
 smicolon-init
-
-# Test project install
-cd /tmp/test-project
-bash /path/to/claude-infra/scripts/install.sh
-
-# Verify
 ls .claude/agents/
 ls .claude/hooks/
-cat .claude/custom/project-context.md
 ```
 
 ## Troubleshooting
 
-**Agents not appearing:**
+**Agents not appearing after plugin installation:**
+- Verify plugin is installed: `/plugin list`
+- Check plugin installation: `/help` should show agents
+- Reinstall if needed: `/plugin uninstall smi-django && /plugin install smi-django`
+
+**Agents not appearing after script installation:**
 - Check `.claude/agents/` directory exists and contains `.md` files
 - Verify files are readable (`ls -la .claude/agents/`)
 - Re-run `smicolon-init` or installation script
@@ -399,15 +445,15 @@ cat .claude/custom/project-context.md
 - Verify hook syntax with `bash -n .claude/hooks/user-prompt-submit-hook.sh`
 - Check project detection logic matches your project
 
-**Wrong agents installed:**
+**Wrong agents installed (script method):**
 - Check project type detection logic
 - Manually reinstall with correct type: `bash scripts/install.sh`
 - Select project type manually when prompted
 
-**Global install not working:**
-- Verify `~/.smicolon/` directory exists
-- Check shell profile has been sourced: `source ~/.zshrc`
-- Verify alias: `type smicolon-init`
+**Plugin installation fails:**
+- Verify marketplace URL is correct: `https://github.com/smicolon/claude-infra`
+- Check GitHub repository is accessible
+- Try removing and re-adding marketplace
 
 ## Repository Maintenance
 
@@ -417,9 +463,18 @@ Old/experimental code goes in `archive/` directory. Do not delete - useful for r
 
 ### Update Propagation
 
-- **Global installation**: Updates via symlinks (`git pull` in `~/.smicolon/`)
-- **Project installation**: Requires reinstallation or manual copy
+**Plugin Installation:**
+- Updates via Claude Code plugin system: `/plugin update smi-django`
+- Automatic version checking
+- Per-plugin independent updates
+
+**Script Installation (Legacy):**
+- Global installation: Updates via `git pull` in `~/.smicolon/`
+- Project installation: Requires reinstallation or manual copy
 
 ### Version Management
 
-No formal versioning yet. Distribution channels (production/dev/beta) provide staging for updates.
+- Each plugin has independent versioning in `plugins/*/.claude-plugin/plugin.json`
+- Marketplace version in `.claude-plugin/marketplace.json`
+- Version history documented in `CHANGELOG.md`
+- Semantic versioning recommended (MAJOR.MINOR.PATCH)

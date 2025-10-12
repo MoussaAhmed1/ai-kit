@@ -1,174 +1,253 @@
 # Smicolon Claude Code Infrastructure
 
-Company-wide development standards enforcement for Claude Code.
+**Company-wide development standards enforcement via Claude Code marketplace.**
 
-**📚 New here? Start with the [Quick Start Guide →](QUICK_START.md)**
-
-## Overview
-
-This repository provides Claude Code agents and hooks that automatically enforce Smicolon development conventions across all projects. The system:
-
-- Auto-detects project types (Django, NestJS, Next.js, Nuxt.js)
-- Injects company conventions into every Claude interaction
-- Validates code after generation
-- Provides specialized agents for different tasks
-- **Available as a Claude Code plugin** or traditional installation
-
-## Installation
-
-### 🎉 Recommended: Plugin Installation
-
-Install individual plugins based on your tech stack:
-
-```bash
-# Add the Smicolon marketplace (one-time setup)
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
-
-# Install what you need
-/plugin install smi-django        # Django backend
-/plugin install smi-nestjs        # NestJS backend
-/plugin install smi-nextjs        # Next.js frontend
-/plugin install smi-nuxtjs        # Nuxt.js frontend
-/plugin install smi-architect        # System architecture diagrams
-
-# Verify - agents are immediately available!
-/help
-```
-
-**Benefits:**
-- ✅ Install only what you need
-- ✅ Independent versioning per stack
-- ✅ Automatic updates
-- ✅ Smaller, faster installs
-- ✅ Mix and match (e.g., Django + Next.js)
-
-See [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md) for complete plugin installation guide.
-
-**For Companies:** Fork this repository to create your own company-specific marketplace! See the "Creating Your Own Marketplace" section in [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md).
+5 independent plugins for Django, NestJS, Next.js, Nuxt.js, and system architecture.
 
 ---
 
-### Alternative: Script-Based Installation
-
-### Global Installation
-
-Install once, use everywhere:
+## Quick Start (2 minutes)
 
 ```bash
-# Clone the repository (if you haven't already)
-git clone https://github.com/smicolon/claude-infra.git
-cd claude-infra
+# 1. Add Smicolon marketplace
+/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
 
-# Run global installation
-bash scripts/install.sh --global
-source ~/.zshrc  # or ~/.bashrc
+# 2. Install plugins for your tech stack
+/plugin install smi-django          # Django (5 agents)
+/plugin install smi-nextjs          # Next.js (4 agents)
+/plugin install smi-architect       # System diagrams (1 agent)
+
+# Or install everything
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+
+# 3. Verify and start using
+/help
+@django-architect "Design a user authentication system"
 ```
 
-This creates `~/.smicolon/` with all agents and hooks.
+Done! Agents are now available in **all your projects** automatically.
 
-### Project Installation
+---
 
-Initialize Smicolon conventions in a project:
+## Table of Contents
+
+- [5 Available Plugins](#5-available-plugins)
+- [What You Get](#what-you-get)
+- [Installation Methods](#installation-methods)
+- [Usage Examples](#usage-examples)
+- [Conventions Enforced](#conventions-enforced)
+- [Repository Structure](#repository-structure)
+- [Customization](#customization)
+- [Updates](#updates)
+- [For Companies](#for-companies)
+- [Troubleshooting](#troubleshooting)
+
+---
+
+## 5 Available Plugins
+
+### 🐍 smi-django (5 agents)
+Django backend development with Python
 
 ```bash
-cd your-project
-smicolon-init
+/plugin install smi-django
 ```
 
-For auto-detected projects, this installs only relevant agents. Manual selection available for non-standard setups.
-
-## Usage
-
-### Available Agents
-
-**Django** (Python backend):
-- `@django-architect` - System design and architecture
+**Agents:**
+- `@django-architect` - System architecture design
 - `@django-builder` - Feature implementation
 - `@django-feature-based` - Large-scale feature-based architecture
 - `@django-tester` - Test writing (90%+ coverage target)
 - `@django-reviewer` - Security and code review
 
-**NestJS** (TypeScript backend):
+### 🦅 smi-nestjs (3 agents)
+NestJS backend development with TypeScript
+
+```bash
+/plugin install smi-nestjs
+```
+
+**Agents:**
 - `@nestjs-architect` - Backend architecture design
 - `@nestjs-builder` - Feature implementation
 - `@nestjs-tester` - Test writing
 
-**Frontend**:
-- `@nextjs-architect` - Next.js/React architecture
-- `@nextjs-modular` - Large-scale Next.js modular architecture
-- `@nuxtjs-architect` - Nuxt.js/Vue 3 architecture
-- `@frontend-visual` - Visual QA and pixel-perfect implementation (Playwright MCP + Figma MCP)
-- `@frontend-tester` - Frontend testing specialist (unit, integration, E2E, accessibility)
+### ⚛️ smi-nextjs (4 agents)
+Next.js frontend development with React
 
-**System Architecture**:
-- `@system-architect` - Eraser.io diagram-as-code specialist (ERD, flowcharts, cloud architecture, sequence diagrams, BPMN)
-
-### Basic Workflow
-
-**Backend (Django/NestJS):**
 ```bash
-# Design phase
-@django-architect
-# Prompt: "Design a payment processing system"
-
-# Implementation phase
-@django-builder
-# Prompt: "Implement the payment system"
-
-# Testing phase
-@django-tester
-# Prompt: "Write tests for payment processing"
-
-# Review phase
-@django-reviewer
-# Prompt: "Review payment code for security issues"
+/plugin install smi-nextjs
 ```
 
-**Frontend (Next.js/Nuxt.js):**
+**Agents:**
+- `@nextjs-architect` - Frontend architecture
+- `@nextjs-modular` - Large-scale modular architecture
+- `@frontend-visual` - Visual QA (Playwright + Figma MCP)
+- `@frontend-tester` - Testing (unit/integration/E2E/accessibility)
+
+### 💚 smi-nuxtjs (3 agents)
+Nuxt.js frontend development with Vue 3
+
+```bash
+/plugin install smi-nuxtjs
+```
+
+**Agents:**
+- `@nuxtjs-architect` - Vue 3 architecture
+- `@frontend-visual` - Visual QA (Playwright + Figma MCP)
+- `@frontend-tester` - Testing (unit/integration/E2E/accessibility)
+
+### 🏗️ smi-architect (1 agent)
+System architecture and diagram-as-code
+
+```bash
+/plugin install smi-architect
+```
+
+**Agent:**
+- `@system-architect` - Eraser.io diagrams (ERD, flowcharts, cloud, sequence, BPMN)
+
+---
+
+## What You Get
+
+### Specialized Agents (14 total)
+
+Each plugin includes agents specialized for that tech stack with deep knowledge of:
+- Architecture patterns
+- Best practices
+- Testing strategies
+- Security requirements
+- Performance optimization
+
+### Automatic Convention Enforcement
+
+Hooks automatically enforce company standards:
+- ✅ Import patterns (absolute imports with aliases)
+- ✅ Model structure (UUID, timestamps, soft deletes)
+- ✅ Type safety (strict TypeScript, Python type hints)
+- ✅ Security (permissions, guards, validation)
+- ✅ Testing requirements (80-90% coverage)
+- ✅ Accessibility (WCAG 2.1 AA)
+
+### Visual QA Integration
+
+Frontend plugins integrate with:
+- **Playwright MCP** - Automated browser testing
+- **Figma MCP** - Design comparison and validation
+
+See [MCP_SETUP.md](MCP_SETUP.md) for setup instructions.
+
+---
+
+## Installation Methods
+
+### Method 1: Plugin Installation (Recommended)
+
+**Benefits:** Install only what you need, automatic updates, independent versioning
+
+```bash
+# Add marketplace (one-time)
+/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+
+# Install specific plugins
+/plugin install smi-django
+/plugin install smi-nextjs
+
+# Or install all
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+
+# Update later
+/plugin update smi-django
+```
+
+### Method 2: Script Installation (Legacy)
+
+**Use for:** Local development and testing only
+
+```bash
+# Clone repository
+git clone https://github.com/smicolon/claude-infra.git
+cd claude-infra
+
+# Global installation
+bash scripts/install.sh --global
+source ~/.zshrc
+
+# Initialize in a project
+cd your-project
+smicolon-init
+```
+
+---
+
+## Usage Examples
+
+### Django Workflow
+
 ```bash
 # Architecture phase
-@nextjs-architect
-# Prompt: "Design authentication flow UI"
+@django-architect "Design a payment processing system with subscriptions"
 
 # Implementation phase
-# Implement components...
+@django-builder "Implement the payment system with Stripe integration"
 
 # Testing phase
-@frontend-tester
-# Prompt: "Write comprehensive tests for authentication flow"
-# Agent writes unit, integration, and E2E tests
+@django-tester "Write tests for payment processing (90%+ coverage)"
 
-# Visual QA phase (Playwright MCP + Figma MCP)
-@frontend-visual
-# Prompt: "Verify login form matches Figma design"
-# Agent uses Figma MCP to extract design and Playwright to verify
+# Review phase
+@django-reviewer "Review payment code for security vulnerabilities"
 ```
 
-**System Architecture:**
+### Next.js Workflow
+
 ```bash
-# Create diagrams for documentation
-@system-architect
-# Prompt: "Create an ERD for our e-commerce database"
-# Prompt: "Design a cloud architecture diagram for our AWS infrastructure"
-# Prompt: "Create a sequence diagram for the checkout flow"
+# Architecture phase
+@nextjs-architect "Design a dashboard with real-time analytics"
+
+# Large-scale architecture
+@nextjs-modular "Design modular architecture for e-commerce platform"
+
+# Testing phase
+@frontend-tester "Write comprehensive tests for dashboard"
+
+# Visual QA (with Playwright + Figma MCP)
+@frontend-visual "Verify dashboard matches Figma design"
 ```
+
+### Full-Stack Workflow
+
+```bash
+# Backend
+/plugin install smi-django
+@django-architect "Design REST API for inventory management"
+
+# Frontend
+/plugin install smi-nextjs
+@nextjs-architect "Design admin dashboard consuming the API"
+
+# System design
+/plugin install smi-architect
+@system-architect "Create system architecture diagram showing frontend, API, and database"
+```
+
+---
 
 ## Conventions Enforced
 
-### Django
+### Django Standards
 
 **Import Pattern:**
 ```python
-# Correct
+# ✅ CORRECT - Absolute modular imports with aliases
 import users.models as _models
 import users.services as _services
 
-# Usage
 user = _models.User.objects.get(id=user_id)
 
-# Incorrect (caught by hooks)
+# ❌ WRONG
 from .models import User
-from ..services import UserService
+from users.models import User
 ```
 
 **Model Pattern:**
@@ -183,8 +262,7 @@ class YourModel(models.Model):
     is_deleted = models.BooleanField(default=False)
 ```
 
-**Required Standards:**
-- Absolute modular imports with aliases
+**Required:**
 - UUID primary keys
 - Timestamps (created_at, updated_at)
 - Soft deletes (is_deleted)
@@ -192,18 +270,16 @@ class YourModel(models.Model):
 - Type hints on all functions
 - Permission classes on all views
 
-### NestJS
+### NestJS Standards
 
 **Import Pattern:**
 ```typescript
-// Correct - absolute imports from barrel exports
+// ✅ CORRECT - Absolute imports from barrel exports
 import { User } from 'src/users/entities'
 import { UsersService } from 'src/users/services'
-import { CreateUserDto } from 'src/users/dto'
 
-// Incorrect
+// ❌ WRONG
 import { User } from './entities/user.entity'
-import { User } from '../entities'
 ```
 
 **Entity Pattern:**
@@ -224,18 +300,17 @@ export class User {
 }
 ```
 
-**Required Standards:**
-- Absolute imports from barrel exports (index.ts)
+**Required:**
 - UUID primary keys
 - Timestamps (createdAt, updatedAt)
 - Soft deletes (deletedAt)
 - DTOs with class-validator
-- Dependency injection
 - Guards on protected routes
+- Barrel exports (index.ts) in all folders
 
-### Next.js
+### Frontend Standards (Next.js/Nuxt.js)
 
-**Required Standards:**
+**Next.js:**
 - TypeScript strict mode (no `any`)
 - Zod validation for all forms
 - TanStack Query for API calls
@@ -243,9 +318,7 @@ export class User {
 - Tailwind CSS
 - WCAG 2.1 AA accessibility
 
-### Nuxt.js
-
-**Required Standards:**
+**Nuxt.js:**
 - TypeScript strict mode
 - Vue 3 Composition API (`<script setup lang="ts">`)
 - VeeValidate + Zod for forms
@@ -253,249 +326,211 @@ export class User {
 - Pinia for state management
 - WCAG 2.1 AA accessibility
 
-## Hooks
+---
 
-### Pre-Prompt Hook
-
-Runs before Claude processes prompts. Detects project type and injects appropriate conventions.
-
-### Post-Write Hook
-
-Runs after Claude writes files. Validates:
-- Import patterns
-- Model/entity structure
-- Required fields (UUID, timestamps, soft deletes)
-- Security requirements (guards, permissions)
-
-Violations are flagged immediately with fix suggestions.
-
-## Directory Structure
-
-Repository structure:
+## Repository Structure
 
 ```
-claude-infra/                     # Marketplace repository
+claude-infra/                     # Smicolon Marketplace
 ├── .claude-plugin/
-│   └── marketplace.json          # Marketplace listing all plugins
-├── plugins/                      # Individual plugins
-│   ├── smi-django/
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json
-│   │   ├── agents/              # 5 Django agents
-│   │   ├── hooks/               # Django-specific hooks
+│   └── marketplace.json          # Lists all 5 plugins
+├── plugins/
+│   ├── smi-django/               # Django plugin
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── agents/              # 5 agents
+│   │   ├── hooks/               # 3 hooks
 │   │   └── README.md
-│   ├── smi-nestjs/
-│   │   ├── .claude-plugin/
-│   │   ├── agents/              # 3 NestJS agents
-│   │   ├── hooks/
-│   │   └── README.md
-│   ├── smi-nextjs/
-│   │   ├── .claude-plugin/
-│   │   ├── agents/              # 4 Next.js agents
-│   │   ├── hooks/
-│   │   └── README.md
-│   ├── smi-nuxtjs/
-│   │   ├── .claude-plugin/
-│   │   ├── agents/              # 3 Nuxt.js agents
-│   │   ├── hooks/
-│   │   └── README.md
-│   └── smi-architect/
-│       ├── .claude-plugin/
-│       ├── agents/              # 1 System architect agent
-│       └── README.md
-├── scripts/                      # Legacy script installation
+│   ├── smi-nestjs/               # NestJS plugin
+│   ├── smi-nextjs/               # Next.js plugin
+│   ├── smi-nuxtjs/               # Nuxt.js plugin
+│   └── smi-architect/            # System architecture plugin
+├── scripts/
+│   └── install.sh                # Legacy script installation
 ├── templates/                    # Project templates
-└── README.md
+├── CHANGELOG.md                  # Version history
+├── MCP_SETUP.md                  # Playwright + Figma setup
+└── README.md                     # This file
 ```
 
-After global installation (legacy `~/.smicolon/`):
-
-```
-~/.smicolon/
-├── agents/
-├── hooks/
-└── scripts/
-    └── init-project.sh
-```
-
-After project initialization (`.claude/` in your project):
-
-```
-your-project/
-├── .claude/              # Created by installer (Claude Code reads this)
-│   ├── agents/          # Symlinked to ~/.smicolon/agents/
-│   ├── hooks/           # Symlinked to ~/.smicolon/hooks/
-│   └── custom/          # Project-specific configuration
-│       └── project-context.md
-```
-
-## Updates
-
-### Global Installation Updates
-
-```bash
-cd ~/.smicolon
-git pull
-```
-
-Changes propagate immediately to all projects via symlinks.
-
-### Project Installation Updates
-
-Re-run the installer to get the latest version:
-
-```bash
-cd your-project
-
-# If you have the repo cloned locally
-bash /path/to/claude-infra/scripts/install.sh
-
-# Or use the quick installer to get the latest
-curl -fsSL https://your-cdn.com/smicolon-claude/production/quick-install.sh | bash --project
-```
+---
 
 ## Customization
 
 ### Project-Specific Rules
 
-Edit `.claude/custom/project-context.md`:
+Create `.claude/custom/project-context.md` in your project:
 
 ```markdown
-# Project Name
+# My Project
 
 ## Tech Stack
-- List your stack
+- Django 5.0 + PostgreSQL
+- Next.js 15 + TypeScript
 
 ## Custom Rules
-- Project-specific conventions
-- API requirements
-- Security policies
+- Use Redis for session storage
+- All API endpoints require JWT
+- Rate limiting: 100 requests/minute
+
+## Environment
+\```bash
+python manage.py migrate
+npm run dev
+\```
 ```
 
-### Company-Wide Conventions
+### Company-Wide Customization
 
-For plugin installation: Fork and modify the repository, then distribute via your own marketplace.
+**For Companies:** Fork this repository to create your own standards!
 
-For script installation: Edit agents in `~/.smicolon/agents/` (global install) or `.claude/agents/` (project install).
-
-## Best Practices
-
-### Working on Multiple Features Simultaneously
-
-Use git worktrees to work on multiple features in parallel with separate Claude sessions:
+1. Fork https://github.com/smicolon/claude-infra
+2. Customize agents in `plugins/*/agents/`
+3. Modify hooks in `plugins/*/hooks/`
+4. Update plugin names and descriptions
+5. Distribute to team:
 
 ```bash
-# In your project directory
+# Team members install from your fork
+/plugin marketplace add yourcompany https://github.com/yourcompany/claude-infra
+/plugin install yourcompany-django
+```
+
+---
+
+## Updates
+
+### Plugin Installation
+
+```bash
+# Update specific plugin
+/plugin update smi-django
+
+# Update all plugins
+/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+
+# Check for updates
+/plugin list
+```
+
+### Script Installation
+
+```bash
+# Update global installation
+cd ~/.smicolon
+git pull
+
+# Changes propagate automatically via symlinks
+```
+
+---
+
+## For Companies
+
+### Create Your Own Marketplace
+
+1. **Fork this repository**
+   ```bash
+   git clone https://github.com/smicolon/claude-infra.git your-company-standards
+   ```
+
+2. **Customize**
+   - Edit `plugins/*/agents/` for your conventions
+   - Modify `plugins/*/hooks/` for your standards
+   - Update `.claude-plugin/marketplace.json`
+
+3. **Distribute**
+   ```bash
+   # Push to your GitHub
+   git push origin main
+
+   # Team installs
+   /plugin marketplace add yourcompany https://github.com/yourcompany/standards
+   /plugin install yourcompany-django
+   ```
+
+### Git Worktree Pattern (Multiple Features)
+
+Work on multiple features simultaneously with separate Claude sessions:
+
+```bash
+# Main project
 cd ~/projects/your-app
 
-# Create worktrees for different features
-git worktree add ../your-app-feature-auth feature/authentication
-git worktree add ../your-app-feature-payments feature/payments
-git worktree add ../your-app-bugfix bugfix/user-validation
+# Create worktrees for parallel features
+git worktree add ../your-app-auth feature/authentication
+git worktree add ../your-app-payments feature/payments
 
-# Each worktree has its own .claude/ with full agent access
-cd ../your-app-feature-auth
-claude  # Start Claude session for auth feature
+# Each has independent Claude session
+cd ../your-app-auth
+claude @django-architect
 
 # In another terminal
-cd ../your-app-feature-payments
-claude  # Start Claude session for payments feature
+cd ../your-app-payments
+claude @nestjs-builder
 ```
 
-This allows:
-- Multiple Claude sessions on different features without conflicts
-- Independent agent interactions per feature
-- Parallel development without switching branches
-- Each worktree maintains its own file state
-
-List and manage worktrees:
-```bash
-git worktree list
-git worktree remove ../your-app-feature-auth
-```
-
-## Distribution
-
-### Publishing
-
-Configure publishing method:
-
-```bash
-# For rsync to server
-export SMICOLON_PUBLISH_METHOD=rsync
-export SMICOLON_PUBLISH_HOST=user@your-server.com
-export SMICOLON_PUBLISH_PATH=/var/www/smicolon-claude
-
-# For AWS S3
-export SMICOLON_PUBLISH_METHOD=s3
-export SMICOLON_S3_BUCKET=s3://your-bucket/smicolon-claude
-
-# For local testing
-export SMICOLON_PUBLISH_METHOD=local
-```
-
-Build and publish:
-
-```bash
-# Build package
-bash scripts/package.sh
-
-# Publish to channel
-bash scripts/publish.sh production  # or dev, beta, etc.
-```
-
-### Team Installation
-
-Update `PACKAGE_BASE_URL` in `scripts/quick-install.sh`, then team installs with:
-
-```bash
-# Production channel (stable)
-curl -fsSL https://your-cdn.com/smicolon-claude/production/quick-install.sh | bash
-
-# Development channel (latest features)
-SMICOLON_CHANNEL=dev curl -fsSL https://your-cdn.com/smicolon-claude/dev/quick-install.sh | bash
-```
-
-After installation, initialize in any project:
-```bash
-cd your-project
-smicolon-init
-```
+---
 
 ## Troubleshooting
 
-**Agents not found:**
+### Agents not appearing?
+
 ```bash
-ls .claude/agents/
-# If empty, run:
-smicolon-init
+# Check plugin is installed
+/plugin list
+
+# Reinstall if needed
+/plugin uninstall smi-django
+/plugin install smi-django
+
+# Verify
+/help
 ```
 
-**Hooks not running:**
+### Hooks not running?
+
 ```bash
+# Plugin installation: Hooks are automatic
+# Script installation: Make executable
 chmod +x .claude/hooks/*.sh
 ```
 
-**Conventions not enforced:**
-Verify project type detection worked:
-```bash
-cat .claude/custom/project-context.md
-```
+### Wrong project type detected?
 
-**Need different agents:**
-Re-run installer and select different project type:
+Script installation only - re-run installer:
 ```bash
 bash /path/to/claude-infra/scripts/install.sh
+# Manually select project type
 ```
+
+### Need different agents?
+
+Install additional plugins:
+```bash
+# Add frontend to Django project
+/plugin install smi-nextjs
+
+# Now you have Django + Next.js agents
+```
+
+---
+
+## Documentation
+
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and breaking changes
+- **[MCP_SETUP.md](MCP_SETUP.md)** - Playwright + Figma MCP integration setup
+- **Plugin READMEs** - Each plugin has its own documentation in `plugins/*/README.md`
+
+---
 
 ## Support
 
-- Documentation: This file and plugin-specific README files
-- Issues: Create issues in the repository
-- Updates:
-  - Plugin install: `/plugin update smi-django` (or other plugin names)
-  - Script install: `cd ~/.smicolon && git pull`
+- **Issues**: [GitHub Issues](https://github.com/smicolon/claude-infra/issues)
+- **Updates**: See [CHANGELOG.md](CHANGELOG.md)
+- **Custom Marketplace**: Fork and customize
+
+---
 
 ## License
 
-Internal use - Smicolon Company
+MIT License - Internal use by Smicolon Company

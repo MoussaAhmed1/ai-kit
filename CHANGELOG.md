@@ -1,173 +1,180 @@
 # Changelog
 
-## [1.0.0] - 2024-10-12
+All notable changes to Smicolon Claude Code Infrastructure will be documented in this file.
 
-### Major Changes: Claude Code Plugin System
+## [2.0.0] - 2025-10-12
 
-This repository has been restructured as a complete Claude Code plugin with marketplace support.
+### BREAKING CHANGE: Marketplace Architecture
+
+Complete restructure from monolithic plugin to marketplace with individual plugins.
 
 ### Added
 
-#### Plugin System
-- ✅ **Plugin manifest** (`.claude-plugin/plugin.json`) for Claude Code integration
-- ✅ **Marketplace registry** (`marketplace-registry.json`) for centralized distribution
-- ✅ **YAML frontmatter** on all 14 agent files for proper sub-agent support
-- ✅ **Direct plugin structure** - Agents and hooks at root level for clean plugin architecture
-- ✅ **PLUGIN_INSTALL.md** - Complete plugin installation guide
+#### Marketplace System
+- ✅ **Claude Code Marketplace** (`.claude-plugin/marketplace.json`) with 5 independent plugins
+- ✅ **Plugin-per-tech-stack** architecture for granular installation
+- ✅ **smi- branding** - All plugins use `smi-` prefix for clear naming
 
-#### Frontend Testing
-- ✅ **@frontend-tester agent** - Comprehensive testing for Next.js and Nuxt.js
-  - Unit tests (components, hooks, utilities)
-  - Integration tests (forms, API calls)
-  - E2E tests (Playwright)
-  - Accessibility tests (axe-core)
-  - 80%+ coverage requirements
+#### 5 Independent Plugins
 
-#### System Architecture
-- ✅ **@system-architect agent** - Eraser.io diagram-as-code specialist
-  - Entity Relationship Diagrams (ERD) for data models
-  - Flowcharts for process flows and logic
-  - Cloud architecture diagrams (AWS, GCP, Azure)
-  - Sequence diagrams for API interactions
-  - BPMN/Swimlane diagrams for business processes
-  - Complete syntax coverage with examples
+**smi-django** (5 agents):
+- @django-architect - Architecture design
+- @django-builder - Feature implementation
+- @django-feature-based - Large-scale architecture
+- @django-tester - Testing (90%+ coverage)
+- @django-reviewer - Security review
 
-#### Frontend Visual QA Improvements
-- ✅ **Figma MCP integration** - Extract design tokens directly from Figma
-- ✅ **Project-adaptive design systems** - No hardcoded colors/spacing
-- ✅ **Design system detection** - Reads from `.claude/custom/design-system.md` or `tailwind.config.js`
-- ✅ **Multi-project support** - Works with different design systems per project
-- ✅ **Design system template** (`templates/design-system-template.md`)
+**smi-nestjs** (3 agents):
+- @nestjs-architect - Backend architecture
+- @nestjs-builder - Feature implementation
+- @nestjs-tester - Testing
 
-#### MCP Setup
-- ✅ **Updated MCP_SETUP.md** with Figma Dev Mode MCP instructions
-- ✅ **Simplified installation** using `claude mcp add` commands
-- ✅ **Figma Desktop setup guide** with all requirements
+**smi-nextjs** (4 agents):
+- @nextjs-architect - Frontend architecture
+- @nextjs-modular - Large-scale modular architecture
+- @frontend-visual - Visual QA (Playwright + Figma MCP)
+- @frontend-tester - Testing (unit/integration/E2E/a11y)
 
-#### Testing Standards
-- ✅ **Pre-prompt hooks updated** - Now inject testing requirements for frontend projects
-- ✅ **Next.js**: Requires 80%+ coverage with unit/integration/E2E tests
-- ✅ **Nuxt.js**: Requires 80%+ coverage with unit/integration/E2E tests
+**smi-nuxtjs** (3 agents):
+- @nuxtjs-architect - Vue 3 architecture
+- @frontend-visual - Visual QA (Playwright + Figma MCP)
+- @frontend-tester - Testing
+
+**smi-architect** (1 agent):
+- @system-architect - Eraser.io diagram-as-code specialist
+
+#### Documentation
+- ✅ **QUICK_START.md** - New beginner-friendly quick start guide
+- ✅ **Plugin-specific READMEs** - Each plugin has its own documentation
+- ✅ **Updated all docs** - Reflects marketplace structure throughout
 
 ### Changed
 
-#### All Agent Files
-- ✅ **Added YAML frontmatter** with `name`, `description`, and `model` fields
-- ✅ **Removed `tools` frontmatter** - Agents now have access to all tools
-- ✅ **Proper sub-agent format** - Compatible with Claude Code `/agent` command
+#### Installation Method
+- **Old**: Install monolithic plugin with all 14 agents
+- **New**: Install only the plugins you need
 
-#### Documentation
-- ✅ **README.md** - Added plugin installation as recommended method
-- ✅ **INDEX.md** - Updated quick start with plugin commands
-- ✅ **STRUCTURE.md** - Remains documenting repository organization
+```bash
+# Before (v1.0.0)
+/plugin install smicolon-standards  # All 14 agents
 
-### Repository Structure
-
+# Now (v2.0.0)
+/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin install smi-django          # Only 5 Django agents
+/plugin install smi-nextjs          # Only 4 Next.js agents
 ```
-claude-infra/
+
+#### Repository Structure
+```
+claude-infra/                        # Now a marketplace
 ├── .claude-plugin/
-│   └── plugin.json              # Plugin manifest
-├── marketplace-registry.json     # Marketplace registry
-├── agents/                      # 14 agents (with YAML frontmatter)
-│   ├── django-architect.md
-│   ├── django-builder.md
-│   ├── django-feature-based.md
-│   ├── django-tester.md
-│   ├── django-reviewer.md
-│   ├── nestjs-architect.md
-│   ├── nestjs-builder.md
-│   ├── nestjs-tester.md
-│   ├── nextjs-architect.md
-│   ├── nextjs-modular.md
-│   ├── nuxtjs-architect.md
-│   ├── frontend-visual.md       # Updated with Figma MCP
-│   ├── frontend-tester.md       # NEW
-│   └── system-architect.md      # NEW
-└── hooks/                       # 3 hooks
-    ├── user-prompt-submit-hook.sh
-    ├── post-write-hook.sh
-    └── post-write-visual-hook.sh
-├── scripts/                     # Installation scripts (backwards compatible)
+│   └── marketplace.json             # Marketplace manifest
+├── plugins/                         # NEW - Individual plugins
+│   ├── smi-django/
+│   │   ├── .claude-plugin/
+│   │   ├── agents/
+│   │   ├── hooks/
+│   │   └── README.md
+│   ├── smi-nestjs/
+│   ├── smi-nextjs/
+│   ├── smi-nuxtjs/
+│   └── smi-architect/
+├── scripts/
+│   └── install.sh                   # Legacy script installation only
 ├── templates/
-│   ├── design-system-template.md  # NEW
-│   ├── django-project/
-│   ├── nestjs-project/
-│   ├── nextjs-project/
-│   └── nuxtjs-project/
-└── docs/
-    ├── README.md
-    ├── PLUGIN_INSTALL.md        # NEW
-    ├── MCP_SETUP.md            # Updated
-    ├── STRUCTURE.md
-    └── INDEX.md
-
+└── README.md
 ```
 
-## Installation Methods
+### Removed
 
-### Plugin Installation (Recommended)
+#### Deprecated Files
+- ❌ Root `/agents/` directory (moved into plugins)
+- ❌ Root `/hooks/` directory (moved into plugins)
+- ❌ `.claude-plugin/plugin.json` (now marketplace.json)
+- ❌ `marketplace-registry.json` (redundant)
+- ❌ `scripts/package.sh` (not needed for plugin installation)
+- ❌ `scripts/publish.sh` (not needed for plugin installation)
+- ❌ `scripts/quick-install.sh` (not needed for plugin installation)
+
+#### Legacy Installation Methods
+- Removed tarball packaging (users install from GitHub directly)
+- Removed distribution scripts (marketplace handles distribution)
+- Kept `scripts/install.sh` for local development only
+
+### Benefits
+
+#### For Users
+- ✅ **Install only what you need** - Smaller, faster installations
+- ✅ **Independent versioning** - Update Django without affecting Next.js
+- ✅ **Mix and match** - Use Django backend + Next.js frontend
+- ✅ **Automatic updates** - Plugin system handles updates
+
+#### For Maintainers
+- ✅ **Better organization** - Self-contained plugins
+- ✅ **Easier testing** - Test individual plugins
+- ✅ **Clear separation** - Each tech stack is independent
+- ✅ **Simpler distribution** - GitHub-native, no packaging needed
+
+### Migration Guide
+
+#### From v1.0.0 (Monolithic Plugin)
+
+If you had the old plugin installed:
 
 ```bash
-/plugin marketplace add smicolon-marketplace https://github.com/smicolon/claude-infra
-/plugin install smicolon-standards
+# Remove old plugin
+/plugin uninstall smicolon-standards
+
+# Add marketplace
+/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+
+# Install what you need
+/plugin install smi-django smi-nextjs
 ```
 
-### Script Installation (Backwards Compatible)
+#### From Script Installation
+
+Script installation is now legacy but still supported:
 
 ```bash
-bash scripts/install.sh --global
-source ~/.zshrc
-cd your-project && smicolon-init
+# Script method still works
+cd your-project
+bash /path/to/claude-infra/scripts/install.sh --global
+smicolon-init
 ```
 
-## Backwards Compatibility
+But plugin installation is recommended for automatic updates.
 
-✅ **All existing installation methods still work**
-- Script-based global installation
-- Script-based project installation
-- Manual symlink creation
-- Distribution via tarball
+### Statistics
 
-## For Companies
-
-Companies can now:
-1. **Fork this repository** to create company-specific standards
-2. **Customize** agents, hooks, and conventions
-3. **Host** their own plugin marketplace
-4. **Distribute** to team via Claude Code plugin system
-
-See "Creating Your Own Marketplace" in [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md).
-
-## Breaking Changes
-
-None - all existing installations continue to work.
-
-## Migration Guide
-
-### From Script Installation to Plugin
-
-If you used script installation previously:
-
-```bash
-# Optional: Remove old installation (if desired)
-rm -rf ~/.smicolon
-# Remove from shell profile if added
-
-# Install as plugin
-/plugin marketplace add smicolon-marketplace https://github.com/smicolon/claude-infra
-/plugin install smicolon-standards
-```
-
-Agents and hooks work identically in both methods.
-
-## Statistics
-
-- **14 Agents**: Django (5), NestJS (3), Frontend (5), System Architecture (1)
-- **3 Hooks**: Pre-prompt, post-write, visual
+- **5 Plugins**: Django, NestJS, Next.js, Nuxt.js, System Architecture
+- **14 Total Agents**: Distributed across plugins
+- **3 Hooks per backend plugin**: Pre-prompt, post-write, visual
 - **4 Frameworks Supported**: Django, NestJS, Next.js, Nuxt.js
-- **2 MCP Servers**: Playwright, Figma
+- **2 MCP Integrations**: Playwright, Figma
 - **1 Diagram Tool**: Eraser.io diagram-as-code
-- **Coverage Targets**: 90% (Django/NestJS), 80% (Frontend)
+
+---
+
+## [1.0.0] - 2024-10-12
+
+### Initial Release
+
+First release of Smicolon Claude Code Infrastructure as a monolithic plugin.
+
+#### Features
+- 14 specialized agents for Django, NestJS, Next.js, Nuxt.js
+- Automatic convention enforcement via hooks
+- Visual QA with Playwright MCP
+- System architecture with Eraser.io
+- Plugin manifest for Claude Code
+
+#### Installation
+- Single plugin installation with all agents
+- Script-based installation for legacy support
+- Distribution via marketplace-registry.json
+
+---
 
 ## Contributors
 
