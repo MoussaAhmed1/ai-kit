@@ -9,10 +9,7 @@
     "email": "dev@smicolon.com",
     "url": "https://github.com/smicolon"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/smicolon/claude-infra"
-  },
+  "repository": "https://github.com/smicolon/claude-infra",
   "plugins": [
     {
       "name": "smi-django",
@@ -26,24 +23,21 @@
         "url": "https://github.com/smicolon"
       },
       "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": {
-        "type": "git",
-        "url": "https://github.com/smicolon/claude-infra"
-      },
+      "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "backend",
       "keywords": ["django", "python", "backend", "testing", "architecture"],
       "agents": [
-        "agents/django-architect.md",
-        "agents/django-builder.md",
-        "agents/django-feature-based.md",
-        "agents/django-tester.md",
-        "agents/django-reviewer.md"
+        "./plugins/smi-django/agents/django-architect.md",
+        "./plugins/smi-django/agents/django-builder.md",
+        "./plugins/smi-django/agents/django-feature-based.md",
+        "./plugins/smi-django/agents/django-tester.md",
+        "./plugins/smi-django/agents/django-reviewer.md"
       ],
       "commands": [
-        "commands/model-create.md",
-        "commands/api-endpoint.md",
-        "commands/test-generate.md"
+        "./plugins/smi-django/commands/model-create.md",
+        "./plugins/smi-django/commands/api-endpoint.md",
+        "./plugins/smi-django/commands/test-generate.md"
       ]
     },
     {
@@ -58,20 +52,17 @@
         "url": "https://github.com/smicolon"
       },
       "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": {
-        "type": "git",
-        "url": "https://github.com/smicolon/claude-infra"
-      },
+      "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "backend",
       "keywords": ["nestjs", "typescript", "backend", "testing", "architecture"],
       "agents": [
-        "agents/nestjs-architect.md",
-        "agents/nestjs-builder.md",
-        "agents/nestjs-tester.md"
+        "./plugins/smi-nestjs/agents/nestjs-architect.md",
+        "./plugins/smi-nestjs/agents/nestjs-builder.md",
+        "./plugins/smi-nestjs/agents/nestjs-tester.md"
       ],
       "commands": [
-        "commands/module-create.md"
+        "./plugins/smi-nestjs/commands/module-create.md"
       ]
     },
     {
@@ -86,10 +77,7 @@
         "url": "https://github.com/smicolon"
       },
       "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": {
-        "type": "git",
-        "url": "https://github.com/smicolon/claude-infra"
-      },
+      "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "frontend",
       "keywords": [
@@ -101,13 +89,13 @@
         "accessibility"
       ],
       "agents": [
-        "agents/nextjs-architect.md",
-        "agents/nextjs-modular.md",
-        "agents/frontend-visual.md",
-        "agents/frontend-tester.md"
+        "./plugins/smi-nextjs/agents/nextjs-architect.md",
+        "./plugins/smi-nextjs/agents/nextjs-modular.md",
+        "./plugins/smi-nextjs/agents/frontend-visual.md",
+        "./plugins/smi-nextjs/agents/frontend-tester.md"
       ],
       "commands": [
-        "commands/component-create.md"
+        "./plugins/smi-nextjs/commands/component-create.md"
       ]
     },
     {
@@ -122,10 +110,7 @@
         "url": "https://github.com/smicolon"
       },
       "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": {
-        "type": "git",
-        "url": "https://github.com/smicolon/claude-infra"
-      },
+      "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "frontend",
       "keywords": [
@@ -138,9 +123,9 @@
         "accessibility"
       ],
       "agents": [
-        "agents/nuxtjs-architect.md",
-        "agents/frontend-visual.md",
-        "agents/frontend-tester.md"
+        "./plugins/smi-nuxtjs/agents/nuxtjs-architect.md",
+        "./plugins/smi-nuxtjs/agents/frontend-visual.md",
+        "./plugins/smi-nuxtjs/agents/frontend-tester.md"
       ],
       "commands": []
     },
@@ -156,10 +141,7 @@
         "url": "https://github.com/smicolon"
       },
       "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": {
-        "type": "git",
-        "url": "https://github.com/smicolon/claude-infra"
-      },
+      "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "architecture",
       "keywords": [
@@ -171,10 +153,10 @@
         "cloud-architecture"
       ],
       "agents": [
-        "agents/system-architect.md"
+        "./plugins/smi-architect/agents/system-architect.md"
       ],
       "commands": [
-        "commands/diagram-create.md"
+        "./plugins/smi-architect/commands/diagram-create.md"
       ]
     }
   ]
