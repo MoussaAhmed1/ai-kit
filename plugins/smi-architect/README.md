@@ -6,7 +6,7 @@ Smicolon company standards for system architecture and diagram-as-code.
 
 ```bash
 # Add Smicolon marketplace
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
 
 # Install System Architecture plugin
 /plugin install smi-architect

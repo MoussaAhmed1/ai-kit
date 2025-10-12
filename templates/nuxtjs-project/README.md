@@ -166,20 +166,22 @@ app/
 
 ## Quick Start
 
-1. Install Smicolon conventions:
+1. Install Smicolon plugins:
    ```bash
-   bash scripts/install.sh
+   /plugin marketplace add https://github.com/smicolon/claude-infra
+   /plugin install smi-nuxtjs
    ```
 
 2. Start building:
    ```bash
-   claude
-   /nuxtjs-architect "Design a user dashboard with authentication"
+   @nuxtjs-architect "Design a user dashboard with authentication"
    ```
 
-## Commands Available
+## Agents Available
 
-- `/nuxtjs-architect` - Frontend architecture and design
+- `@nuxtjs-architect` - Nuxt.js/Vue 3 architecture specialist
+- `@frontend-visual` - Visual QA (Playwright + Figma MCP)
+- `@frontend-tester` - Testing (unit/integration/E2E/accessibility)
 
 ## Enforced by Hooks
 

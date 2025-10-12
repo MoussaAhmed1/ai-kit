@@ -191,15 +191,13 @@ See [MCP_SETUP.md](MCP_SETUP.md) for setup instructions.
 
 ---
 
-## Installation Methods
+## Installation
 
-### Method 1: Plugin Installation (Recommended)
-
-**Benefits:** Install only what you need, automatic updates, independent versioning
+**Simple plugin installation:**
 
 ```bash
 # Add marketplace (one-time)
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
 
 # Install specific plugins
 /plugin install smi-django
@@ -210,24 +208,6 @@ See [MCP_SETUP.md](MCP_SETUP.md) for setup instructions.
 
 # Update later
 /plugin update smi-django
-```
-
-### Method 2: Script Installation (Legacy)
-
-**Use for:** Local development and testing only
-
-```bash
-# Clone repository
-git clone https://github.com/smicolon/claude-infra.git
-cd claude-infra
-
-# Global installation
-bash scripts/install.sh --global
-source ~/.zshrc
-
-# Initialize in a project
-cd your-project
-smicolon-init
 ```
 
 ---
@@ -407,9 +387,8 @@ claude-infra/                     # Smicolon Marketplace
 │   ├── feature-development.md
 │   └── code-review.md
 ├── scripts/
-│   └── install.sh                # Legacy script installation
+│   └── cleanup-plugins.sh        # Development cleanup utility
 ├── templates/                    # Project templates
-├── CHANGELOG.md                  # Version history
 ├── MCP_SETUP.md                  # Playwright + Figma setup
 └── README.md                     # This file
 ```
@@ -464,8 +443,6 @@ npm run dev
 
 ## Updates
 
-### Plugin Installation
-
 ```bash
 # Update specific plugin
 /plugin update smi-django
@@ -475,16 +452,6 @@ npm run dev
 
 # Check for updates
 /plugin list
-```
-
-### Script Installation
-
-```bash
-# Update global installation
-cd ~/.smicolon
-git pull
-
-# Changes propagate automatically via symlinks
 ```
 
 ---
@@ -557,19 +524,12 @@ claude @nestjs-builder
 
 ### Hooks not running?
 
-```bash
-# Plugin installation: Hooks are automatic
-# Script installation: Make executable
-chmod +x .claude/hooks/*.sh
-```
-
-### Wrong project type detected?
-
-Script installation only - re-run installer:
+Hooks are automatic with plugin installation. If hooks aren't working:
 
 ```bash
-bash /path/to/claude-infra/scripts/install.sh
-# Manually select project type
+# Reinstall the plugin
+/plugin uninstall smi-django
+/plugin install smi-django
 ```
 
 ### Need different agents?
@@ -587,7 +547,6 @@ Install additional plugins:
 
 ## Documentation
 
-- **[CHANGELOG.md](CHANGELOG.md)** - Version history and breaking changes
 - **[MCP_SETUP.md](MCP_SETUP.md)** - Playwright + Figma MCP integration setup
 - **Plugin READMEs** - Each plugin has its own documentation in `plugins/*/README.md`
 
@@ -596,11 +555,12 @@ Install additional plugins:
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/smicolon/claude-infra/issues)
-- **Updates**: See [CHANGELOG.md](CHANGELOG.md)
 - **Custom Marketplace**: Fork and customize
 
 ---
 
 ## License
 
-MIT License - Internal use by Smicolon Company
+Copyright (c) 2024-2025 Smicolon Company. All rights reserved.
+
+This is for Internal use only.

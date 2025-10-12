@@ -6,7 +6,7 @@ Smicolon company standards for Next.js/React projects.
 
 ```bash
 # Add Smicolon marketplace
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
 
 # Install Next.js plugin
 /plugin install smi-nextjs

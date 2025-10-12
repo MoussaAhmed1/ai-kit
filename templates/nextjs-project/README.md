@@ -78,20 +78,27 @@ src/
 
 ## Quick Start
 
-1. Install Smicolon conventions:
+1. Install Smicolon plugins:
    ```bash
-   bash scripts/install.sh
+   /plugin marketplace add https://github.com/smicolon/claude-infra
+   /plugin install smi-nextjs
    ```
 
 2. Start building:
    ```bash
-   claude
-   /nextjs-architect "Design a user dashboard"
+   @nextjs-architect "Design a user dashboard"
    ```
+
+## Agents Available
+
+- `@nextjs-architect` - Frontend architecture and design
+- `@nextjs-modular` - Large-scale modular architecture
+- `@frontend-visual` - Visual QA (Playwright + Figma MCP)
+- `@frontend-tester` - Testing (unit/integration/E2E/accessibility)
 
 ## Commands Available
 
-- `/nextjs-architect` - Frontend architecture and design
+- `/component-create` - Create React/Next.js components
 
 ## Enforced by Hooks
 

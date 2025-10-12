@@ -6,7 +6,7 @@ Smicolon company standards for Django projects.
 
 ```bash
 # Add Smicolon marketplace
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
 
 # Install Django plugin
 /plugin install smi-django

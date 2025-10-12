@@ -72,38 +72,45 @@ app/
 
 ## Quick Start
 
-1. Install Smicolon conventions:
+1. Install Smicolon plugins:
    ```bash
-   bash scripts/install.sh
+   /plugin marketplace add https://github.com/smicolon/claude-infra
+   /plugin install smi-django
    ```
 
 2. Start building:
    ```bash
-   claude
-   /django-architect "Design a user authentication system"
+   @django-architect "Design a user authentication system"
    ```
 
 3. Implement:
    ```bash
-   /django-build "Build the authentication system"
+   @django-builder "Build the authentication system"
    ```
 
 4. Test:
    ```bash
-   /django-test "Write tests for authentication"
+   @django-tester "Write tests for authentication"
    ```
 
 5. Review:
    ```bash
-   /django-review "Review the authentication code"
+   @django-reviewer "Review the authentication code"
    ```
+
+## Agents Available
+
+- `@django-architect` - Architecture and design
+- `@django-builder` - Feature implementation
+- `@django-tester` - Write comprehensive tests (90%+ coverage)
+- `@django-reviewer` - Security and code review
+- `@django-feature-based` - Large-scale feature-based architecture
 
 ## Commands Available
 
-- `/django-architect` - Architecture and design
-- `/django-build` - Feature implementation
-- `/django-test` - Write comprehensive tests
-- `/django-review` - Security and code review
+- `/model-create` - Create Django models with conventions
+- `/api-endpoint` - Generate complete REST API endpoints
+- `/test-generate` - Generate comprehensive tests
 
 ## Enforced by Hooks
 

@@ -28,14 +28,14 @@ claude-infra/                     # Smicolon Marketplace
 │   ├── feature-development.md
 │   └── code-review.md
 ├── scripts/
-│   └── install.sh                # Legacy script installation only
+│   └── cleanup-plugins.sh        # Development cleanup utility
 ├── templates/                    # Project templates with pre-configured conventions
 └── .claude/                      # Local Claude Code configuration (not committed)
 ```
 
-### Installation Methods
+### Installation Method
 
-**Recommended: Plugin Installation**
+**Plugin Installation**
 - Install as Claude Code plugins via marketplace
 - Install only what you need (e.g., just Django or just Next.js)
 - Automatic updates per plugin
@@ -44,7 +44,7 @@ claude-infra/                     # Smicolon Marketplace
 
 ```bash
 # Add marketplace
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
 
 # Install specific plugins
 /plugin install smi-django          # Django only (5 agents)
@@ -54,54 +54,6 @@ claude-infra/                     # Smicolon Marketplace
 # Or install all
 /plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
 ```
-
-**Alternative: Script Installation (Legacy)**
-- Global install: Copies to `~/.smicolon/`
-- Project install: Copies/symlinks to project's `.claude/`
-- Manual updates via `git pull`
-- Used for local development and testing only
-
-## Installation System
-
-### Plugin Installation (Recommended)
-
-Users can install individual plugins from the marketplace based on their tech stack needs:
-
-```bash
-# Add Smicolon marketplace (one-time)
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
-
-# Install specific plugins
-/plugin install smi-django          # Django backend (5 agents)
-/plugin install smi-nestjs          # NestJS backend (3 agents)
-/plugin install smi-nextjs          # Next.js frontend (4 agents)
-/plugin install smi-nuxtjs          # Nuxt.js frontend (3 agents)
-/plugin install smi-architect       # System architecture (1 agent)
-
-# Update plugins
-/plugin update smi-django
-```
-
-### Script Installation (Legacy)
-
-Only used for local development and testing:
-
-```bash
-# Global installation
-bash scripts/install.sh --global
-source ~/.zshrc
-
-# Project initialization
-smicolon-init
-```
-
-### Installation Flow (Script Method)
-
-1. Detects project type (Django/NestJS/Next.js/Nuxt.js) via file inspection
-2. Copies relevant agents from `plugins/*/agents/` directories
-3. Copies hooks from `plugins/*/hooks/` directories (conditional execution based on project type)
-4. Creates `.claude/custom/project-context.md` with project-specific template
-5. Updates `.gitignore` to exclude `.claude/custom/private/`
 
 ## Agent System
 
@@ -322,10 +274,9 @@ import { User } from '../entities'
 
 ### Installation and Setup
 
-**Plugin Method (Recommended):**
 ```bash
 # Add Smicolon marketplace
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
 
 # Install specific plugins
 /plugin install smi-django          # Django only
@@ -340,46 +291,18 @@ import { User } from '../entities'
 /plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
 ```
 
-**Script Method (Legacy):**
-```bash
-# Install globally
-bash scripts/install.sh --global
-source ~/.zshrc  # or ~/.bashrc
-
-# Initialize in a project
-cd your-project
-smicolon-init
-
-# Update global installation
-cd ~/.smicolon
-git pull
-```
-
-### Project Installation (Direct - Legacy Only)
-
-```bash
-# In a project directory (for local testing)
-bash /path/to/claude-infra/scripts/install.sh
-```
-
 ### Testing Installation
 
 ```bash
 # Test plugin installation
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
 /plugin install smi-django
 /help  # Should show @django-* agents
-
-# Test script installation (legacy)
-cd test-django-project
-bash /path/to/claude-infra/scripts/install.sh
-ls .claude/agents/  # Should show django-*.md files
-ls -la .claude/hooks/  # Verify hooks are executable
 ```
 
 ## Project Type Detection Logic
 
-Used by `install.sh` and hooks to determine which agents and conventions to apply:
+Used by hooks to determine which agents and conventions to apply:
 
 1. **Django**: `[ -f "manage.py" ] || [ -d "config/settings" ]`
 2. **NestJS**: `[ -f "package.json" ] && grep -q "@nestjs/core" package.json`
@@ -449,12 +372,10 @@ claude @frontend-visual
 - `.claude-plugin/marketplace.json` - Single source of truth for all plugin configuration
 - `plugins/smi-django/hooks/user-prompt-submit-hook.sh` - Convention injection logic (most critical)
 - `plugins/smi-django/agents/django-architect.md` - Example agent structure and conventions
-- `scripts/install.sh` - Legacy installation logic and project detection
 
 ### Documentation
 
 - `README.md` - Complete user-facing documentation (Quick Start, installation, usage, conventions)
-- `CHANGELOG.md` - Version history and breaking changes
 - `MCP_SETUP.md` - Playwright + Figma MCP integration setup
 - `plugins/*/README.md` - Plugin-specific documentation
 
@@ -472,8 +393,7 @@ claude @frontend-visual
 4. Update `.claude-plugin/marketplace.json` to register the agent in the plugin's `agents` array
 5. Update plugin's README.md to document new agent
 6. Update root README.md to reflect new agent count
-7. Update CHANGELOG.md with the addition
-8. Test plugin installation in sample project
+7. Test plugin installation in sample project
 
 ### Modifying Conventions
 
@@ -482,7 +402,6 @@ claude @frontend-visual
 3. Test with sample project
 4. Update plugin's README.md if visible changes
 5. Increment plugin version in `.claude-plugin/marketplace.json`
-6. Update CHANGELOG.md
 
 ### Creating New Plugins
 
@@ -493,22 +412,14 @@ claude @frontend-visual
 5. Create plugin README.md
 6. Add plugin configuration to `.claude-plugin/marketplace.json` in the `plugins` array
 7. Update root README.md to document the new plugin
-8. Update CHANGELOG.md
 
 ### Testing Changes
 
 ```bash
 # Test plugin installation
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
 /plugin install smi-django
 /help  # Verify agents appear
-
-# Test script install (legacy)
-bash scripts/install.sh --global
-cd /tmp/test-project
-smicolon-init
-ls .claude/agents/
-ls .claude/hooks/
 ```
 
 ## Troubleshooting
@@ -518,20 +429,10 @@ ls .claude/hooks/
 - Check plugin installation: `/help` should show agents
 - Reinstall if needed: `/plugin uninstall smi-django && /plugin install smi-django`
 
-**Agents not appearing after script installation:**
-- Check `.claude/agents/` directory exists and contains `.md` files
-- Verify files are readable (`ls -la .claude/agents/`)
-- Re-run `smicolon-init` or installation script
-
 **Hooks not executing:**
-- Check hooks are executable: `chmod +x .claude/hooks/*.sh`
-- Verify hook syntax with `bash -n .claude/hooks/user-prompt-submit-hook.sh`
+- Hooks are automatic with plugin installation
+- Reinstall the plugin if hooks aren't working
 - Check project detection logic matches your project
-
-**Wrong agents installed (script method):**
-- Check project type detection logic
-- Manually reinstall with correct type: `bash scripts/install.sh`
-- Select project type manually when prompted
 
 **Plugin installation fails:**
 - Verify marketplace URL is correct: `https://github.com/smicolon/claude-infra`
@@ -551,14 +452,9 @@ Old/experimental code goes in `archive/` directory. Do not delete - useful for r
 - Automatic version checking
 - Per-plugin independent updates
 
-**Script Installation (Legacy):**
-- Global installation: Updates via `git pull` in `~/.smicolon/`
-- Project installation: Requires reinstallation or manual copy
-
 ### Version Management
 
 - Each plugin has independent versioning in `.claude-plugin/marketplace.json` (in each plugin object)
 - Marketplace version in `.claude-plugin/marketplace.json` (at root level)
-- Version history documented in `CHANGELOG.md`
 - Semantic versioning recommended (MAJOR.MINOR.PATCH)
 - Test your own work, and make sure it's working please

@@ -192,27 +192,25 @@ src/
 
 ## Quick Start
 
-1. Install Smicolon conventions:
+1. Install Smicolon plugins:
    ```bash
-   bash scripts/install.sh
+   /plugin marketplace add https://github.com/smicolon/claude-infra
+   /plugin install smi-nestjs
    ```
 
 2. Start building:
    ```bash
-   claude @nestjs-architect
-   # "Design a user management system with authentication"
+   @nestjs-architect "Design a user management system with authentication"
    ```
 
 3. Implement:
    ```bash
-   claude @nestjs-builder
-   # "Build the user management system"
+   @nestjs-builder "Build the user management system"
    ```
 
 4. Test:
    ```bash
-   claude @nestjs-tester
-   # "Write tests for the user system"
+   @nestjs-tester "Write tests for the user system"
    ```
 
 ## Agents Available
@@ -220,6 +218,10 @@ src/
 - `@nestjs-architect` - Architecture design specialist
 - `@nestjs-builder` - Feature implementation specialist
 - `@nestjs-tester` - Testing specialist
+
+## Commands Available
+
+- `/module-create` - Create complete NestJS modules (entity, DTOs, service, controller)
 
 ## Enforced by Hooks
 

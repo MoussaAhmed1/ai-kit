@@ -6,7 +6,7 @@ Smicolon company standards for Nuxt.js/Vue 3 projects.
 
 ```bash
 # Add Smicolon marketplace
-/plugin marketplace add smicolon https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/claude-infra
 
 # Install Nuxt.js plugin
 /plugin install smi-nuxtjs
