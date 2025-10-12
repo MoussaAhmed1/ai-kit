@@ -27,5 +27,6 @@
   "agents": [
     "system-architect"
   ],
+  "hooks": [],
   "license": "MIT"
 }
