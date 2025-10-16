@@ -1,6 +1,5 @@
 {
   "name": "smicolon-marketplace",
-  "displayName": "Smicolon Plugin Marketplace",
   "version": "1.0.0",
   "description": "Official marketplace for Smicolon development tools and standards",
   "license": "MIT",
@@ -13,7 +12,6 @@
   "plugins": [
     {
       "name": "smi-django",
-      "displayName": "Smicolon Django",
       "version": "1.0.0",
       "description": "Company standards for Django projects with 5 specialized agents and automatic convention enforcement",
       "source": "./plugins/smi-django",
@@ -34,15 +32,10 @@
         "./agents/django-tester.md",
         "./agents/django-reviewer.md"
       ],
-      "commands": [
-        "./commands/model-create.md",
-        "./commands/api-endpoint.md",
-        "./commands/test-generate.md"
-      ]
+      "commands": ["./commands/model-create.md", "./commands/api-endpoint.md", "./commands/test-generate.md"]
     },
     {
       "name": "smi-nestjs",
-      "displayName": "Smicolon NestJS",
       "version": "1.0.0",
       "description": "Company standards for NestJS/TypeScript backend projects with 3 specialized agents",
       "source": "./plugins/smi-nestjs",
@@ -56,18 +49,11 @@
       "license": "MIT",
       "category": "backend",
       "keywords": ["nestjs", "typescript", "backend", "testing", "architecture"],
-      "agents": [
-        "./agents/nestjs-architect.md",
-        "./agents/nestjs-builder.md",
-        "./agents/nestjs-tester.md"
-      ],
-      "commands": [
-        "./commands/module-create.md"
-      ]
+      "agents": ["./agents/nestjs-architect.md", "./agents/nestjs-builder.md", "./agents/nestjs-tester.md"],
+      "commands": ["./commands/module-create.md"]
     },
     {
       "name": "smi-nextjs",
-      "displayName": "Smicolon Next.js",
       "version": "1.0.0",
       "description": "Company standards for Next.js/React projects with 4 specialized agents including visual QA",
       "source": "./plugins/smi-nextjs",
@@ -80,27 +66,12 @@
       "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "frontend",
-      "keywords": [
-        "nextjs",
-        "react",
-        "frontend",
-        "typescript",
-        "visual-qa",
-        "accessibility"
-      ],
-      "agents": [
-        "./agents/nextjs-architect.md",
-        "./agents/nextjs-modular.md",
-        "./agents/frontend-visual.md",
-        "./agents/frontend-tester.md"
-      ],
-      "commands": [
-        "./commands/component-create.md"
-      ]
+      "keywords": ["nextjs", "react", "frontend", "typescript", "visual-qa", "accessibility"],
+      "agents": ["./agents/nextjs-architect.md", "./agents/nextjs-modular.md", "./agents/frontend-visual.md", "./agents/frontend-tester.md"],
+      "commands": ["./commands/component-create.md"]
     },
     {
       "name": "smi-nuxtjs",
-      "displayName": "Smicolon Nuxt.js",
       "version": "1.0.0",
       "description": "Company standards for Nuxt.js/Vue 3 projects with specialized agents including visual QA",
       "source": "./plugins/smi-nuxtjs",
@@ -113,25 +84,12 @@
       "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "frontend",
-      "keywords": [
-        "nuxtjs",
-        "vue",
-        "vue3",
-        "frontend",
-        "typescript",
-        "visual-qa",
-        "accessibility"
-      ],
-      "agents": [
-        "./agents/nuxtjs-architect.md",
-        "./agents/frontend-visual.md",
-        "./agents/frontend-tester.md"
-      ],
+      "keywords": ["nuxtjs", "vue", "vue3", "frontend", "typescript", "visual-qa", "accessibility"],
+      "agents": ["./agents/nuxtjs-architect.md", "./agents/frontend-visual.md", "./agents/frontend-tester.md"],
       "commands": []
     },
     {
       "name": "smi-architect",
-      "displayName": "Smicolon Architect",
       "version": "1.0.0",
       "description": "System architecture and diagram-as-code with Eraser.io integration",
       "source": "./plugins/smi-architect",
@@ -144,20 +102,9 @@
       "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "architecture",
-      "keywords": [
-        "architecture",
-        "diagrams",
-        "eraser",
-        "erd",
-        "flowchart",
-        "cloud-architecture"
-      ],
-      "agents": [
-        "./agents/system-architect.md"
-      ],
-      "commands": [
-        "./commands/diagram-create.md"
-      ]
+      "keywords": ["architecture", "diagrams", "eraser", "erd", "flowchart", "cloud-architecture"],
+      "agents": ["./agents/system-architect.md"],
+      "commands": ["./commands/diagram-create.md"]
     }
   ]
 }
