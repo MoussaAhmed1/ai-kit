@@ -1,110 +1,263 @@
-# MCP Setup for Visual Testing & Design Integration
+# MCP Server Setup Guide
 
-## Overview
+This guide explains how MCP (Model Context Protocol) servers are configured in the Smicolon marketplace templates for automatic, context-aware loading.
 
-The `@frontend-visual` agent uses two MCP servers:
-1. **Playwright MCP** - Visual testing and verification of implementations
-2. **Figma MCP** - Design analysis and design token extraction from Figma files
+## Why Project-Scoped MCPs?
 
-## Quick Start
+### The Context Problem
+- MCPs loaded globally consume **40k-108k tokens** before any conversation starts
+- With 200k context window, this leaves only **~92k tokens** for actual work
+- Solution: **Project-scoped `.mcp.json` files** that only load when working in specific projects
 
-```bash
-# 1. Install Playwright MCP
-claude mcp add playwright npx @playwright/mcp@latest
-
-# 2. Enable Figma MCP server in Figma Desktop:
-#    - Open Figma Desktop app
-#    - Preferences → Enable "Enable Dev Mode MCP Server"
-#    - Restart Figma, open a file, enable Dev Mode
-
-# 3. Add Figma MCP to Claude
-claude mcp add --transport sse figma-dev-mode-mcp-server http://127.0.0.1:3845/sse
-
-# 4. Verify
-claude mcp list
+### Token Savings
+```
+Global MCP setup:  108k tokens consumed (all projects)
+Project-scoped:    ~5-10k tokens (only relevant MCPs)
+Savings:           ~100k tokens freed for coding!
 ```
 
-Now you can use `@frontend-visual` with both Playwright and Figma integration!
+## Project-Scoped Configuration
 
-## Installation
+Each template includes a `.mcp.json` file at the project root that automatically loads framework-specific MCPs when you work in that directory.
 
-### Simple Installation (Recommended)
-
-Use Claude Code's built-in MCP management commands:
-
-#### 1. Install Playwright MCP
+### Directory-Based Auto-Loading
 
 ```bash
-claude mcp add playwright npx @playwright/mcp@latest
+# Django project
+cd ~/projects/django-app
+claude  # Auto-loads: Linear + PostgreSQL MCPs
+
+# Next.js project
+cd ~/projects/nextjs-app
+claude  # Auto-loads: Linear + Playwright + Figma MCPs
+
+# Change directory = different MCPs automatically!
 ```
 
-This automatically configures Playwright MCP for visual testing.
+## MCP Servers by Framework
 
-#### 2. Install Figma Dev Mode MCP
+### Django / NestJS Projects
+
+**MCPs Configured:**
+- **Linear**: Issue tracking and project management
+- **PostgreSQL**: Database inspection and read-only queries
+
+**`.mcp.json`:**
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
+    },
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://localhost/YOUR_DATABASE_NAME"
+      ]
+    }
+  }
+}
+```
+
+**Setup Steps:**
+1. Update `YOUR_DATABASE_NAME` with actual database name
+2. Add credentials if database requires authentication:
+   ```json
+   "postgresql://username:password@localhost:5432/dbname"
+   ```
+3. Authenticate Linear (one-time OAuth when prompted)
+
+### Next.js / Nuxt.js Projects
+
+**MCPs Configured:**
+- **Linear**: Issue tracking and project management
+- **Playwright**: Browser automation and visual testing
+- **Figma**: Design file integration (remote)
+
+**`.mcp.json`:**
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "figma": {
+      "transport": "http",
+      "url": "https://mcp.figma.com/mcp"
+    }
+  }
+}
+```
+
+**Setup Steps:**
+1. Authenticate Linear (one-time OAuth)
+2. Authenticate Figma (requires Dev Mode permissions)
+3. Run `npm run dev` before using Playwright MCP
+4. No configuration needed - works out of the box!
+
+## MCP Server Details
+
+### Linear MCP
+
+**Purpose:** Seamless issue tracking integration
+
+**Features:**
+- Create Linear issues from Claude
+- Update existing issues
+- Search and filter issues
+- Link commits to issues
+
+**Authentication:**
+- OAuth flow (one-time setup)
+- Click "Authenticate" when prompted
+- Authorize access in browser
+
+**Usage Examples:**
+```bash
+# Create issue
+"Create a Linear issue: Fix authentication bug"
+
+# Update issue
+"Update Linear issue ABC-123: Mark as completed"
+
+# Search issues
+"Show all P0 bugs in Linear"
+```
+
+**Token Cost:** ~2k tokens
+
+---
+
+### PostgreSQL MCP
+
+**Purpose:** Database inspection and debugging
+
+**Features:**
+- View database schemas
+- Execute read-only SQL queries
+- Inspect table structures
+- Check relationships and indexes
+
+**Security:**
+- **Read-only access** - cannot modify data
+- Safe for production database inspection
+- No destructive operations allowed
+
+**Configuration:**
+```json
+"postgresql://username:password@host:port/database"
+```
+
+**Usage Examples:**
+```bash
+# Inspect schema
+"Show me the users table schema"
+
+# Read-only query
+"How many active users are in the database?"
+
+# Relationships
+"What tables reference the users table?"
+```
+
+**Token Cost:** ~3k tokens
+
+---
+
+### Playwright MCP
+
+**Purpose:** Browser automation and visual testing
+
+**Features:**
+- Navigate pages and interact with UI
+- Take screenshots for verification
+- Execute JavaScript in browser
+- Submit forms and test flows
+- Works with `@frontend-visual` agent
 
 **Requirements:**
-- Figma Desktop app (latest version)
-- **Dev seat or Full seat** Figma account (Free/Viewer accounts cannot use Dev Mode)
-- At least one design file in Figma
+- Local dev server running (`npm run dev`)
+- Browser window will be visible during testing
 
-**Setup Figma MCP Server:**
-
-1. **Update Figma Desktop**: Ensure you have the latest version
-   - Figma Desktop → Help → Check for Updates
-
-2. **Open Figma Desktop app** (required - web version doesn't support MCP server)
-
-3. **Open a design file**: The MCP server requires an active file
-
-4. **Enable MCP Server**:
-   - Go to **Preferences** (macOS: Figma → Preferences, Windows: Settings)
-   - Find **"Enable Dev Mode MCP Server"** option
-   - Toggle it **ON**
-   - Restart Figma Desktop if prompted
-
-5. **Enable Dev Mode** (toggle in top-right corner)
-
-6. The local MCP server is now available at `http://127.0.0.1:3845/sse`
-
-**Add to Claude Code:**
-
+**Usage with @frontend-visual:**
 ```bash
-claude mcp add --transport sse figma-dev-mode-mcp-server http://127.0.0.1:3845/sse
+# Start dev server
+npm run dev
+
+# Visual testing
+@frontend-visual "Verify login page matches design"
+
+# Playwright will:
+# - Open browser to http://localhost:3000
+# - Navigate to login page
+# - Take screenshots
+# - Compare with Figma (if configured)
+# - Report discrepancies
 ```
 
-**Verify Installation:**
+**Token Cost:** ~4k tokens
 
+**Installation (if not using templates):**
 ```bash
-# List all MCP servers
-claude mcp list
-
-# You should see:
-# - figma-dev-mode-mcp-server (http://127.0.0.1:3845/sse)
+# Install Playwright browsers first
+npx playwright install
+npx playwright install-deps
 ```
 
-**Important Notes:**
-- **Figma Desktop app is required** - the MCP server feature is not available in the web version
-- **Dev or Full seat required** - Free/Viewer accounts don't have Dev Mode access
-- The MCP server only runs when Figma Desktop is open with a file
-- Dev Mode must be enabled for Claude to access design data
+---
 
-**Reference:** [Full setup guide](https://www.builder.io/blog/claude-code-figma-mcp-server)
+### Figma MCP (Remote)
 
-### Manual Installation (Alternative)
+**Purpose:** Design file integration for pixel-perfect implementation
 
-If you prefer manual configuration:
+**Features:**
+- Fetch design specs from Figma files
+- Extract colors, typography, spacing
+- Compare implementation vs design
+- Works with `@frontend-visual` agent
 
-**Location:** `~/.claude/mcp.json` (or project-specific `.claude/mcp.json`)
+**Requirements:**
+- Figma account with **Dev Mode permissions**
+- OAuth authentication (one-time)
+- **Remote MCP** - no local Figma app needed
+
+**Authentication:**
+```bash
+# Claude will prompt for authentication
+# Click "Authenticate" → Opens browser
+# Sign in to Figma → Authorize access
+```
+
+**Usage Examples:**
+```bash
+# Get design specs
+"Get design specs from Figma file XYZ"
+
+# Extract styles
+"Extract color palette from Figma design"
+
+# Compare implementation
+@frontend-visual "Compare dashboard with Figma design ABC-123"
+```
+
+**Token Cost:** ~3k tokens
+
+**Alternative: Figma Desktop MCP (Local)**
+
+If you prefer using Figma Desktop app:
 
 ```json
 {
   "mcpServers": {
-    "playwright": {
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"],
-      "env": {}
-    },
-    "figma-dev-mode-mcp-server": {
+    "figma-dev-mode": {
       "transport": "sse",
       "url": "http://127.0.0.1:3845/sse"
     }
@@ -112,436 +265,228 @@ If you prefer manual configuration:
 }
 ```
 
-### Verify Installation
+**Requirements:**
+1. Figma Desktop app (latest version)
+2. Enable "Dev Mode MCP Server" in Figma Preferences
+3. Open a design file
+4. Toggle Dev Mode ON
 
-Start Claude Code and check that both MCP servers' tools are available:
+## Scope Hierarchy
 
-```bash
-claude
+Claude Code uses three MCP scopes with priority:
 
-# In Claude, you should see these tools available:
-
-# Playwright tools:
-# - mcp__playwright__navigate
-# - mcp__playwright__screenshot
-# - mcp__playwright__click
-# - mcp__playwright__fill
-# - mcp__playwright__evaluate
-# - etc.
-
-# Figma tools:
-# - mcp__figma__get_file
-# - mcp__figma__get_file_styles
-# - mcp__figma__get_node
-# - mcp__figma__get_image
-# - etc.
+```
+1. Local (.claude/mcp.json in project)     [Highest Priority]
+2. Project (.mcp.json at project root)     [Medium Priority]
+3. User (~/.claude/mcp.json)               [Lowest Priority]
 ```
 
-## Usage with @frontend-visual Agent
+### Recommended Strategy
+
+**User Scope** (`~/.claude/mcp.json`):
+- Minimal global MCPs (GitHub, Git only)
+- Tools used across ALL projects
+
+**Project Scope** (`.mcp.json`):
+- Framework-specific MCPs
+- Team-shared configuration
+- **Commit to git for team consistency**
+
+**Local Scope** (`.claude/mcp.json`):
+- Personal overrides
+- Sensitive credentials
+- **Do NOT commit to git**
+
+### Example Setup
+
+```bash
+# Global (always loaded)
+~/.claude/mcp.json
+{
+  "mcpServers": {
+    "github": { ... }  # 2k tokens
+  }
+}
+
+# Django project (auto-loads in this directory)
+~/projects/django-app/.mcp.json
+{
+  "mcpServers": {
+    "linear": { ... },    # 2k tokens
+    "postgres": { ... }   # 3k tokens
+  }
+}
+
+# Next.js project (auto-loads in this directory)
+~/projects/nextjs-app/.mcp.json
+{
+  "mcpServers": {
+    "linear": { ... },     # 2k tokens
+    "playwright": { ... }, # 4k tokens
+    "figma": { ... }       # 3k tokens
+  }
+}
+
+Result:
+- Django session:  2k + 2k + 3k = 7k tokens  (vs 108k global)
+- Next.js session: 2k + 2k + 4k + 3k = 11k tokens (vs 108k global)
+- 90%+ token reduction achieved!
+```
+
+## Visual Testing with @frontend-visual
+
+The `@frontend-visual` agent uses Playwright and Figma MCPs for pixel-perfect implementation verification.
 
 ### Workflow 1: Implementing from Figma
 
-1. **Provide Figma URL:**
-   ```bash
-   claude @frontend-visual
-   ```
+```bash
+# Start dev server
+npm run dev
 
-   ```
-   "Implement this login form from Figma:
-   https://www.figma.com/file/ABC123DEF456/Project?node-id=123:456"
-   ```
+# Use visual agent
+claude @frontend-visual
 
-2. **Agent will:**
-   - Extract file_key and node_id from URL
-   - Use Figma MCP to get design system and component details
-   - Extract colors, spacing, typography from Figma
-   - Implement the component using project's tech stack
-   - Verify with Playwright screenshots
-   - Compare implementation with Figma design
-   - Report findings and iterations needed
+# Provide Figma URL
+"Implement this login form from Figma:
+https://www.figma.com/file/ABC123/Project?node-id=123:456"
+```
+
+**Agent will:**
+1. Extract design specs from Figma MCP
+2. Get colors, typography, spacing
+3. Implement component using project tech stack
+4. Use Playwright to capture implementation
+5. Compare with Figma design
+6. Report differences and suggest fixes
 
 ### Workflow 2: Verifying Existing Implementation
 
-1. **Start your dev server:**
-   ```bash
-   npm run dev
-   # Server running at http://localhost:3000
-   ```
+```bash
+# Start dev server
+npm run dev
 
-2. **Use the visual agent:**
-   ```bash
-   claude @frontend-visual
-   ```
+# Visual verification
+claude @frontend-visual
 
-3. **Provide context:**
-   ```
-   "I just implemented a login form at /login.
-   Please verify it matches the design system and test all states."
-   ```
+"Verify the dashboard at /dashboard matches the design system"
+```
 
-4. **Agent will:**
-   - Load project design system (.claude/custom/design-system.md or tailwind.config.js)
-   - Navigate to http://localhost:3000/login
-   - Take screenshots
-   - Measure spacing, colors, typography
-   - Verify against project design system
-   - Test interactions (hover, focus, validation)
-   - Test responsive breakpoints
-   - Report findings
+**Agent will:**
+1. Load project design system (from tailwind.config.js or design-system.md)
+2. Navigate to page with Playwright
+3. Take screenshots
+4. Measure spacing, colors, typography
+5. Compare with design system
+6. Test responsive breakpoints
+7. Report findings
 
 ### Workflow 3: Design System Extraction
 
-1. **Provide Figma file URL:**
-   ```bash
-   claude @frontend-visual
-   ```
-
-   ```
-   "Extract the design system from this Figma file:
-   https://www.figma.com/file/ABC123DEF456/Design-System"
-   ```
-
-2. **Agent will:**
-   - Use Figma MCP to get file styles
-   - Extract color palette
-   - Extract typography scale
-   - Extract spacing system
-   - Extract component patterns
-   - Create `.claude/custom/design-system.md` documentation
-   - Report complete design system
-
-### Example Session with Figma
-
 ```bash
-$ claude @frontend-visual
-
-You: Implement this dashboard from Figma:
-https://www.figma.com/file/ABC123/Project?node-id=123:456
-
-Agent: I'll implement the dashboard from Figma.
-
-[Agent uses Figma MCP first:]
-1. mcp__figma__get_file({ file_key: "ABC123" })
-2. mcp__figma__get_file_styles({ file_key: "ABC123" })
-   - Extracted design system: Colors, typography, spacing
-3. mcp__figma__get_node({ file_key: "ABC123", node_id: "123:456" })
-   - Dashboard structure, layout, dimensions
-4. mcp__figma__get_image({ file_key: "ABC123", node_ids: ["123:456"] })
-   - Reference screenshot saved
-
-Agent: Design system extracted:
-- Primary color: #2563EB
-- Font: Inter, sizes 14/16/20/24/32px
-- Spacing: 4/8/16/24/32/48px
-- Layout: 240px sidebar, 64px header
-
-[Agent implements Dashboard.tsx using extracted values]
-
-[Agent uses Playwright MCP to verify:]
-1. npm run dev
-2. mcp__playwright__navigate({ url: "http://localhost:3000/dashboard" })
-3. mcp__playwright__screenshot({ name: "dashboard-implementation" })
-4. mcp__playwright__evaluate({ script: "..." }) # Measure spacing
-
-Agent: Verification complete:
-✅ Layout structure matches Figma
-✅ Colors match design system (#2563EB primary)
-✅ Sidebar is 240px as specified
-✅ Header is 64px as specified
-✅ Spacing follows 4/8/16 scale
-✅ Typography uses Inter font with correct sizes
-
-Implementation is pixel-perfect and matches Figma design.
-```
-
-### Example Session with Screenshot
-
-```bash
-$ claude @frontend-visual
-
-You: I implemented a dashboard at /dashboard. Verify against the design system.
-
-Agent: I'll verify your dashboard implementation.
-
-[Agent loads project design system:]
-1. Read('.claude/custom/design-system.md')
-   - Project uses: #3B82F6 primary, Roboto font, 8px spacing scale
-
-[Agent uses Playwright MCP:]
-1. mcp__playwright__navigate({ url: "http://localhost:3000/dashboard" })
-2. mcp__playwright__screenshot({ name: "dashboard-current" })
-3. mcp__playwright__evaluate({ script: "..." }) # Measure spacing
-
-Agent: Verification results:
-✅ Layout structure is correct
-✅ Colors match project design system (#3B82F6)
-❌ Header padding is 16px, should be 24px (3 * 8px per design system)
-❌ Sidebar is 220px wide, should be 240px (30 * 8px)
-✅ Font is Roboto as specified
-✅ Mobile responsive works correctly
-
-I can fix these spacing issues. Should I proceed?
-```
-
-## Available MCP Tools
-
-### Figma MCP Tools
-
-#### Get File
-```typescript
-mcp__figma__get_file({
-  file_key: "ABC123DEF456"  // From Figma URL
-})
-// Returns: File metadata, document structure, pages, frames
-```
-
-#### Get File Styles (Design Tokens)
-```typescript
-mcp__figma__get_file_styles({
-  file_key: "ABC123DEF456"
-})
-// Returns:
-// - Color styles (fills, strokes)
-// - Text styles (typography)
-// - Effect styles (shadows, blurs)
-// - Grid styles (layout grids)
-```
-
-#### Get Node
-```typescript
-mcp__figma__get_node({
-  file_key: "ABC123DEF456",
-  node_id: "123:456"  // From Figma URL after node-id=
-})
-// Returns: Specific node/component details, layout, styles, children
-```
-
-#### Get Image Export
-```typescript
-mcp__figma__get_image({
-  file_key: "ABC123DEF456",
-  node_ids: ["123:456", "123:457"],
-  format: "png",  // or "svg", "jpg", "pdf"
-  scale: 2  // 1, 2, 3, 4 for @2x, @3x, @4x
-})
-// Returns: URLs to exported images
-```
-
-#### Get Comments
-```typescript
-mcp__figma__get_comments({
-  file_key: "ABC123DEF456"
-})
-// Returns: All comments on the file (useful for design feedback)
-```
-
-### Playwright MCP Tools
-
-#### Navigation
-```typescript
-mcp__playwright__navigate({
-  url: "http://localhost:3000/page",
-  browser?: "chromium" | "firefox" | "webkit"
-})
-```
-
-#### Screenshots
-```typescript
-mcp__playwright__screenshot({
-  name: "component-state",
-  fullPage?: boolean,
-  selector?: string  // Screenshot specific element
-})
-```
-
-### Interactions
-```typescript
-mcp__playwright__click({ selector: "button.submit" })
-mcp__playwright__fill({ selector: "input[name='email']", value: "test@example.com" })
-mcp__playwright__hover({ selector: ".card" })
-mcp__playwright__focus({ selector: "input" })
-```
-
-### Evaluation
-```typescript
-mcp__playwright__evaluate({
-  script: `
-    const element = document.querySelector('.card');
-    const styles = window.getComputedStyle(element);
-    return {
-      padding: styles.padding,
-      margin: styles.margin,
-      backgroundColor: styles.backgroundColor
-    };
-  `
-})
-```
-
-### Viewport
-```typescript
-mcp__playwright__setViewportSize({
-  width: 375,
-  height: 667
-})
-```
-
-### Waiting
-```typescript
-mcp__playwright__waitForSelector({
-  selector: ".loading",
-  state: "hidden"
-})
-```
-
-## Best Practices
-
-### 1. Start Dev Server First
-Always ensure your development server is running before using visual testing:
-
-```bash
-# Terminal 1: Dev server
-npm run dev
-
-# Terminal 2: Claude with visual agent
 claude @frontend-visual
+
+"Extract design system from Figma file:
+https://www.figma.com/file/ABC123/Design-System"
 ```
 
-### 2. Use with Storybook
-For component library testing, use Storybook:
+**Agent will:**
+1. Use Figma MCP to get file styles
+2. Extract color palette
+3. Extract typography scale
+4. Extract spacing system
+5. Create `.claude/custom/design-system.md`
+6. Generate Tailwind config (if applicable)
+
+## Team Setup
+
+### For New Projects
 
 ```bash
-# Terminal 1: Storybook
-npm run storybook
+# 1. Clone template
+npx degit smicolon/claude-infra/templates/django-project my-project
+cd my-project
 
-# Terminal 2: Visual testing
-claude @frontend-visual
-# "Test all Button component variants at http://localhost:6006"
+# 2. Update .mcp.json
+# Edit database connection string
+
+# 3. Start Claude Code
+claude
+
+# 4. Authenticate MCPs (first time only)
+# Linear: Click "Authenticate" when prompted
+# PostgreSQL: No auth needed (connection string)
+
+# 5. Start building
+@django-architect "Design user management system"
 ```
 
-### 3. Design Comparison Workflow
-When implementing from design:
-
-1. Save design mockup in project: `/designs/page-name.png`
-2. Implement the page/component
-3. Use @frontend-visual to capture implementation
-4. Provide both images to agent for comparison
-5. Agent measures differences and suggests fixes
-
-### 4. Visual Regression Testing
-After making changes:
+### For Existing Projects
 
 ```bash
-# Before changes
-@frontend-visual "Capture baseline screenshots of dashboard"
+# 1. Copy .mcp.json from template
+cp /path/to/template/.mcp.json .
 
-# Make your changes...
+# 2. Update configuration
+# Edit database connection, etc.
 
-# After changes
-@frontend-visual "Compare current dashboard with baseline"
+# 3. Commit to git
+git add .mcp.json
+git commit -m "Add project-scoped MCP configuration"
+git push
+
+# 4. Team members pull
+# They get MCPs automatically!
 ```
 
 ## Troubleshooting
 
-### Playwright MCP Issues
+### MCPs Not Loading
 
-#### MCP Server Not Found
-
-**Error:** `playwright MCP server not available`
-
-**Solution:**
+**Check installation:**
 ```bash
-# Install globally
-npm install -g @playwright/mcp-server
-
-# Or use npx (no installation needed)
-# Update mcp.json to use npx
+/mcp  # In Claude Code, view active MCPs
 ```
 
-### Figma MCP Issues
-
-#### Figma Dev Mode MCP Server Not Found
-
-**Error:** `figma-dev-mode-mcp-server not available`
-
-**Solution:**
+**Verify .mcp.json location:**
 ```bash
-# Add the Figma Dev Mode MCP server
-claude mcp add --transport sse figma-dev-mode-mcp-server http://127.0.0.1:3845/sse
+ls -la .mcp.json  # Should be at project root
 ```
 
-#### Cannot Connect to Figma Dev Mode Server
+**Restart Claude Code:**
+```bash
+# Exit and restart for new .mcp.json to load
+```
 
-**Error:** `Connection refused` or `Server not available at http://127.0.0.1:3845/sse`
+### Linear Authentication Issues
+
+**Error:** `Linear authentication failed`
 
 **Solution:**
-1. **Use Figma Desktop app**: MCP server is only available in Desktop app, not web version
-2. **Enable MCP Server in Figma**:
-   - Open Figma Desktop → Settings/Preferences
-   - Find "Enable MCP Server" option
-   - Toggle it ON
-   - Restart Figma Desktop
-3. **Ensure Figma is running**: Figma Desktop app must be open
-4. **Open a design file**: The MCP server only runs when a file is open
-5. **Enable Dev Mode**:
-   - Click the "Dev Mode" toggle in top-right of Figma
-   - Dev Mode must be active for the MCP server to work
-6. **Check port 3845**: Ensure nothing else is using this port
+1. Type `/mcp` in Claude Code
+2. Select Linear from the list
+3. Click "Authenticate"
+4. Complete OAuth flow in browser
+5. Verify authentication success
+
+### PostgreSQL Connection Issues
+
+**Error:** `Connection refused`
+
+**Solution:**
+1. Verify database is running:
    ```bash
-   lsof -i :3845
+   psql -U username -d dbname
    ```
-7. **Restart Figma Desktop** if the server still isn't starting
+2. Check connection string format:
+   ```json
+   "postgresql://username:password@localhost:5432/dbname"
+   ```
+3. Test connection outside Claude:
+   ```bash
+   psql "postgresql://username:password@localhost:5432/dbname"
+   ```
 
-#### Figma File Not Open
-
-**Error:** `No active file` or `Cannot access design data`
-
-**Solution:**
-- Ensure the Figma file you want to access is currently open in Figma
-- The Figma Dev Mode MCP server only provides access to currently open files
-- Switch to the correct file tab in Figma if multiple files are open
-
-#### Dev Mode Not Available
-
-**Error:** `Dev Mode not accessible` or `MCP Server option not visible`
-
-**Solution:**
-- **Seat type required**: You must have a **Dev seat** or **Full seat** in Figma
-- **Free/Viewer accounts** cannot use Dev Mode or the MCP server
-- Dev Mode is available on:
-  - Figma Professional plans (Dev or Full seats)
-  - Organization plans (Dev or Full seats)
-  - Enterprise plans (Dev or Full seats)
-- Check your seat type:
-  - Figma → Settings → Account → Your plan and seat type
-- Solutions:
-  - Ask your team admin to upgrade you to a Dev seat
-  - Use a team workspace with appropriate seats
-  - Subscribe to Figma Professional plan ($12/month with Dev seat)
-
-### Port Already in Use
-
-**Error:** `EADDRINUSE: address already in use`
-
-**Solution:**
-```bash
-# Find and kill process on port 3000
-lsof -ti:3000 | xargs kill -9
-
-# Or use different port
-npm run dev -- -p 3001
-```
-
-### Screenshots Not Saved
-
-Screenshots are saved in Claude Code's context and shown to you visually. They're not saved to your filesystem by default.
-
-To save screenshots:
-```typescript
-// Agent will show you the screenshot
-// You can ask: "Save that screenshot to /screenshots/filename.png"
-```
-
-### Browser Not Launching
+### Playwright Browser Not Launching
 
 **Error:** `Browser not found`
 
@@ -552,72 +497,111 @@ npx playwright install
 npx playwright install-deps
 ```
 
-## Integration with CI/CD
+### Figma Authentication Issues
 
-For automated visual testing in CI:
+**Error:** `Figma authentication failed` or `Dev Mode not available`
 
-```yaml
-# .github/workflows/visual-tests.yml
-name: Visual Tests
+**Solution:**
+1. Verify Figma account has **Dev Mode permissions**
+2. Free/Viewer accounts cannot use Dev Mode
+3. Requires Professional/Organization/Enterprise plan with Dev seat
+4. Click "Authenticate" when prompted
+5. Complete OAuth flow in browser
 
-on: [push, pull_request]
+**Using Figma Desktop MCP instead:**
+1. Install Figma Desktop app
+2. Enable "Dev Mode MCP Server" in Preferences
+3. Open a design file
+4. Toggle Dev Mode ON
+5. Use SSE transport: `http://127.0.0.1:3845/sse`
 
-jobs:
-  visual-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+### High Token Usage
 
-      - name: Install dependencies
-        run: npm ci
+**Check context breakdown:**
+```bash
+/context  # View token usage
 
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-
-      - name: Build and start dev server
-        run: |
-          npm run build
-          npm run start &
-          npx wait-on http://localhost:3000
-
-      - name: Run visual tests with Claude Code
-        run: |
-          # Use Claude Code API or script to run visual tests
-          claude-code --agent frontend-visual --prompt "Test all pages"
+# Shows:
+# - MCP tools: X tokens
+# - Memory files: Y tokens
+# - Available: Z tokens
 ```
 
-## Tips for Pixel-Perfect Implementation
+**Optimize:**
+1. Move global MCPs to project-scoped files
+2. Remove unused MCPs
+3. Use project templates (pre-optimized)
 
-1. **Exact measurements:** Use Playwright to measure actual vs expected
-2. **Color verification:** Get computed colors and compare with design
-3. **Responsive testing:** Test all breakpoints systematically
-4. **State testing:** Test hover, focus, disabled, error states
-5. **Cross-browser:** Test in Chromium, Firefox, and WebKit
+## Best Practices
 
-## Support
+1. **Always use project-scoped `.mcp.json`** for framework-specific MCPs
+2. **Keep global MCPs minimal** (GitHub, Git only)
+3. **Commit `.mcp.json` to git** for team consistency
+4. **Update connection strings** before first use
+5. **Authenticate once** per MCP (OAuth persists)
+6. **Monitor token usage** with `/context` command
+7. **Use specific MCPs** for specific projects (not all MCPs everywhere)
+8. **Run dev server** before using Playwright MCP
+9. **Use @frontend-visual** agent for visual testing (don't invoke MCPs directly)
+10. **Document MCP requirements** in project README
 
-- Playwright MCP: https://github.com/microsoft/playwright-mcp
-- Claude Code MCP: https://docs.claude.com/claude-code/mcp
-- Issues: Create issue in this repository
+## Future Enhancements
 
-## Example Project Structure
+### Lazy Loading (Planned)
 
-```
-your-project/
-├── src/
-│   ├── app/
-│   ├── components/
-│   └── features/
-├── designs/              # Design mockups
-│   ├── dashboard.png
-│   └── login.png
-├── screenshots/          # Visual test screenshots
-│   ├── baseline/
-│   └── current/
-├── .claude/
-│   ├── agents/
-│   │   └── frontend-visual.md
-│   └── mcp.json         # Playwright MCP config
-└── package.json
-```
+GitHub issue #7336 proposes lazy loading:
+- Load only lightweight index at startup (~5k tokens)
+- Load tools on-demand based on keywords
+- 95% token reduction potential
+
+**Status:** Feature request with proof-of-concept
+
+### Skills Integration (Planned)
+
+Skills will work with MCPs:
+- Skills can declare `required-mcps` in SKILL.md
+- Auto-prompt to install if missing
+- Seamless integration with project MCPs
+
+## Available MCP Tools
+
+### Linear MCP Tools
+- `create_issue` - Create Linear issue
+- `update_issue` - Update existing issue
+- `search_issues` - Search/filter issues
+- `get_issue` - Get issue details
+- `add_comment` - Add comment to issue
+
+### PostgreSQL MCP Tools
+- `query` - Execute read-only SQL query
+- `list_tables` - List all tables
+- `describe_table` - Get table schema
+- `get_indexes` - List table indexes
+
+### Playwright MCP Tools
+- `navigate` - Navigate to URL
+- `screenshot` - Take screenshot
+- `click` - Click element
+- `fill` - Fill form field
+- `evaluate` - Execute JavaScript
+- `setViewportSize` - Set viewport size
+- `waitForSelector` - Wait for element
+
+### Figma MCP Tools
+- `get_file` - Get Figma file details
+- `get_file_styles` - Get design tokens
+- `get_node` - Get component details
+- `get_image` - Export design as image
+- `get_comments` - Get design comments
+
+## Summary
+
+Project-scoped MCPs provide:
+- ✅ **Automatic context-based loading** (change directory = different MCPs)
+- ✅ **90%+ token reduction** (7-11k vs 108k global)
+- ✅ **Team consistency** (commit `.mcp.json` to git)
+- ✅ **Framework-specific tools** (Django gets PostgreSQL, Next.js gets Playwright)
+- ✅ **Seamless integration** with agents and workflows
+- ✅ **Zero manual toggling** (MCPs load automatically per project)
+
+**Result:** More context for actual coding, less overhead from unused tools!

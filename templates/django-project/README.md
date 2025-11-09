@@ -78,22 +78,34 @@ app/
    /plugin install smi-django
    ```
 
-2. Start building:
+2. Configure MCP servers (project-scoped):
+   ```bash
+   # Update .mcp.json with your database connection string
+   # Replace YOUR_DATABASE_NAME with your actual database name
+   ```
+
+3. Authenticate Linear MCP (first time only):
+   ```bash
+   # In Claude Code, Linear will prompt for authentication
+   # Click "Authenticate" and authorize access
+   ```
+
+4. Start building:
    ```bash
    @django-architect "Design a user authentication system"
    ```
 
-3. Implement:
+5. Implement:
    ```bash
    @django-builder "Build the authentication system"
    ```
 
-4. Test:
+6. Test:
    ```bash
    @django-tester "Write tests for authentication"
    ```
 
-5. Review:
+7. Review:
    ```bash
    @django-reviewer "Review the authentication code"
    ```
@@ -122,3 +134,55 @@ The post-write hook automatically checks for:
 - ✅ Permission classes on views
 
 Violations will be flagged immediately.
+
+## MCP Servers Configured
+
+This template includes project-scoped MCP servers (`.mcp.json`) that automatically load when you work in this directory:
+
+### Linear
+- **Purpose**: Issue tracking and project management integration
+- **Features**: Create/update/search Linear issues directly from Claude
+- **Authentication**: OAuth (one-time setup)
+- **Usage**: Ask Claude to "create a Linear issue" or "update issue ABC-123"
+
+### PostgreSQL
+- **Purpose**: Database inspection and read-only queries
+- **Features**:
+  - View database schemas
+  - Execute read-only SQL queries
+  - Inspect table structures
+- **Configuration**: Update connection string in `.mcp.json`:
+  ```json
+  "postgresql://username:password@localhost:5432/your_db_name"
+  ```
+- **Security**: Read-only access for safety
+
+### Configuration File
+
+The `.mcp.json` file in this template:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
+    },
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://localhost/YOUR_DATABASE_NAME"
+      ]
+    }
+  }
+}
+```
+
+**Remember to**:
+1. Update `YOUR_DATABASE_NAME` with your actual database name
+2. Add credentials if your database requires authentication
+3. Commit `.mcp.json` to git for team-wide MCP configuration
+
+**Token Optimization**: Project-scoped MCPs only load when you're in this directory, saving ~100k tokens compared to global MCP configuration.

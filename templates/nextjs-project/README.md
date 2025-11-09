@@ -84,7 +84,18 @@ src/
    /plugin install smi-nextjs
    ```
 
-2. Start building:
+2. Authenticate MCP servers (first time only):
+   ```bash
+   # Linear: OAuth authentication (click "Authenticate" when prompted)
+   # Figma: OAuth authentication (requires Figma Dev Mode permissions)
+   ```
+
+3. Start dev server for Playwright MCP:
+   ```bash
+   npm run dev  # Playwright MCP can test your running app
+   ```
+
+4. Start building:
    ```bash
    @nextjs-architect "Design a user dashboard"
    ```
@@ -109,3 +120,87 @@ The post-write hook automatically checks for:
 - ✅ Proper error handling
 
 Violations will be flagged immediately.
+
+## MCP Servers Configured
+
+This template includes project-scoped MCP servers (`.mcp.json`) that automatically load when you work in this directory:
+
+### Linear
+- **Purpose**: Issue tracking and project management integration
+- **Features**: Create/update/search Linear issues directly from Claude
+- **Authentication**: OAuth (one-time setup)
+- **Usage**: Ask Claude to "create a Linear issue for this bug"
+
+### Playwright
+- **Purpose**: Browser automation and visual testing
+- **Features**:
+  - Navigate pages and test UI interactions
+  - Take screenshots for visual verification
+  - Execute JavaScript in browser context
+  - Submit forms and test user flows
+- **Requirements**:
+  - Run `npm run dev` to have a local server running
+  - Playwright will open a visible browser window
+- **Usage with @frontend-visual agent**:
+  ```bash
+  @frontend-visual "Verify the login page design matches Figma"
+  ```
+
+### Figma (Remote)
+- **Purpose**: Design file integration and pixel-perfect implementation
+- **Features**:
+  - Fetch design specs from Figma files
+  - Extract colors, typography, spacing
+  - Compare implementation vs design
+- **Requirements**:
+  - Figma account with Dev Mode permissions
+  - OAuth authentication (one-time)
+- **Usage**: Ask Claude to "get design specs from Figma file XYZ"
+
+### Configuration File
+
+The `.mcp.json` file in this template:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "figma": {
+      "transport": "http",
+      "url": "https://mcp.figma.com/mcp"
+    }
+  }
+}
+```
+
+**Setup Requirements**:
+1. **Linear**: Click "Authenticate" when prompted (one-time OAuth)
+2. **Playwright**: No setup needed, works out of the box
+3. **Figma**:
+   - Authenticate when prompted
+   - Requires Figma Dev Mode access
+   - Remote MCP server (no local Figma app needed)
+
+**Token Optimization**: Project-scoped MCPs only load when you're in this directory, saving ~100k tokens compared to global MCP configuration.
+
+**Visual Testing Workflow**:
+```bash
+# 1. Start dev server
+npm run dev
+
+# 2. Use visual testing agent
+@frontend-visual "Verify dashboard layout matches design"
+
+# Playwright will:
+# - Open browser to your local app
+# - Take screenshots
+# - Compare with Figma designs (if Figma file linked)
+# - Report visual discrepancies
+```
