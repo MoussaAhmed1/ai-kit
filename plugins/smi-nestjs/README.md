@@ -20,6 +20,21 @@ Smicolon company standards for NestJS/TypeScript backend projects.
 - `@nestjs-builder` - Feature implementation with NestJS best practices
 - `@nestjs-tester` - Test writing for NestJS applications
 
+### 2 Auto-Enforcing Skills (NEW!)
+
+Skills automatically activate based on context - no manual invocation needed:
+
+**Code Organization:**
+- `barrel-export-manager` - Auto-creates/maintains index.ts barrel exports in all module directories
+- `import-convention-enforcer` - Auto-fixes imports to use absolute paths from barrel exports
+
+**How Skills Work:**
+- Auto-invoke when creating entities, DTOs, services, or importing modules
+- Automatically create index.ts files with proper exports
+- Convert relative imports to absolute barrel imports
+- Maintain clean, organized module structure
+- Work alongside agents for complete code quality
+
 ### Automatic Convention Enforcement
 
 **Import Pattern:**

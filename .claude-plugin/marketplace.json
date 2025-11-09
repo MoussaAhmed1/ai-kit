@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Official marketplace for Smicolon development tools and standards",
   "license": "MIT",
+  "metadata": {
+    "description": "Official marketplace for Smicolon development tools and standards - 5 framework-specific plugins with 14 specialized agents, 11 auto-enforcing skills, and comprehensive development workflows for Django, NestJS, Next.js, Nuxt.js, and system architecture"
+  },
   "owner": {
     "name": "Smicolon Development Team",
     "email": "dev@smicolon.com",
@@ -12,8 +15,8 @@
   "plugins": [
     {
       "name": "smi-django",
-      "version": "1.0.0",
-      "description": "Company standards for Django projects with 5 specialized agents and automatic convention enforcement",
+      "version": "1.1.0",
+      "description": "Company standards for Django projects with 5 specialized agents, 6 auto-enforcing skills, and automatic convention enforcement",
       "source": "./plugins/smi-django",
       "author": {
         "name": "Smicolon",
@@ -24,7 +27,7 @@
       "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "backend",
-      "keywords": ["django", "python", "backend", "testing", "architecture"],
+      "keywords": ["django", "python", "backend", "testing", "architecture", "security", "performance"],
       "agents": [
         "./agents/django-architect.md",
         "./agents/django-builder.md",
@@ -32,12 +35,20 @@
         "./agents/django-tester.md",
         "./agents/django-reviewer.md"
       ],
-      "commands": ["./commands/model-create.md", "./commands/api-endpoint.md", "./commands/test-generate.md"]
+      "commands": ["./commands/model-create.md", "./commands/api-endpoint.md", "./commands/test-generate.md"],
+      "skills": [
+        "./skills/import-convention-enforcer/SKILL.md",
+        "./skills/model-entity-validator/SKILL.md",
+        "./skills/security-first-validator/SKILL.md",
+        "./skills/test-coverage-advisor/SKILL.md",
+        "./skills/performance-optimizer/SKILL.md",
+        "./skills/migration-safety-checker/SKILL.md"
+      ]
     },
     {
       "name": "smi-nestjs",
-      "version": "1.0.0",
-      "description": "Company standards for NestJS/TypeScript backend projects with 3 specialized agents",
+      "version": "1.1.0",
+      "description": "Company standards for NestJS/TypeScript backend projects with 3 specialized agents and 2 auto-enforcing skills",
       "source": "./plugins/smi-nestjs",
       "author": {
         "name": "Smicolon",
@@ -48,14 +59,18 @@
       "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "backend",
-      "keywords": ["nestjs", "typescript", "backend", "testing", "architecture"],
+      "keywords": ["nestjs", "typescript", "backend", "testing", "architecture", "barrel-exports"],
       "agents": ["./agents/nestjs-architect.md", "./agents/nestjs-builder.md", "./agents/nestjs-tester.md"],
-      "commands": ["./commands/module-create.md"]
+      "commands": ["./commands/module-create.md"],
+      "skills": [
+        "./skills/barrel-export-manager/SKILL.md",
+        "./skills/import-convention-enforcer/SKILL.md"
+      ]
     },
     {
       "name": "smi-nextjs",
-      "version": "1.0.0",
-      "description": "Company standards for Next.js/React projects with 4 specialized agents including visual QA",
+      "version": "1.1.0",
+      "description": "Company standards for Next.js/React projects with 4 specialized agents, 3 auto-enforcing skills, and visual QA",
       "source": "./plugins/smi-nextjs",
       "author": {
         "name": "Smicolon",
@@ -66,9 +81,14 @@
       "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "frontend",
-      "keywords": ["nextjs", "react", "frontend", "typescript", "visual-qa", "accessibility"],
+      "keywords": ["nextjs", "react", "frontend", "typescript", "visual-qa", "accessibility", "forms"],
       "agents": ["./agents/nextjs-architect.md", "./agents/nextjs-modular.md", "./agents/frontend-visual.md", "./agents/frontend-tester.md"],
-      "commands": ["./commands/component-create.md"]
+      "commands": ["./commands/component-create.md"],
+      "skills": [
+        "./skills/accessibility-validator/SKILL.md",
+        "./skills/react-form-validator/SKILL.md",
+        "./skills/import-convention-enforcer/SKILL.md"
+      ]
     },
     {
       "name": "smi-nuxtjs",

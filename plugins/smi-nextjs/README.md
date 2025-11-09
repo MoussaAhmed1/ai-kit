@@ -21,6 +21,22 @@ Smicolon company standards for Next.js/React projects.
 - `@frontend-visual` - Visual QA with Playwright + Figma MCP integration
 - `@frontend-tester` - Frontend testing (unit, integration, E2E, accessibility)
 
+### 3 Auto-Enforcing Skills (NEW!)
+
+Skills automatically activate based on context - no manual invocation needed:
+
+**Frontend Quality:**
+- `accessibility-validator` - Auto-checks WCAG 2.1 AA compliance (keyboard nav, ARIA, contrast)
+- `react-form-validator` - Auto-enforces React Hook Form + Zod for all forms
+- `import-convention-enforcer` - Auto-fixes imports to use path aliases (@/ pattern)
+
+**How Skills Work:**
+- Auto-invoke when creating components, forms, or organizing imports
+- Proactively fix violations (divs→buttons, add ARIA, convert to Zod)
+- Explain WHY accessibility/validation matters
+- Block inaccessible/unvalidated code
+- Work alongside agents for complete quality assurance
+
 ### Automatic Convention Enforcement
 
 **Required Standards:**
