@@ -1,20 +1,20 @@
 ---
 name: barrel-export-manager
-description: Automatically create and maintain index.ts barrel exports in NestJS modules for clean imports. Use when creating entities, DTOs, services, controllers, or organizing module structure. (plugin:smi-nestjs@smicolon-marketplace)
+description: This skill should be used when the user asks to "create barrel exports", "add index.ts", "organize exports", "create entity", "add DTO", "create service", or when adding files to NestJS module directories. Auto-maintains barrel exports.
 ---
 
 # Barrel Export Manager
 
 Auto-creates and maintains `index.ts` barrel export files in NestJS modules for clean, maintainable imports.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User creates new entity, DTO, service, controller, guard, decorator
-- User adds files to module directories
-- User organizes NestJS module structure
-- User mentions "NestJS", "module", "create"
-- User imports from module directories
+This skill activates when:
+- Creating new entity, DTO, service, controller, guard, decorator
+- Adding files to module directories
+- Organizing NestJS module structure
+- Mentioning "NestJS", "module", "create"
+- Importing from module directories
 
 ## Required Pattern (MANDATORY)
 
@@ -55,7 +55,7 @@ export class User {
 
 ### Step 2: Auto-Create/Update index.ts
 
-I automatically create or update `users/entities/index.ts`:
+Automatically create or update `users/entities/index.ts`:
 
 ```typescript
 // users/entities/index.ts
@@ -65,7 +65,7 @@ export * from './profile.entity'
 
 ### Step 3: Verify Imports Use Barrel
 
-I ensure other files import from barrel:
+Ensure other files import from barrel:
 
 ```typescript
 // ✅ CORRECT - Import from barrel
@@ -77,11 +77,11 @@ import { User } from 'src/users/entities/user.entity'
 
 ### Step 4: Update on File Changes
 
-When files are added/removed/renamed, I automatically update the barrel export:
+When files are added/removed/renamed, automatically update the barrel export:
 
 ```typescript
 // User adds: organization.entity.ts
-// I automatically update index.ts:
+// Automatically update index.ts:
 export * from './user.entity'
 export * from './profile.entity'
 export * from './organization.entity'  // ✅ Added automatically
@@ -245,7 +245,7 @@ export { UsersService } from './users.service'
 
 ## Auto-Barrel Creation Rules
 
-I automatically create `index.ts` when:
+Automatically create `index.ts` when:
 
 1. **2+ files in directory** (avoids unnecessary barrels)
 2. **Files export classes/types** (entities, DTOs, services, etc.)
@@ -311,7 +311,7 @@ src/
 ```typescript
 // User creates: payment-method.entity.ts
 
-// I automatically update entities/index.ts:
+// Automatically update entities/index.ts:
 export * from './user.entity'
 export * from './profile.entity'
 export * from './payment-method.entity'  // ✅ Auto-added
@@ -322,7 +322,7 @@ export * from './payment-method.entity'  // ✅ Auto-added
 ```typescript
 // User renames: update-user.dto.ts → modify-user.dto.ts
 
-// I automatically update dto/index.ts:
+// Automatically update dto/index.ts:
 export * from './create-user.dto'
 export * from './modify-user.dto'  // ✅ Auto-updated
 ```
@@ -332,7 +332,7 @@ export * from './modify-user.dto'  // ✅ Auto-updated
 ```typescript
 // User deletes: profile.entity.ts
 
-// I automatically update entities/index.ts:
+// Automatically update entities/index.ts:
 export * from './user.entity'
 // export * from './profile.entity'  // ✅ Auto-removed
 ```
@@ -366,21 +366,21 @@ export class OrdersService {
 ✅ Clean, maintainable import structure
 ✅ Easy refactoring (rename/move files)
 
-## Skill Behavior
+## Behavior
 
-**I am PROACTIVE:**
-- I create barrels WITHOUT being asked
-- I update barrels AUTOMATICALLY when files change
-- I convert direct imports to barrel imports
-- I explain benefits of barrel exports
-- I maintain consistent structure
+**Proactive enforcement:**
+- Create barrels without being asked
+- Update barrels automatically when files change
+- Convert direct imports to barrel imports
+- Explain benefits of barrel exports
+- Maintain consistent structure
 
-**I do NOT:**
-- Require user to ask "create barrel export"
+**Never:**
+- Require explicit "create barrel export" request
 - Allow direct file imports when barrel exists
 - Wait for imports to break
 
-**I ALWAYS:**
+**Always:**
 - Create `index.ts` in module directories
 - Keep barrel exports up to date
 - Use `export *` for simplicity (unless selective needed)

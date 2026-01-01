@@ -1,21 +1,21 @@
 ---
 name: security-first-validator
-description: Automatically check Django REST API endpoints for security requirements (permissions, authentication, input validation, rate limiting). Use when creating views, viewsets, API routes, serializers, or any API endpoint code. (plugin:smi-django@smicolon-marketplace)
+description: This skill should be used when the user asks to "create an API endpoint", "add a view", "write a viewset", "create a serializer", or when writing Django REST Framework code. Enforces security requirements (permissions, authentication, rate limiting).
 ---
 
 # Security-First Validator
 
-Auto-enforces security requirements for ALL Django REST Framework API endpoints.
+Enforces security requirements for all Django REST Framework API endpoints.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User creates API views or viewsets
-- User creates serializers
-- User mentions "endpoint", "API", "view", "route"
-- User writes DRF classes (APIView, ViewSet, Serializer)
-- User creates URL patterns for APIs
-- User discusses authentication or permissions
+This skill activates when:
+- Creating API views or viewsets
+- Creating serializers
+- Mentioning "endpoint", "API", "view", "route"
+- Writing DRF classes (APIView, ViewSet, Serializer)
+- Creating URL patterns for APIs
+- Discussing authentication or permissions
 
 ## Security Requirements (MANDATORY)
 
@@ -70,11 +70,11 @@ class LoginView(APIView):
     # ...
 ```
 
-## Auto-Validation Process
+## Validation Process
 
 ### Step 1: Detect New API Endpoint
 
-When I see API code being written:
+When API code is being written:
 
 ```python
 class UserViewSet(viewsets.ModelViewSet):
@@ -85,7 +85,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 ### Step 2: Run Security Checklist
 
-I verify:
+Verify:
 1. ✅ Permission classes defined
 2. ✅ Serializer has proper validation
 3. ✅ No raw SQL queries
@@ -131,7 +131,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'  # Never use __all__!
 ```
 
-**I auto-fix to:**
+**Auto-fix to:**
 
 ```python
 # ✅ SAFE - Explicit field list
@@ -145,7 +145,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 ### Step 5: Report Security Issues
 
-I immediately alert:
+Report to developer:
 
 > **Security Issues Detected and Fixed**
 >
@@ -159,14 +159,6 @@ I immediately alert:
 > - Permission classes prevent unauthorized access
 > - Explicit fields prevent accidental data exposure
 > - Read-only fields prevent tampering with audit trail
-
-## Security Patterns
-
-See supporting files for complete patterns:
-- `checklists/owasp-top-10.md` - OWASP vulnerability checklist
-- `patterns/django-security.md` - Django-specific security patterns
-- `patterns/permission-classes.md` - Correct permission patterns
-- `examples/secure-django-view.py` - Complete secure view example
 
 ## Complete Secure Endpoint Example
 
@@ -302,7 +294,7 @@ class AdminViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
 ```
 
-**I auto-fix:**
+**Auto-fix:**
 ```python
 # ✅ SECURE
 class AdminViewSet(viewsets.ModelViewSet):
@@ -372,7 +364,7 @@ class LoginView(APIView):
 
 ## OWASP Top 10 Coverage
 
-I automatically check for:
+Automatically check for:
 
 1. **Broken Access Control** → Permission classes required
 2. **Cryptographic Failures** → No sensitive fields in serializers
@@ -387,7 +379,7 @@ I automatically check for:
 
 ## Custom Permission Classes
 
-I recognize and allow custom permissions:
+Recognize and allow custom permissions:
 
 ```python
 from rest_framework.permissions import BasePermission
@@ -421,25 +413,23 @@ Works together with:
 ✅ Input validation on all write operations
 ✅ Developer understands OWASP risks
 
-## Skill Behavior
+## Behavior
 
-**I am PROACTIVE:**
-- I check security WITHOUT being asked
-- I add permission classes AUTOMATICALLY
-- I fix serializer field exposure IMMEDIATELY
-- I explain WHY each security measure is critical
-- I reference OWASP categories
+**Proactive enforcement:**
+- Check security without being asked
+- Add permission classes automatically
+- Fix serializer field exposure immediately
+- Explain WHY each security measure is critical
+- Reference OWASP categories
 
-**I do NOT:**
-- Require user to ask "check security"
+**Never:**
+- Require explicit "check security" request
 - Wait for pen test results
-- Just warn - I FIX violations automatically
+- Just warn without fixing
 - Allow endpoints without security
 
-**I BLOCK completion if:**
+**Block completion if:**
 - No permission classes defined
 - Serializer uses `fields = '__all__'`
 - Raw SQL detected
 - Sensitive endpoints lack rate limiting
-
-This ensures every API endpoint is secure from the moment it's created.

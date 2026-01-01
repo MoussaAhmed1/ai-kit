@@ -1,6 +1,6 @@
 ---
 name: red-phase-verifier
-description: Ensure tests fail before implementation (TDD red phase). Activates when writing tests first, during TDD loop, or when red-green-refactor is mentioned. (plugin:smi-django@smicolon-marketplace)
+description: This skill should be used when the user asks to "write tests first", "run TDD", "verify red phase", "check failing tests", or when practicing test-driven development. Ensures tests fail before implementation.
 ---
 
 # Red Phase Verifier
@@ -16,11 +16,12 @@ In TDD:
 
 This skill enforces Step 1.
 
-## When This Skill Activates
+## Activation Triggers
 
-- During /tdd-loop command
-- When test files created before implementation
-- When "write tests first" mentioned
+This skill activates when:
+- Running /dev-loop command
+- Creating test files before implementation
+- Mentioning "write tests first"
 
 ## Verification Process
 
@@ -153,9 +154,9 @@ Fix issues, then run verification again.
 - `NameError` - Undefined variable in test
 - `TypeError` - Wrong arguments in test setup
 
-## TDD Loop Integration
+## Dev Loop Integration
 
-When integrated with /tdd-loop:
+When integrated with /dev-loop:
 
 1. Tests written -> Run red phase verifier
 2. If all fail correctly -> Proceed to implementation

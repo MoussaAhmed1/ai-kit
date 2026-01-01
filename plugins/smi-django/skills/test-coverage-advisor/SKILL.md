@@ -1,20 +1,20 @@
 ---
 name: test-coverage-advisor
-description: Automatically suggest missing test cases to achieve 90%+ coverage. Use when completing features, finishing implementation, before code review, or when tests are mentioned. Activates when user says done, finished, ready for review. (plugin:smi-django@smicolon-marketplace)
+description: This skill should be used when the user asks to "write tests", "generate tests", "check coverage", "add test cases", or when completing features and saying "done", "finished", "ready for review". Suggests tests for 90%+ coverage.
 ---
 
 # Test Coverage Advisor
 
 Auto-suggests comprehensive test cases to achieve Smicolon's 90%+ coverage target.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User completes feature implementation
-- User mentions "done", "finished", "ready", "complete"
-- User says "review this code"
-- User creates models, services, views, or APIs
-- User asks about testing
+This skill activates when:
+- Completing feature implementation
+- Mentioning "done", "finished", "ready", "complete"
+- Saying "review this code"
+- Creating models, services, views, or APIs
+- Asking about testing
 - Before code is marked as complete
 
 ## Coverage Target (MANDATORY)
@@ -30,7 +30,7 @@ Test categories:
 
 ### Step 1: Identify Untested Code
 
-When feature implementation is complete, I scan for:
+When feature implementation is complete, scan for:
 
 ```python
 # models.py - Has tests? ❓
@@ -223,7 +223,7 @@ class TestUserViewSet:
 
 ### Step 4: Report Coverage Plan
 
-I provide a detailed report:
+Provide a detailed report:
 
 > **Test Coverage Analysis**
 >
@@ -247,7 +247,7 @@ I provide a detailed report:
 
 ## Edge Case Checklist
 
-For every function/method, I suggest tests for:
+For every function/method, suggest tests for:
 
 ### Input Validation
 - ✅ Valid input (happy path)
@@ -295,7 +295,7 @@ users/
 
 ## Pytest Configuration
 
-I also suggest pytest setup:
+Also suggest pytest setup:
 
 ```python
 # conftest.py
@@ -329,7 +329,7 @@ addopts = --cov=. --cov-report=html --cov-report=term-missing
 
 ## Factory Pattern (factory_boy)
 
-For complex test data, I suggest factories:
+For complex test data, suggest factories:
 
 ```python
 # users/tests/factories.py
@@ -352,7 +352,7 @@ def test_bulk_users():
 
 ## Integration with CI/CD
 
-I suggest coverage enforcement in CI:
+Suggest coverage enforcement in CI:
 
 ```yaml
 # .github/workflows/tests.yml
@@ -360,13 +360,6 @@ I suggest coverage enforcement in CI:
   run: |
     pytest --cov=. --cov-fail-under=90
 ```
-
-## Test Templates
-
-See supporting files:
-- `templates/test-structures.md` - Test file templates
-- `checklists/edge-cases.md` - Edge case checklist
-- `examples/complete-test-suites/` - Full test examples
 
 ## Success Criteria
 
@@ -378,24 +371,24 @@ See supporting files:
 ✅ Permissions tested
 ✅ Error handling tested
 
-## Skill Behavior
+## Behavior
 
-**I am PROACTIVE:**
-- I analyze coverage WITHOUT being asked
-- I suggest tests when code is complete
-- I generate complete test files
-- I explain what each test verifies
-- I calculate coverage impact
+**Proactive enforcement:**
+- Analyze coverage without being asked
+- Suggest tests when code is complete
+- Generate complete test files
+- Explain what each test verifies
+- Calculate coverage impact
 
-**I do NOT:**
-- Require user to ask "write tests"
+**Never:**
+- Require explicit "write tests" request
 - Wait for coverage report
-- Just list what to test - I WRITE the tests
+- Just list what to test without writing tests
 
 **When user says "done" or "ready":**
-- I immediately analyze test coverage
-- I identify gaps
-- I suggest (or write) missing tests
-- I don't let code be "complete" without tests
+- Immediately analyze test coverage
+- Identify gaps
+- Suggest (or write) missing tests
+- Don't let code be "complete" without tests
 
 This ensures 90%+ coverage is maintained from day one.

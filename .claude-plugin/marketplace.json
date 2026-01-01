@@ -1,10 +1,10 @@
 {
   "name": "smicolon-marketplace",
   "version": "2.1.0",
-  "description": "Official marketplace for Smicolon development standards - 6 plugins with 14 agents, 16 skills, path-specific rules, and dev loop automation",
+  "description": "Official marketplace for Smicolon development standards - 6 plugins with 14 agents, 16 skills, and dev loop automation",
   "license": "MIT",
   "metadata": {
-    "description": "Official marketplace for Smicolon development standards - 6 framework-specific plugins with 14 specialized agents, 16 auto-enforcing skills, 16 path-specific rules, and autonomous dev loops for Django, NestJS, Next.js, Nuxt.js, and system architecture"
+    "description": "Official marketplace for Smicolon development standards - 6 framework-specific plugins with 14 specialized agents, 16 auto-enforcing skills, and autonomous dev loops for Django, NestJS, Next.js, Nuxt.js, and system architecture"
   },
   "owner": {
     "name": "Smicolon Development Team",
@@ -37,7 +37,7 @@
     {
       "name": "smi-django",
       "version": "2.1.0",
-      "description": "Django standards with 5 agents, 8 skills, and 6 path rules",
+      "description": "Django standards with 5 agents and 8 auto-enforcing skills",
       "source": "./plugins/smi-django",
       "author": {
         "name": "Smicolon",
@@ -75,7 +75,7 @@
     {
       "name": "smi-nestjs",
       "version": "2.1.0",
-      "description": "NestJS standards with 3 agents, 2 skills, and 4 path rules",
+      "description": "NestJS standards with 3 agents and 2 auto-enforcing skills",
       "source": "./plugins/smi-nestjs",
       "author": {
         "name": "Smicolon",
@@ -101,7 +101,7 @@
     {
       "name": "smi-nextjs",
       "version": "2.1.0",
-      "description": "Next.js standards with 4 agents, 3 skills, 3 path rules, and visual QA",
+      "description": "Next.js standards with 4 agents, 3 auto-enforcing skills, and visual QA",
       "source": "./plugins/smi-nextjs",
       "author": {
         "name": "Smicolon",
@@ -129,7 +129,7 @@
     {
       "name": "smi-nuxtjs",
       "version": "2.1.0",
-      "description": "Nuxt.js standards with 3 agents, 3 skills, 3 path rules, and visual QA",
+      "description": "Nuxt.js standards with 3 agents, 3 auto-enforcing skills, and visual QA",
       "source": "./plugins/smi-nuxtjs",
       "author": {
         "name": "Smicolon",

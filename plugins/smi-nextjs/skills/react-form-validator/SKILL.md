@@ -1,20 +1,20 @@
 ---
 name: react-form-validator
-description: Automatically enforce React Hook Form + Zod pattern for all forms in Next.js/React. Use when creating forms, handling user input, validation, or form submission. (plugin:smi-nextjs@smicolon-marketplace)
+description: This skill should be used when the user asks to "create a form", "add validation", "handle form submission", "use React Hook Form", or when creating login, signup, or data entry forms. Enforces React Hook Form + Zod pattern.
 ---
 
 # React Form Validator
 
 Auto-enforces React Hook Form + Zod validation pattern for ALL forms in Next.js/React applications.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User creates form components
-- User uses `<form>`, `<input>`, form elements
-- User mentions "form", "validation", "submit", "input"
-- User handles form state or submission
-- User creates login, signup, or data entry forms
+This skill activates when:
+- Creating form components
+- Using `<form>`, `<input>`, form elements
+- Mentioning "form", "validation", "submit", "input"
+- Handling form state or submission
+- Creating login, signup, or data entry forms
 
 ## Required Form Pattern (MANDATORY)
 
@@ -29,7 +29,7 @@ ALL forms MUST use:
 
 ### Step 1: Detect Form Without Pattern
 
-When I see a form being created:
+When detecting a form being created:
 
 ```tsx
 // ❌ WRONG - Uncontrolled form, no validation
@@ -53,7 +53,7 @@ function LoginForm() {
 
 ### Step 2: Identify Missing Requirements
 
-I detect:
+Detect:
 - ❌ No React Hook Form
 - ❌ No Zod validation
 - ❌ No TypeScript types
@@ -545,22 +545,22 @@ export async function submitContact(formData: FormData) {
 ✅ Forms are keyboard accessible
 ✅ ARIA attributes for errors
 
-## Skill Behavior
+## Behavior
 
-**I am PROACTIVE:**
-- I detect forms WITHOUT being asked
-- I add React Hook Form + Zod AUTOMATICALLY
-- I generate complete form code
-- I explain benefits of the pattern
-- I ensure accessibility
+**Proactive enforcement:**
+- Detect forms without being asked
+- Add React Hook Form + Zod automatically
+- Generate complete form code
+- Explain benefits of the pattern
+- Ensure accessibility
 
-**I do NOT:**
+**Never:**
 - Allow unvalidated forms
 - Accept useState for form state
 - Allow inline validation logic
 - Skip TypeScript types
 
-**I BLOCK completion if:**
+**Block completion if:**
 - Form lacks validation
 - No error handling
 - Missing loading states

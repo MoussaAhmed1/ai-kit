@@ -1,18 +1,19 @@
 ---
 name: test-validity-checker
-description: Verify tests are meaningful and not trivial shortcuts. Activates when writing tests, before running test suites, or when test coverage is mentioned. (plugin:smi-django@smicolon-marketplace)
+description: This skill should be used when the user asks to "check tests", "validate tests", "review test quality", "verify test coverage", or when writing test files or running pytest. Ensures tests are meaningful.
 ---
 
 # Test Validity Checker
 
 Auto-validates that tests are meaningful and catch real bugs.
 
-## When This Skill Activates
+## Activation Triggers
 
+This skill activates when:
 - Writing test files
 - Before pytest execution
 - When test coverage is checked
-- When TDD loop is running
+- When dev loop is running
 
 ## Validity Checks
 

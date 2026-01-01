@@ -1,21 +1,21 @@
 ---
 name: accessibility-validator
-description: Automatically validate React/Next.js components meet WCAG 2.1 AA standards. Use when creating components, forms, buttons, modals, navigation, or any interactive UI elements. (plugin:smi-nextjs@smicolon-marketplace)
+description: This skill should be used when the user asks to "check accessibility", "make accessible", "add ARIA", "fix a11y", or when creating React/Next.js components, forms, buttons, modals, or interactive UI elements. Enforces WCAG 2.1 AA.
 ---
 
 # Accessibility Validator
 
 Auto-enforces WCAG 2.1 AA accessibility standards for all React/Next.js components.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User creates React/Next.js components
-- User builds forms, buttons, modals, navigation
-- User adds interactive elements
-- User mentions "component", "UI", "form", "button"
-- User creates pages or layouts
-- User works on user-facing features
+This skill activates when:
+- Creating React/Next.js components
+- Building forms, buttons, modals, navigation
+- Adding interactive elements
+- Mentioning "component", "UI", "form", "button"
+- Creating pages or layouts
+- Working on user-facing features
 
 ## WCAG 2.1 AA Requirements (MANDATORY)
 
@@ -31,7 +31,7 @@ All components MUST meet:
 
 ### Step 1: Detect Component Creation
 
-When I see component being written:
+When detecting component being written:
 
 ```tsx
 // Component without accessibility
@@ -42,7 +42,7 @@ function LoginButton({ onClick }) {
 
 ### Step 2: Run Accessibility Checklist
 
-I verify:
+Verify:
 1. ❌ Using div instead of button (semantic HTML)
 2. ❌ No keyboard support (only onClick, no onKeyDown)
 3. ❌ Not focusable (div not in tab order)
@@ -237,7 +237,7 @@ function Modal({ isOpen, onClose, title, children }) {
 
 ## Keyboard Navigation Checklist
 
-For every component, I verify:
+For every component, verify:
 
 - ✅ All interactive elements are focusable (button, a, input, etc.)
 - ✅ Tab order is logical (follows visual flow)
@@ -249,7 +249,7 @@ For every component, I verify:
 
 ## Color Contrast Requirements
 
-I check all text meets minimum contrast:
+Check all text meets minimum contrast:
 
 ```tsx
 // ❌ WRONG - insufficient contrast (2.5:1)
@@ -350,7 +350,7 @@ function Modal({ isOpen, title }) {
 
 ## Testing Recommendations
 
-I suggest automated tests:
+Suggest automated tests:
 
 ```tsx
 import { render } from '@testing-library/react'
@@ -365,7 +365,7 @@ test('LoginButton has no accessibility violations', async () => {
 })
 ```
 
-## Common Violations I Check
+## Common Violations Checked
 
 ### Missing Labels
 - Form inputs without labels
@@ -421,21 +421,21 @@ test('LoginButton has no accessibility violations', async () => {
 ✅ Screen reader tested
 ✅ Automated axe tests pass
 
-## Skill Behavior
+## Behavior
 
-**I am PROACTIVE:**
-- I check accessibility WITHOUT being asked
-- I fix violations IMMEDIATELY
-- I add ARIA attributes automatically
-- I explain WCAG criteria for each fix
-- I suggest automated tests
+**Proactive enforcement:**
+- Check accessibility without being asked
+- Fix violations immediately
+- Add ARIA attributes automatically
+- Explain WCAG criteria for each fix
+- Suggest automated tests
 
-**I do NOT:**
-- Require user to ask "check accessibility"
+**Never:**
+- Require explicit "check accessibility" request
 - Wait for accessibility audit
-- Just warn - I FIX violations
+- Just warn without fixing
 
-**I BLOCK completion if:**
+**Block completion if:**
 - Buttons are divs
 - Forms lack labels
 - Color contrast fails

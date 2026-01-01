@@ -1,21 +1,21 @@
 ---
 name: model-entity-validator
-description: Automatically validate Django models have required fields (UUID primary key, timestamps, soft delete). Use when creating or modifying Django models, database schemas, or seeing model class definitions. (plugin:smi-django@smicolon-marketplace)
+description: This skill should be used when the user asks to "create a model", "add a Django model", "create database table", "add entity", "define schema", or when writing class definitions inheriting from models.Model. Validates BaseModel inheritance pattern.
 ---
 
 # Model/Entity Validator
 
-Auto-enforces Smicolon's BaseModel inheritance pattern for ALL Django models.
+Enforces Smicolon's BaseModel inheritance pattern for all Django models.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User creates new model files
-- User modifies existing models
-- User mentions "model", "database", "schema", "table"
-- User writes class inheriting from `models.Model`
-- User runs migrations
-- User discusses data structure
+This skill activates when:
+- Creating new model files
+- Modifying existing models
+- Mentioning "model", "database", "schema", "table"
+- Writing class inheriting from `models.Model`
+- Running migrations
+- Discussing data structure
 
 ## Core Principle: BaseModel Inheritance
 
@@ -37,11 +37,11 @@ class User(_core_models.BaseModel):
     email = models.EmailField(unique=True)
 ```
 
-## Auto-Validation Process
+## Validation Process
 
 ### Step 1: Check if BaseModel Exists
 
-Before doing ANYTHING, I check if the project has a BaseModel:
+Before any action, check if the project has a BaseModel:
 
 ```python
 # Search for BaseModel in (in order):
@@ -56,13 +56,13 @@ Before doing ANYTHING, I check if the project has a BaseModel:
 
 ### Step 2a: BaseModel Exists - Suggest Inheritance
 
-When I see:
+When seeing:
 ```python
 class Product(models.Model):
     name = models.CharField(max_length=255)
 ```
 
-I fix to:
+Fix to:
 ```python
 import core.models as _core_models
 
@@ -78,7 +78,7 @@ class Product(_core_models.BaseModel):
 
 ### Step 2b: BaseModel NOT Found - Create It First
 
-If no BaseModel exists, I create it:
+If no BaseModel exists, create it:
 
 ```python
 # core/models.py
@@ -126,10 +126,10 @@ class ActiveManager(models.Manager):
         return super().get_queryset().filter(is_deleted=False)
 ```
 
-Then I tell the developer:
+Report to developer:
 > **BaseModel Created**
 >
-> Created `core/models.py` with BaseModel. All your models should now inherit from it:
+> Created `core/models.py` with BaseModel. All models should now inherit from it:
 > ```python
 > import core.models as _core_models
 >
@@ -139,7 +139,7 @@ Then I tell the developer:
 
 ### Step 3: Detect Duplicate Fields
 
-If I see a model with explicit id/timestamp fields that inherits from BaseModel:
+If seeing a model with explicit id/timestamp fields that inherits from BaseModel:
 
 ```python
 # ❌ WRONG - Duplicate fields
@@ -149,22 +149,16 @@ class User(_core_models.BaseModel):
     email = models.EmailField()
 ```
 
-I remove them:
+Remove them:
 ```python
 # ✅ CORRECT - Only custom fields
 class User(_core_models.BaseModel):
     email = models.EmailField(unique=True)
 ```
 
-And explain:
-> **Duplicate Fields Removed**
->
-> Removed `id`, `created_at`, `updated_at`, `is_deleted` from `User` model.
-> These fields are already inherited from `BaseModel`.
-
 ### Step 4: Validate Indexes
 
-I check if appropriate indexes exist:
+Check if appropriate indexes exist:
 
 ```python
 class Product(_core_models.BaseModel):
@@ -222,8 +216,8 @@ class User(AbstractUser):
     """
     Custom User model with UUID and timestamps.
 
-    Note: For User we override AbstractUser directly since it has its own
-    ID handling. We add the standard fields manually.
+    Note: For User, override AbstractUser directly since it has its own
+    ID handling. Add the standard fields manually.
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -276,36 +270,9 @@ Product.active.all()  # Only non-deleted
 Product.objects.all()  # All including deleted
 ```
 
-## Edge Cases
-
-### Existing Models with Integer IDs
-
-If migrating existing model with integer IDs to UUID:
-
-> ⚠️ **Existing Model Detected**
->
-> This model already has an integer primary key. Converting to UUID requires:
-> 1. Data migration to generate UUIDs for existing records
-> 2. Update all foreign keys
-> 3. Potential application downtime
->
-> Recommend: Use UUID for new models, plan migration for existing ones.
-
-### Models That Can't Inherit BaseModel
-
-Some Django models (like User with AbstractUser) need special handling:
-
-```python
-# User inherits from AbstractUser, so add fields explicitly
-class User(AbstractUser):
-    id = models.UUIDField(...)
-    created_at = ...
-    # etc.
-```
-
 ## Validation Checklist
 
-When I review a model, I check:
+When reviewing a model, check:
 
 1. ✅ Inherits from `BaseModel` (or has explicit required fields for special cases)
 2. ✅ Does NOT duplicate fields from BaseModel
@@ -316,25 +283,16 @@ When I review a model, I check:
 7. ✅ Has docstring explaining the model
 8. ✅ Has `__str__` method for admin display
 
-## Integration with Other Skills
+## Behavior
 
-Works together with:
-- **import-convention-enforcer**: Ensures proper import pattern
-- **migration-safety-checker**: Validates migrations are safe
-- **security-first-validator**: Checks for sensitive field exposure
+**Proactive enforcement:**
+- Check if BaseModel exists FIRST
+- Suggest inheritance instead of field duplication
+- Remove duplicate fields automatically
+- Create BaseModel if missing
+- Explain WHY inheritance is better
 
-## Skill Behavior
-
-**I am PROACTIVE:**
-- I check if BaseModel exists FIRST
-- I suggest inheritance instead of field duplication
-- I remove duplicate fields automatically
-- I create BaseModel if missing
-- I explain WHY inheritance is better
-
-**I do NOT:**
+**Never:**
 - Add duplicate id/timestamp fields to models
 - Let developers repeat base fields
 - Ignore existing BaseModel in the project
-
-This ensures all models follow Smicolon's DRY BaseModel pattern.

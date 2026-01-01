@@ -1,14 +1,15 @@
 ---
 name: veevalidate-form-validator
-description: Automatically enforce VeeValidate + Zod pattern for all forms in Nuxt.js/Vue 3. Use when creating forms, handling user input, validation, or form submission. (plugin:smi-nuxtjs@smicolon-marketplace)
+description: This skill should be used when the user asks to "create a form", "add validation", "handle form submission", "use VeeValidate", or when creating login, signup, or data entry forms in Nuxt.js/Vue 3. Enforces VeeValidate + Zod pattern.
 ---
 
 # VeeValidate + Zod Form Validator
 
-## When This Skill Activates
+## Activation Triggers
 
+This skill activates when:
 - Creating form components
-- User mentions "form", "validation", "input"
+- Mentioning "form", "validation", "input"
 - Writing `<form>` or v-model
 - Handling user input
 

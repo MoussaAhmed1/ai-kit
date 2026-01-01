@@ -1,20 +1,19 @@
 ---
 name: import-convention-enforcer
-description: Automatically validate and fix Django import patterns to use absolute modular imports with aliases. Use when writing imports, creating new Python files, or modifying existing files. (plugin:smi-django@smicolon-marketplace)
+description: This skill should be used when the user asks to "fix imports", "add imports", "create a Python file", "write a Django model", "create a service", or when writing any Django Python code. Enforces absolute modular import pattern with aliases.
 ---
 
 # Import Convention Enforcer
 
-Auto-enforces Smicolon's absolute modular import pattern for Django projects.
+Enforces Smicolon's absolute modular import pattern for Django projects.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User writes or modifies Python files
-- User creates new models, services, views, or serializers
-- User mentions "import", "add", "create", or "refactor"
-- User reviews or fixes code
-- Any Python file is being written or edited
+This skill activates when:
+- Writing or modifying Python files
+- Creating models, services, views, or serializers
+- Mentioning "import", "add", "create", or "refactor"
+- Reviewing or fixing code
 
 ## Django Import Pattern (MANDATORY)
 
@@ -53,11 +52,11 @@ import .models as models
 from . import models
 ```
 
-## Auto-Validation Process
+## Validation Process
 
 ### Step 1: Detect Import Violations
 
-When I see Python code being written, I scan for:
+Scan Python code for:
 
 **Violation Type 1: Relative imports**
 ```python
@@ -77,8 +76,6 @@ import users.models               # ❌ (no alias)
 
 ### Step 2: Auto-Fix Violations
 
-I immediately suggest corrections:
-
 **Before (Violation):**
 ```python
 from .models import User, Profile
@@ -96,9 +93,9 @@ profile = _users_models.Profile.objects.get(...)
 result = _users_services.UserService.create_user(...)
 ```
 
-### Step 3: Explain Why
+### Step 3: Explain the Fix
 
-I tell the developer:
+Report to developer:
 > **Import Pattern Violation Fixed**
 >
 > Changed relative/direct imports to absolute modular imports with app-prefixed aliases:
@@ -110,14 +107,12 @@ I tell the developer:
 > - ✅ Easier to refactor
 > - ✅ No circular dependency issues
 > - ✅ Consistent across entire codebase
-> - ✅ Scales to large projects
 
-### Step 4: Verify All Imports in File
+### Step 4: Verify All Imports
 
-I check the entire file to ensure ALL imports follow the pattern:
+Check the entire file to ensure ALL imports follow the pattern:
 
 ```python
-# Check all imports at top of file
 import uuid
 import users.models as _users_models          # ✅
 import users.services as _users_services      # ✅
@@ -126,16 +121,9 @@ from rest_framework import serializers        # ✅ Third-party is fine
 from django.db import models                  # ✅ Django imports are fine
 ```
 
-## Pattern Reference Files
-
-See supporting files for detailed patterns:
-- `patterns/django-imports.md` - Complete Django import patterns
-- `auto-fixes/convert-relative-imports.py` - Auto-conversion script
-- `tests/test-import-patterns.md` - Test cases and examples
-
 ## Common Scenarios
 
-### Scenario 1: Creating New Model File
+### Creating New Model File
 
 **User writes:**
 ```python
@@ -144,7 +132,7 @@ from django.db import models
 from .base import BaseModel  # ❌ WRONG
 ```
 
-**I auto-fix to:**
+**Auto-fix to:**
 ```python
 # users/models.py
 from django.db import models
@@ -154,7 +142,7 @@ class User(_users_base.BaseModel):
     pass
 ```
 
-### Scenario 2: Creating New Service
+### Creating New Service
 
 **User writes:**
 ```python
@@ -163,7 +151,7 @@ from .models import User  # ❌ WRONG
 from .serializers import UserSerializer  # ❌ WRONG
 ```
 
-**I auto-fix to:**
+**Auto-fix to:**
 ```python
 # users/services.py
 import users.models as _users_models  # ✅ CORRECT
@@ -176,7 +164,7 @@ class UserService:
         return serializer.data
 ```
 
-### Scenario 3: Cross-App Imports
+### Cross-App Imports
 
 **User writes:**
 ```python
@@ -185,7 +173,7 @@ from users.models import User  # ❌ WRONG
 from products.models import Product  # ❌ WRONG
 ```
 
-**I auto-fix to:**
+**Auto-fix to:**
 ```python
 # orders/services.py
 import users.models as _user_models  # ✅ CORRECT
@@ -195,10 +183,9 @@ class OrderService:
     def create_order(self, user_id, product_id):
         user = _user_models.User.objects.get(id=user_id)
         product = _product_models.Product.objects.get(id=product_id)
-        # ...
 ```
 
-## Barrel Exports (Optional Enhancement)
+## Barrel Exports (Optional)
 
 For cleaner imports, suggest barrel exports in `__init__.py`:
 
@@ -217,10 +204,6 @@ import users.models as _users_models
 user = _users_models.User.objects.get(...)  # Clean!
 ```
 
-## Integration with Hooks
-
-This skill works alongside the `user-prompt-submit-hook.sh` which injects convention reminders. I enforce the actual pattern when code is written.
-
 ## Success Criteria
 
 ✅ All Python files use absolute modular imports with aliases
@@ -229,17 +212,15 @@ This skill works alongside the `user-prompt-submit-hook.sh` which injects conven
 ✅ Consistent `_alias` naming pattern
 ✅ Developers understand WHY (explained every time)
 
-## Skill Behavior
+## Behavior
 
-**I am PROACTIVE:**
-- I check imports WITHOUT being asked
-- I fix violations IMMEDIATELY
-- I explain WHY the pattern is required
-- I update ALL related usage in the file
+**Proactive enforcement:**
+- Check imports without being asked
+- Fix violations immediately
+- Explain why the pattern is required
+- Update all related usage in the file
 
-**I do NOT:**
-- Require user to ask "check imports"
+**Never:**
+- Require explicit "check imports" request
 - Wait for code review
-- Just warn - I FIX automatically
-
-This ensures imports are always correct from the moment code is written.
+- Just warn without fixing

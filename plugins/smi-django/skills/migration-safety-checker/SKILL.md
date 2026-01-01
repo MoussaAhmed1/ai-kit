@@ -1,21 +1,21 @@
 ---
 name: migration-safety-checker
-description: Automatically validate Django database migrations are safe for production (no data loss, reversible, tested). Use when creating migrations, modifying models, running makemigrations, or mentioning schema changes. (plugin:smi-django@smicolon-marketplace)
+description: This skill should be used when the user asks to "create a migration", "run makemigrations", "modify a model field", "rename a column", or mentions "schema change", "alter table", "database migration". Validates migrations are production-safe.
 ---
 
 # Migration Safety Checker
 
-Auto-validates Django migrations are production-safe before they cause data loss.
+Validates Django migrations are production-safe before they cause data loss.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User runs `makemigrations`
-- User modifies model fields
-- User mentions "migration", "schema", "alter table"
-- User adds/removes/renames fields
-- User changes field types
-- Migration files are created or modified
+This skill activates when:
+- Running `makemigrations`
+- Modifying model fields
+- Mentioning "migration", "schema", "alter table"
+- Adding/removing/renaming fields
+- Changing field types
+- Creating or modifying migration files
 
 ## Safety Requirements
 
@@ -51,7 +51,7 @@ These operations require special attention:
 3. **Creating new tables**
 4. **Adding non-unique indexes**
 
-## Auto-Validation Process
+## Validation Process
 
 ### Step 1: Analyze Migration File
 
@@ -70,7 +70,7 @@ class Migration(migrations.Migration):
 
 ### Step 2: Identify Risks
 
-I detect:
+Detect:
 - Operation type: `RemoveField`
 - Field: `old_email`
 - **Risk:** 🔴 CRITICAL - Dropping column loses data!
@@ -98,7 +98,7 @@ I detect:
 
 ### Step 4: Generate Safe Migration
 
-If user approves, I create:
+If user approves, create:
 
 ```python
 # Migration 1: Archive data
@@ -317,7 +317,7 @@ Before applying migration:
 
 ## Validation Commands
 
-I suggest running:
+Suggest running:
 
 ```bash
 # Review SQL before applying
@@ -352,26 +352,24 @@ python manage.py migrate --database=staging
 ✅ Data migrations properly batched
 ✅ Reversible migrations
 
-## Skill Behavior
+## Behavior
 
-**I am PROACTIVE:**
-- I analyze migrations WITHOUT being asked
-- I BLOCK unsafe migrations immediately
-- I suggest safe 3-step patterns
-- I generate data migration code
-- I explain WHY the migration is risky
+**Proactive enforcement:**
+- Analyze migrations without being asked
+- Block unsafe migrations immediately
+- Suggest safe 3-step patterns
+- Generate data migration code
+- Explain WHY the migration is risky
 
-**I do NOT:**
+**Never:**
 - Allow data loss migrations
 - Let users skip safety checks
 - Apply migrations without review
-- Just warn - I BLOCK unsafe operations
+- Just warn without blocking unsafe operations
 
 **When migration is unsafe:**
-- I stop the process
-- I explain the risk
-- I provide safe alternative
-- I generate corrected migration code
+- Stop the process
+- Explain the risk
+- Provide safe alternative
+- Generate corrected migration code
 - User must acknowledge before proceeding
-
-This prevents production data loss from unsafe migrations.

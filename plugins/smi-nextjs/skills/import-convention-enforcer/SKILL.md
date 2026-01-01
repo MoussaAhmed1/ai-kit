@@ -1,20 +1,20 @@
 ---
 name: import-convention-enforcer
-description: Automatically enforce consistent import patterns for Next.js/React using path aliases and proper organization. Use when writing imports, creating new files, or organizing code structure. (plugin:smi-nextjs@smicolon-marketplace)
+description: This skill should be used when the user asks to "fix imports", "organize imports", "add path alias", "create component", or when writing Next.js/React files that need consistent import patterns. Enforces @/ path aliases.
 ---
 
 # Import Convention Enforcer (Next.js/React)
 
 Auto-enforces consistent import patterns using Next.js path aliases for clean, maintainable code.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User writes or modifies TypeScript/JavaScript files
-- User creates new components, hooks, utilities
-- User imports from other files
-- User organizes project structure
-- User mentions "import", "add", "create"
+This skill activates when:
+- Writing or modifying TypeScript/JavaScript files
+- Creating new components, hooks, utilities
+- Importing from other files
+- Organizing project structure
+- Mentioning "import", "add", "create"
 
 ## Required Import Pattern (MANDATORY)
 
@@ -376,21 +376,21 @@ Suggest ESLint rules:
 ✅ Type imports use `type` keyword
 ✅ Consistent import style across project
 
-## Skill Behavior
+## Behavior
 
-**I am PROACTIVE:**
-- I detect relative imports AUTOMATICALLY
-- I convert to path aliases IMMEDIATELY
-- I organize import order
-- I suggest barrel exports
-- I explain import patterns
+**Proactive enforcement:**
+- Detect relative imports automatically
+- Convert to path aliases immediately
+- Organize import order
+- Suggest barrel exports
+- Explain import patterns
 
-**I do NOT:**
-- Require user to ask "fix imports"
+**Never:**
+- Require explicit "fix imports" request
 - Allow deep relative paths
 - Wait for linter errors
 
-**I ALWAYS:**
+**Always:**
 - Use `@/` path aliases
 - Organize imports by category
 - Add barrel exports where beneficial

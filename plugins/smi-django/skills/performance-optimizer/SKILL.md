@@ -1,21 +1,21 @@
 ---
 name: performance-optimizer
-description: Automatically detect N+1 queries, missing indexes, and inefficient Django ORM patterns. Use when writing database queries, accessing related objects, fetching data, or mentioning performance/optimization. (plugin:smi-django@smicolon-marketplace)
+description: This skill should be used when the user asks to "optimize queries", "fix slow queries", "improve performance", "detect N+1", "add indexes", or when writing Django ORM queries that access related objects. Detects and fixes performance issues.
 ---
 
 # Performance Optimizer
 
 Auto-detects and fixes Django ORM performance issues before they reach production.
 
-## When This Skill Activates
+## Activation Triggers
 
-I automatically run when:
-- User writes ORM queries
-- User accesses related objects (foreign keys, M2M)
-- User creates views that fetch data
-- User mentions "slow", "performance", "optimization"
-- User loops over querysets
-- User creates list/detail views
+This skill activates when:
+- Writing ORM queries
+- Accessing related objects (foreign keys, M2M)
+- Creating views that fetch data
+- Mentioning "slow", "performance", "optimization"
+- Looping over querysets
+- Creating list/detail views
 
 ## Performance Targets
 
@@ -125,7 +125,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 ### Step 1: Detect Anti-Pattern
 
-When I see:
+When detecting:
 ```python
 def get_users_with_organizations(self):
     users = User.objects.all()
@@ -137,14 +137,14 @@ def get_users_with_organizations(self):
 
 ### Step 2: Analyze Query Pattern
 
-I identify:
+Identify:
 - Queryset: `User.objects.all()` (1 query)
 - Foreign key access: `u.organization.name` (N queries)
 - **Total:** 1 + N queries = N+1 problem!
 
 ### Step 3: Suggest Optimization
 
-I provide:
+Provide:
 
 > **N+1 Query Detected!**
 >
@@ -227,7 +227,7 @@ users = User.objects.select_related(
 
 ## Index Recommendations
 
-I suggest indexes for:
+Suggest indexes for:
 
 ### Frequently Filtered Fields
 
@@ -321,7 +321,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 ## Database Query Analysis
 
-I check queries using Django Debug Toolbar patterns:
+Check queries using Django Debug Toolbar patterns:
 
 ```python
 from django.db import connection
@@ -338,7 +338,7 @@ def test_user_list_queries(self):
 
 ## Performance Checklist
 
-For every queryset, I verify:
+For every queryset, verify:
 
 - ✅ `select_related()` for accessed foreign keys
 - ✅ `prefetch_related()` for reverse FKs and M2M
@@ -424,21 +424,21 @@ def test_user_list_performance(django_assert_num_queries):
 ✅ Pagination on all list endpoints
 ✅ Bulk operations used instead of loops
 
-## Skill Behavior
+## Behavior
 
-**I am PROACTIVE:**
-- I detect N+1 queries AUTOMATICALLY
-- I suggest optimizations IMMEDIATELY
-- I calculate performance impact (queries before/after)
-- I add indexes to models
-- I explain WHY the optimization matters
+**Proactive enforcement:**
+- Detect N+1 queries automatically
+- Suggest optimizations immediately
+- Calculate performance impact (queries before/after)
+- Add indexes to models
+- Explain WHY the optimization matters
 
-**I do NOT:**
-- Require user to ask "optimize queries"
+**Never:**
+- Require explicit "optimize queries" request
 - Wait for production slowness
-- Just warn - I FIX performance issues
+- Just warn without fixing
 
-**I BLOCK completion if:**
+**Block completion if:**
 - N+1 queries detected
 - Missing indexes on frequently queried fields
 - No pagination on list endpoints

@@ -1,12 +1,13 @@
 ---
 name: import-convention-enforcer
-description: Automatically enforce consistent import patterns for Nuxt.js/Vue 3 using path aliases and proper organization. Use when writing imports, creating new files, or organizing code structure. (plugin:smi-nuxtjs@smicolon-marketplace)
+description: This skill should be used when the user asks to "fix imports", "organize imports", "use path aliases", "create component", or when writing Nuxt.js/Vue 3 files that need consistent import patterns. Enforces ~/ path aliases.
 ---
 
 # Nuxt.js Import Convention Enforcer
 
-## When This Skill Activates
+## Activation Triggers
 
+This skill activates when:
 - Writing imports in Vue/TS files
 - Creating new files
 - Modifying existing files with imports
