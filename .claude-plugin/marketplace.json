@@ -1,10 +1,10 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.1.0",
-  "description": "Official marketplace for Smicolon development standards - 7 plugins with 16 agents, 18 skills, failure memory, and TDD dev loops",
+  "version": "2.2.0",
+  "description": "Official marketplace for Smicolon development standards - 8 plugins with 19 agents, 21 skills, Flutter mobile development, failure memory, and TDD dev loops",
   "license": "MIT",
   "metadata": {
-    "description": "Official marketplace for Smicolon development standards - 7 plugins with 16 specialized agents, 18 auto-enforcing skills, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, and system architecture"
+    "description": "Official marketplace for Smicolon development standards - 8 plugins with 19 specialized agents, 21 auto-enforcing skills, Flutter mobile development, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Flutter, and system architecture"
   },
   "owner": {
     "name": "Smicolon Development Team",
@@ -193,6 +193,40 @@
         "./commands/failure-list.md"
       ],
       "skills": ["./skills/failure-log-manager/SKILL.md"],
+      "hooks": ["./hooks/hooks.json"]
+    },
+    {
+      "name": "smi-flutter",
+      "version": "0.1.0",
+      "description": "Flutter development with Fastlane automation, store publishing, and architecture patterns",
+      "source": "./plugins/smi-flutter",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": "https://github.com/smicolon/claude-infra",
+      "license": "MIT",
+      "category": "mobile",
+      "keywords": ["flutter", "dart", "mobile", "ios", "android", "fastlane", "app-store", "google-play"],
+      "agents": [
+        "./agents/flutter-architect.md",
+        "./agents/flutter-builder.md",
+        "./agents/release-manager.md"
+      ],
+      "commands": [
+        "./commands/flutter-build.md",
+        "./commands/flutter-test.md",
+        "./commands/flutter-deploy.md",
+        "./commands/fastlane-setup.md",
+        "./commands/signing-setup.md"
+      ],
+      "skills": [
+        "./skills/flutter-architecture/SKILL.md",
+        "./skills/fastlane-knowledge/SKILL.md",
+        "./skills/store-publishing/SKILL.md"
+      ],
       "hooks": ["./hooks/hooks.json"]
     }
   ]
