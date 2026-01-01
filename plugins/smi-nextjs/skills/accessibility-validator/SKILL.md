@@ -1,6 +1,6 @@
 ---
 name: accessibility-validator
-description: Automatically validate React/Next.js components meet WCAG 2.1 AA standards. Use when creating components, forms, buttons, modals, navigation, or any interactive UI elements.
+description: Automatically validate React/Next.js components meet WCAG 2.1 AA standards. Use when creating components, forms, buttons, modals, navigation, or any interactive UI elements. (plugin:smi-nextjs@smicolon-marketplace)
 ---
 
 # Accessibility Validator

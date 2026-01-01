@@ -1,6 +1,6 @@
 ---
 name: accessibility-validator
-description: Automatically validate Vue 3/Nuxt.js components meet WCAG 2.1 AA standards. Activates when creating components, forms, or interactive UI elements.
+description: Automatically validate Vue 3/Nuxt.js components meet WCAG 2.1 AA standards. Use when creating components, forms, buttons, modals, navigation, or any interactive UI elements. (plugin:smi-nuxtjs@smicolon-marketplace)
 ---
 
 # Vue Accessibility Validator

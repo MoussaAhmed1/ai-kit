@@ -1,6 +1,6 @@
 ---
 name: import-convention-enforcer
-description: Automatically enforce absolute imports from barrel exports in NestJS. Use when writing imports, creating TypeScript files, or organizing NestJS module structure.
+description: Automatically enforce absolute imports from barrel exports in NestJS. Use when writing imports, creating TypeScript files, or organizing NestJS module structure. (plugin:smi-nestjs@smicolon-marketplace)
 ---
 
 # Import Convention Enforcer (NestJS)

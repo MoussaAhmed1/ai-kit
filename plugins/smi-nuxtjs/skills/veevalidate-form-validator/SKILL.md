@@ -1,6 +1,6 @@
 ---
 name: veevalidate-form-validator
-description: Auto-enforce VeeValidate + Zod pattern for all forms. Activates when creating forms or handling user input.
+description: Automatically enforce VeeValidate + Zod pattern for all forms in Nuxt.js/Vue 3. Use when creating forms, handling user input, validation, or form submission. (plugin:smi-nuxtjs@smicolon-marketplace)
 ---
 
 # VeeValidate + Zod Form Validator

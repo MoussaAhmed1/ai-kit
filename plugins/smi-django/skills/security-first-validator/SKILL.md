@@ -1,6 +1,6 @@
 ---
 name: security-first-validator
-description: Automatically check Django REST API endpoints for security requirements (permissions, authentication, input validation, rate limiting). Use when creating views, viewsets, API routes, serializers, or any API endpoint code.
+description: Automatically check Django REST API endpoints for security requirements (permissions, authentication, input validation, rate limiting). Use when creating views, viewsets, API routes, serializers, or any API endpoint code. (plugin:smi-django@smicolon-marketplace)
 ---
 
 # Security-First Validator

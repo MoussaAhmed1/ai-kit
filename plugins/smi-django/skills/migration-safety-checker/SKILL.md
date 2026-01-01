@@ -1,6 +1,6 @@
 ---
 name: migration-safety-checker
-description: Automatically validate Django database migrations are safe for production (no data loss, reversible, tested). Use when creating migrations, modifying models, running makemigrations, or mentioning schema changes.
+description: Automatically validate Django database migrations are safe for production (no data loss, reversible, tested). Use when creating migrations, modifying models, running makemigrations, or mentioning schema changes. (plugin:smi-django@smicolon-marketplace)
 ---
 
 # Migration Safety Checker

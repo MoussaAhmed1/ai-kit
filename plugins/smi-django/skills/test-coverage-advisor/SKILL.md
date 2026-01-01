@@ -1,6 +1,6 @@
 ---
 name: test-coverage-advisor
-description: Automatically suggest missing test cases to achieve 90%+ coverage. Use when completing features, finishing implementation, before code review, or when tests are mentioned. Activates when user says done, finished, ready for review.
+description: Automatically suggest missing test cases to achieve 90%+ coverage. Use when completing features, finishing implementation, before code review, or when tests are mentioned. Activates when user says done, finished, ready for review. (plugin:smi-django@smicolon-marketplace)
 ---
 
 # Test Coverage Advisor

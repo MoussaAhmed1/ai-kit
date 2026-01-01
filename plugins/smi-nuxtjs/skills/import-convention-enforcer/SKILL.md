@@ -1,6 +1,6 @@
 ---
 name: import-convention-enforcer
-description: Auto-enforce consistent import patterns for Nuxt.js. Activates when writing imports.
+description: Automatically enforce consistent import patterns for Nuxt.js/Vue 3 using path aliases and proper organization. Use when writing imports, creating new files, or organizing code structure. (plugin:smi-nuxtjs@smicolon-marketplace)
 ---
 
 # Nuxt.js Import Convention Enforcer

@@ -1,6 +1,6 @@
 ---
 name: import-convention-enforcer
-description: Automatically enforce consistent import patterns for Next.js/React using path aliases and proper organization. Use when writing imports, creating new files, or organizing code structure.
+description: Automatically enforce consistent import patterns for Next.js/React using path aliases and proper organization. Use when writing imports, creating new files, or organizing code structure. (plugin:smi-nextjs@smicolon-marketplace)
 ---
 
 # Import Convention Enforcer (Next.js/React)

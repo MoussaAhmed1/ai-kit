@@ -1,6 +1,6 @@
 ---
 name: performance-optimizer
-description: Automatically detect N+1 queries, missing indexes, and inefficient Django ORM patterns. Use when writing database queries, accessing related objects, fetching data, or mentioning performance/optimization.
+description: Automatically detect N+1 queries, missing indexes, and inefficient Django ORM patterns. Use when writing database queries, accessing related objects, fetching data, or mentioning performance/optimization. (plugin:smi-django@smicolon-marketplace)
 ---
 
 # Performance Optimizer

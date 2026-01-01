@@ -1,6 +1,6 @@
 ---
 name: barrel-export-manager
-description: Automatically create and maintain index.ts barrel exports in NestJS modules for clean imports. Use when creating entities, DTOs, services, controllers, or organizing module structure.
+description: Automatically create and maintain index.ts barrel exports in NestJS modules for clean imports. Use when creating entities, DTOs, services, controllers, or organizing module structure. (plugin:smi-nestjs@smicolon-marketplace)
 ---
 
 # Barrel Export Manager

@@ -1,6 +1,6 @@
 ---
 name: model-entity-validator
-description: Auto-enforce BaseModel inheritance for Django models (UUID, timestamps, soft delete). Use when creating or modifying Django models, database schemas, or seeing model class definitions.
+description: Automatically validate Django models have required fields (UUID primary key, timestamps, soft delete). Use when creating or modifying Django models, database schemas, or seeing model class definitions. (plugin:smi-django@smicolon-marketplace)
 ---
 
 # Model/Entity Validator

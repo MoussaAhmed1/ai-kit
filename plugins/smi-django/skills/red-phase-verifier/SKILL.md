@@ -1,6 +1,6 @@
 ---
 name: red-phase-verifier
-description: Ensure tests fail before implementation (red phase of TDD). Activates when writing tests during TDD loop.
+description: Ensure tests fail before implementation (TDD red phase). Activates when writing tests first, during TDD loop, or when red-green-refactor is mentioned. (plugin:smi-django@smicolon-marketplace)
 ---
 
 # Red Phase Verifier

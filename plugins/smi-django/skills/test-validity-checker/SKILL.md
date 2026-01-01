@@ -1,6 +1,6 @@
 ---
 name: test-validity-checker
-description: Verify tests are meaningful and not shortcuts. Activates when writing tests, before running test suites, or when test coverage is mentioned.
+description: Verify tests are meaningful and not trivial shortcuts. Activates when writing tests, before running test suites, or when test coverage is mentioned. (plugin:smi-django@smicolon-marketplace)
 ---
 
 # Test Validity Checker

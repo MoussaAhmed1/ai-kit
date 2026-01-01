@@ -1,6 +1,6 @@
 ---
 name: react-form-validator
-description: Automatically enforce React Hook Form + Zod pattern for all forms in Next.js/React. Use when creating forms, handling user input, validation, or form submission.
+description: Automatically enforce React Hook Form + Zod pattern for all forms in Next.js/React. Use when creating forms, handling user input, validation, or form submission. (plugin:smi-nextjs@smicolon-marketplace)
 ---
 
 # React Form Validator

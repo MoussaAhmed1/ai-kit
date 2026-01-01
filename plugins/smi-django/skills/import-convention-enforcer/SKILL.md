@@ -1,6 +1,6 @@
 ---
 name: import-convention-enforcer
-description: Automatically validate and fix Django import patterns to use absolute modular imports with aliases. Use when writing imports, creating new Python files, modifying existing files, or seeing import statements in code.
+description: Automatically validate and fix Django import patterns to use absolute modular imports with aliases. Use when writing imports, creating new Python files, or modifying existing files. (plugin:smi-django@smicolon-marketplace)
 ---
 
 # Import Convention Enforcer
