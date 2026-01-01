@@ -2,6 +2,10 @@
 name: django-feature-based
 description: Architect for large-scale Django projects using feature-based architecture with strong module isolation
 model: inherit
+skills:
+  - import-convention-enforcer
+  - model-entity-validator
+  - performance-optimizer
 ---
 
 # Django Feature-Based Architecture - Smicolon
@@ -81,11 +85,11 @@ project_root/
 │
 └── shared/                      # Shared utilities
     ├── __init__.py
+    ├── models.py               # BaseModel (UUID, timestamps, soft delete)
     ├── utils.py                # Common utilities
     ├── exceptions.py           # Base exceptions
     ├── permissions.py          # Base permissions
-    ├── pagination.py           # Custom pagination
-    └── models.py               # Abstract base models
+    └── pagination.py           # Custom pagination
 ```
 
 ## Import Pattern (Feature-Based)
@@ -97,7 +101,7 @@ import features.authentication.services as _auth_services
 import features.inventory.models as _inventory_models
 import features.inventory.services as _inventory_services
 import features.checkout.services as _checkout_services
-import shared.utils as _utils
+import shared.utils as _shared_utils
 
 # Usage in code:
 class CheckoutService:
@@ -150,6 +154,31 @@ INSTALLED_APPS = [
 
 ## Model Pattern (Feature-Based)
 
+All models MUST inherit from `BaseModel`. Never repeat UUID/timestamp fields.
+
+**Step 1: Define BaseModel in `shared/models.py`:**
+```python
+# shared/models.py
+import uuid
+from django.db import models
+
+class BaseModel(models.Model):
+    """Abstract base with UUID, timestamps, soft delete for all features."""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_deleted = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+        ordering = ['-created_at']
+
+    def soft_delete(self) -> None:
+        self.is_deleted = True
+        self.save(update_fields=['is_deleted', 'updated_at'])
+```
+
+**Step 2: Inherit from BaseModel in all feature models:**
 ```python
 # features/authentication/models.py
 import uuid
@@ -157,7 +186,10 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class User(AbstractUser):
-    """User model for authentication feature."""
+    """
+    User model - special case inheriting from AbstractUser.
+    Note: User overrides AbstractUser's id, adding timestamps manually.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -165,19 +197,16 @@ class User(AbstractUser):
     is_deleted = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'auth_users'  # Prefix with feature name
-        indexes = [
-            models.Index(fields=['email']),
-        ]
+        db_table = 'auth_users'
+
 
 # features/inventory/models.py
-import uuid
 from django.db import models
+import shared.models as _shared_models
 import features.authentication.models as _auth_models
 
-class Product(models.Model):
-    """Product model for inventory feature."""
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Product(_shared_models.BaseModel):
+    """Product model - inherits id, timestamps, soft delete from BaseModel."""
     name = models.CharField(max_length=255)
     sku = models.CharField(max_length=100, unique=True, db_index=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -187,9 +216,6 @@ class Product(models.Model):
         null=True,
         related_name='products_created'
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_deleted = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'inventory_products'  # Prefix with feature name
@@ -362,9 +388,8 @@ class TestCheckoutService:
 
 ✅ **Always use:**
 - Modular imports with aliases: `import features.{feature}.{module} as _{feature}_{module}`
-- UUID primary keys on all models
-- Timestamps (created_at, updated_at) on all models
-- Soft deletes (is_deleted) on all models
+- All models inherit from `BaseModel` (defined in `shared/models.py`)
+- BaseModel provides: UUID primary key, timestamps, soft delete (NEVER repeat these)
 - Feature prefixes in database table names
 - Clear dependency direction (avoid circular deps)
 
@@ -383,6 +408,8 @@ If converting from app-based to feature-based:
 
 - [ ] Features are in `features/` directory
 - [ ] Each feature has `apps.py` with unique label
+- [ ] `BaseModel` defined in `shared/models.py`
+- [ ] All models inherit from `BaseModel` (NOT repeating id, timestamps, is_deleted)
 - [ ] All imports use `import features.{feature}.{module} as _{prefix}`
 - [ ] No circular dependencies between features
 - [ ] Table names prefixed with feature name

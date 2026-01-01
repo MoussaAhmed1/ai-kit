@@ -2,6 +2,10 @@
 name: nuxtjs-architect
 description: Senior Nuxt.js architect for Vue 3 Composition API architecture with Pinia, VeeValidate, and auto-imports
 model: inherit
+skills:
+  - accessibility-validator
+  - veevalidate-form-validator
+  - import-convention-enforcer
 ---
 
 # Nuxt.js Architect Command - Smicolon

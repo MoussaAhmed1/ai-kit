@@ -1,11 +1,11 @@
 ---
 name: model-entity-validator
-description: Automatically validate Django models have required fields (UUID primary key, timestamps, soft delete). Use when creating or modifying Django models, database schemas, or seeing model class definitions.
+description: Auto-enforce BaseModel inheritance for Django models (UUID, timestamps, soft delete). Use when creating or modifying Django models, database schemas, or seeing model class definitions.
 ---
 
 # Model/Entity Validator
 
-Auto-enforces Smicolon's standard model pattern with required fields for ALL Django models.
+Auto-enforces Smicolon's BaseModel inheritance pattern for ALL Django models.
 
 ## When This Skill Activates
 
@@ -17,81 +17,84 @@ I automatically run when:
 - User runs migrations
 - User discusses data structure
 
-## Required Model Fields (MANDATORY)
+## Core Principle: BaseModel Inheritance
 
-Every Django model MUST have these exact fields:
+**NEVER repeat UUID/timestamp fields.** All models inherit from BaseModel.
 
 ```python
-import uuid
-from django.db import models
-
-class YourModel(models.Model):
-    """Model description."""
-
-    # 1. UUID Primary Key (REQUIRED)
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-
-    # 2. Created Timestamp (REQUIRED)
+# ❌ WRONG - Repeating fields
+class User(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    # 3. Updated Timestamp (REQUIRED)
     updated_at = models.DateTimeField(auto_now=True)
-
-    # 4. Soft Delete Flag (REQUIRED)
     is_deleted = models.BooleanField(default=False)
+    email = models.EmailField()
 
-    # ... your custom fields here
+# ✅ CORRECT - Inherit from BaseModel
+import core.models as _core_models
 
-    class Meta:
-        db_table = 'your_table_name'
-        indexes = [
-            models.Index(fields=['created_at']),
-            models.Index(fields=['is_deleted']),
-        ]
+class User(_core_models.BaseModel):
+    email = models.EmailField(unique=True)
 ```
 
 ## Auto-Validation Process
 
-### Step 1: Detect New/Modified Model
+### Step 1: Check if BaseModel Exists
 
-When I see a model class being written:
+Before doing ANYTHING, I check if the project has a BaseModel:
 
 ```python
-class User(models.Model):
-    email = models.EmailField(unique=True)
-    # Missing required fields! ❌
+# Search for BaseModel in (in order):
+# 1. core/models.py
+# 2. shared/models.py
+# 3. common/models.py
+# 4. {app}/base.py
 ```
 
-### Step 2: Check for Required Fields
+**If BaseModel found:** Suggest inheritance (Step 2a)
+**If BaseModel NOT found:** Create BaseModel first (Step 2b)
 
-I verify presence of:
-1. ✅ UUID primary key named `id`
-2. ✅ `created_at` with `auto_now_add=True`
-3. ✅ `updated_at` with `auto_now=True`
-4. ✅ `is_deleted` with `default=False`
+### Step 2a: BaseModel Exists - Suggest Inheritance
 
-### Step 3: Auto-Add Missing Fields
-
-**Before (Incomplete):**
+When I see:
 ```python
-class User(models.Model):
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=100)
+class Product(models.Model):
+    name = models.CharField(max_length=255)
 ```
 
-**After (Complete):**
+I fix to:
 ```python
+import core.models as _core_models
+
+class Product(_core_models.BaseModel):
+    """Product model - inherits id, timestamps, soft delete from BaseModel."""
+
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        db_table = 'products'
+```
+
+### Step 2b: BaseModel NOT Found - Create It First
+
+If no BaseModel exists, I create it:
+
+```python
+# core/models.py
 import uuid
 from django.db import models
 
-class User(models.Model):
-    """User model."""
+class BaseModel(models.Model):
+    """
+    Abstract base model providing:
+    - UUID primary key
+    - Automatic timestamps (created_at, updated_at)
+    - Soft delete support (is_deleted)
 
-    # Required fields (auto-added)
+    All models MUST inherit from this class.
+    """
+
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -101,141 +104,176 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_deleted = models.BooleanField(default=False)
 
-    # Custom fields
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=100)
-
     class Meta:
-        db_table = 'users'
-        indexes = [
-            models.Index(fields=['created_at']),
-            models.Index(fields=['is_deleted']),
-            models.Index(fields=['email']),  # Business index
-        ]
-```
-
-### Step 4: Suggest Migration
-
-After adding fields, I remind:
-
-> **Model Fields Added**
->
-> Added required Smicolon fields to `User` model:
-> - UUID primary key (`id`)
-> - Timestamps (`created_at`, `updated_at`)
-> - Soft delete flag (`is_deleted`)
->
-> **Next steps:**
-> ```bash
-> python manage.py makemigrations
-> python manage.py migrate
-> ```
->
-> **Why these fields?**
-> - UUID: Prevents ID enumeration attacks, works across distributed systems
-> - Timestamps: Audit trail for all records
-> - Soft delete: Preserve data instead of hard deletes
-
-### Step 5: Validate Indexes
-
-I check if appropriate indexes exist:
-
-```python
-class Meta:
-    db_table = 'users'
-    indexes = [
-        models.Index(fields=['created_at']),    # For time-based queries
-        models.Index(fields=['is_deleted']),    # For active records filter
-        # Suggest indexes for commonly queried fields
-    ]
-```
-
-## Pattern Templates
-
-See supporting files for complete examples:
-- `templates/django-base-model.py` - Complete model template
-- `templates/field-snippets.json` - Individual field templates
-- `checklists/django-model-checklist.md` - Required fields checklist
-- `migration-guides/add-uuid-migration.md` - Safe migration patterns
-
-## Complete Model Example
-
-```python
-import uuid
-from django.db import models
-from django.contrib.auth.models import AbstractUser
-
-
-class User(AbstractUser):
-    """User account model."""
-
-    # Override default ID with UUID
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-
-    # Required timestamps
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    # Required soft delete
-    is_deleted = models.BooleanField(default=False)
-
-    # Custom fields
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=20, blank=True)
-    bio = models.TextField(blank=True)
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-
-    # Relationships
-    organization = models.ForeignKey(
-        'Organization',
-        on_delete=models.CASCADE,
-        related_name='users'
-    )
-
-    class Meta:
-        db_table = 'users'
+        abstract = True
         ordering = ['-created_at']
-        indexes = [
-            models.Index(fields=['created_at']),
-            models.Index(fields=['is_deleted']),
-            models.Index(fields=['email']),
-            models.Index(fields=['organization', 'is_deleted']),
-        ]
 
-    def __str__(self):
-        return self.email
-
-    def soft_delete(self):
-        """Soft delete the user instead of hard delete."""
+    def soft_delete(self) -> None:
+        """Soft delete the record."""
         self.is_deleted = True
         self.save(update_fields=['is_deleted', 'updated_at'])
-```
 
-## Custom Managers for Soft Delete
+    def restore(self) -> None:
+        """Restore a soft-deleted record."""
+        self.is_deleted = False
+        self.save(update_fields=['is_deleted', 'updated_at'])
 
-I also suggest adding custom managers:
 
-```python
 class ActiveManager(models.Manager):
     """Manager that excludes soft-deleted records."""
 
     def get_queryset(self):
         return super().get_queryset().filter(is_deleted=False)
+```
 
+Then I tell the developer:
+> **BaseModel Created**
+>
+> Created `core/models.py` with BaseModel. All your models should now inherit from it:
+> ```python
+> import core.models as _core_models
+>
+> class YourModel(_core_models.BaseModel):
+>     # Your fields here - DO NOT add id, created_at, updated_at, is_deleted
+> ```
 
-class User(models.Model):
-    # ... fields ...
+### Step 3: Detect Duplicate Fields
 
-    objects = models.Manager()  # Default manager (includes deleted)
-    active = ActiveManager()    # Active records only
+If I see a model with explicit id/timestamp fields that inherits from BaseModel:
+
+```python
+# ❌ WRONG - Duplicate fields
+class User(_core_models.BaseModel):
+    id = models.UUIDField(...)  # Already in BaseModel!
+    created_at = models.DateTimeField(...)  # Already in BaseModel!
+    email = models.EmailField()
+```
+
+I remove them:
+```python
+# ✅ CORRECT - Only custom fields
+class User(_core_models.BaseModel):
+    email = models.EmailField(unique=True)
+```
+
+And explain:
+> **Duplicate Fields Removed**
+>
+> Removed `id`, `created_at`, `updated_at`, `is_deleted` from `User` model.
+> These fields are already inherited from `BaseModel`.
+
+### Step 4: Validate Indexes
+
+I check if appropriate indexes exist:
+
+```python
+class Product(_core_models.BaseModel):
+    name = models.CharField(max_length=255)
+    sku = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        db_table = 'products'
+        indexes = [
+            models.Index(fields=['sku']),  # Suggest for unique lookups
+            models.Index(fields=['name']),  # Suggest for search
+        ]
+```
+
+## Complete Model Examples
+
+### Standard Model
+
+```python
+# products/models.py
+from django.db import models
+import core.models as _core_models
+
+class Product(_core_models.BaseModel):
+    """Product model."""
+
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    sku = models.CharField(max_length=100, unique=True, db_index=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = 'products'
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['is_active', 'is_deleted']),
+        ]
+
+    def __str__(self):
+        return self.name
+```
+
+### User Model (with AbstractUser)
+
+```python
+# users/models.py
+import uuid
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    """
+    Custom User model with UUID and timestamps.
+
+    Note: For User we override AbstractUser directly since it has its own
+    ID handling. We add the standard fields manually.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_deleted = models.BooleanField(default=False)
+
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        db_table = 'users'
+```
+
+### Through Model (Many-to-Many)
+
+```python
+# users/models.py
+import core.models as _core_models
+
+class UserOrganization(_core_models.BaseModel):
+    """Through model for user-organization relationship."""
+
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    organization = models.ForeignKey('Organization', on_delete=models.CASCADE)
+    role = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'user_organizations'
+        unique_together = [['user', 'organization']]
+```
+
+## Custom Managers
+
+BaseModel provides soft delete. Add a custom manager for convenience:
+
+```python
+import core.models as _core_models
+
+class Product(_core_models.BaseModel):
+    name = models.CharField(max_length=255)
+
+    objects = models.Manager()  # All records
+    active = _core_models.ActiveManager()  # Excludes soft-deleted
 
 # Usage
-User.active.all()  # Only non-deleted users
-User.objects.all()  # All users including deleted
+Product.active.all()  # Only non-deleted
+Product.objects.all()  # All including deleted
 ```
 
 ## Edge Cases
@@ -244,7 +282,6 @@ User.objects.all()  # All users including deleted
 
 If migrating existing model with integer IDs to UUID:
 
-**I warn:**
 > ⚠️ **Existing Model Detected**
 >
 > This model already has an integer primary key. Converting to UUID requires:
@@ -252,99 +289,52 @@ If migrating existing model with integer IDs to UUID:
 > 2. Update all foreign keys
 > 3. Potential application downtime
 >
-> See `migration-guides/migrate-int-to-uuid.md` for safe migration steps.
+> Recommend: Use UUID for new models, plan migration for existing ones.
 
-### Abstract Base Models
+### Models That Can't Inherit BaseModel
 
-For abstract base classes, I still add these fields:
-
-```python
-class BaseModel(models.Model):
-    """Abstract base model with required fields."""
-
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_deleted = models.BooleanField(default=False)
-
-    class Meta:
-        abstract = True  # This model won't create a table
-
-# Usage
-class User(BaseModel):
-    email = models.EmailField()
-    # Inherits all required fields!
-```
-
-### Through Models (Many-to-Many)
-
-Even through models get required fields:
+Some Django models (like User with AbstractUser) need special handling:
 
 ```python
-class UserOrganization(models.Model):
-    """Through model for user-organization relationship."""
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_deleted = models.BooleanField(default=False)
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    role = models.CharField(max_length=50)
-
-    class Meta:
-        db_table = 'user_organizations'
-        unique_together = [['user', 'organization']]
+# User inherits from AbstractUser, so add fields explicitly
+class User(AbstractUser):
+    id = models.UUIDField(...)
+    created_at = ...
+    # etc.
 ```
 
 ## Validation Checklist
 
 When I review a model, I check:
 
-- ✅ UUID primary key with `uuid.uuid4` default
-- ✅ `created_at` field with `auto_now_add=True`
-- ✅ `updated_at` field with `auto_now=True`
-- ✅ `is_deleted` field with `default=False`
-- ✅ Appropriate `db_table` name (plural, snake_case)
-- ✅ Indexes on `created_at` and `is_deleted`
-- ✅ Indexes on frequently queried fields
-- ✅ Foreign keys have `on_delete` specified
-- ✅ Docstring explaining the model
-- ✅ `__str__` method for admin display
+1. ✅ Inherits from `BaseModel` (or has explicit required fields for special cases)
+2. ✅ Does NOT duplicate fields from BaseModel
+3. ✅ Uses absolute import: `import core.models as _core_models`
+4. ✅ Has appropriate `db_table` name (singular or plural, snake_case)
+5. ✅ Has indexes on frequently queried fields
+6. ✅ Foreign keys have `on_delete` specified
+7. ✅ Has docstring explaining the model
+8. ✅ Has `__str__` method for admin display
 
 ## Integration with Other Skills
 
 Works together with:
-- **import-convention-enforcer**: Ensures `import uuid` is added
+- **import-convention-enforcer**: Ensures proper import pattern
 - **migration-safety-checker**: Validates migrations are safe
 - **security-first-validator**: Checks for sensitive field exposure
-
-## Success Criteria
-
-✅ ALL models have UUID primary keys
-✅ ALL models have timestamps
-✅ ALL models have soft delete
-✅ Appropriate indexes exist
-✅ Migrations generated successfully
-✅ Developer understands WHY each field exists
 
 ## Skill Behavior
 
 **I am PROACTIVE:**
-- I check models WITHOUT being asked
-- I add missing fields AUTOMATICALLY
-- I explain WHY each field is required
-- I suggest appropriate indexes
-- I warn about migration complexity
+- I check if BaseModel exists FIRST
+- I suggest inheritance instead of field duplication
+- I remove duplicate fields automatically
+- I create BaseModel if missing
+- I explain WHY inheritance is better
 
 **I do NOT:**
-- Require user to ask "validate model"
-- Wait for code review
-- Just warn - I ADD fields automatically
+- Add duplicate id/timestamp fields to models
+- Let developers repeat base fields
+- Ignore existing BaseModel in the project
 
-This ensures all models follow Smicolon standards from the moment they're created.
+This ensures all models follow Smicolon's DRY BaseModel pattern.

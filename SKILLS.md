@@ -24,7 +24,7 @@ Skills are **auto-invoked capabilities** that Claude Code activates based on con
 
 ## Skills by Plugin
 
-### Django Plugin (6 Skills)
+### Django Plugin (8 Skills)
 
 #### 1. import-convention-enforcer
 **Auto-fixes imports to absolute modular pattern**
@@ -35,8 +35,8 @@ from .models import User
 from users.models import User
 
 # ✅ Auto-fixes to
-import users.models as _models
-# Usage: user = _models.User.objects.get(id=user_id)
+import users.models as _users_models
+# Usage: user = _users_models.User.objects.get(id=user_id)
 ```
 
 **Activates when:**
@@ -189,6 +189,57 @@ class Migration(migrations.Migration):
 - Downtime from blocking operations
 - Type changes without data migration
 
+#### 7. test-validity-checker
+**Auto-validates test quality and structure**
+
+```python
+# ❌ Detects issues
+def test_something():
+    pass  # Empty test!
+
+def test_create_user():
+    result = create_user("test@example.com")
+    # No assertion!
+
+# ✅ Requires
+def test_create_user():
+    result = create_user("test@example.com")
+    assert result is not None
+    assert result.email == "test@example.com"
+```
+
+**Activates when:**
+- Writing pytest tests
+- User mentions "test", "TDD"
+
+**Enforces:**
+- No empty tests
+- Tests must have assertions
+- Meaningful test names
+
+#### 8. red-phase-verifier
+**Verifies TDD red phase (tests fail before implementation)**
+
+```python
+# ✅ Red phase verified
+# Running: pytest users/tests/test_user_service.py
+# FAILED: test_create_user - UserService not implemented
+# TDD: Red phase confirmed - proceed to green phase
+
+# ❌ Blocks if tests already pass
+# Running: pytest users/tests/test_user_service.py
+# PASSED: test_create_user
+# TDD: Tests already pass - red phase incomplete!
+```
+
+**Activates when:**
+- User starts TDD loop
+- User mentions "TDD", "red phase"
+
+**Enforces:**
+- Tests must fail before implementation
+- Prevents writing tests after code
+
 ### Next.js Plugin (3 Skills)
 
 #### 1. accessibility-validator
@@ -334,6 +385,116 @@ import { UsersService } from 'src/users/services'
 - Barrel export usage
 - Import organization (NestJS core → third-party → project)
 
+### Nuxt.js Plugin (3 Skills)
+
+#### 1. accessibility-validator
+**Auto-checks WCAG 2.1 AA compliance (Vue 3)**
+
+```vue
+<!-- ❌ Detects accessibility violation -->
+<div @click="handleLogin">Login</div>
+
+<!-- ✅ Auto-fixes to -->
+<button type="button" @click="handleLogin">
+  Login
+</button>
+
+<!-- ❌ Detects missing ARIA -->
+<input v-model="search" placeholder="Search" />
+
+<!-- ✅ Auto-adds -->
+<label for="search">Search</label>
+<input
+  id="search"
+  v-model="search"
+  placeholder="Search"
+  aria-describedby="search-hint"
+/>
+```
+
+**Activates when:**
+- Creating Vue components
+- Writing template sections
+- User mentions "component", "form"
+
+**Enforces:**
+- Semantic HTML
+- Keyboard navigation
+- ARIA attributes
+- Focus management
+
+#### 2. veevalidate-form-validator
+**Auto-enforces VeeValidate + Zod**
+
+```vue
+<!-- ❌ Detects unvalidated form -->
+<form @submit="handleSubmit">
+  <input v-model="email" />  <!-- No validation! -->
+</form>
+
+<!-- ✅ Auto-converts to -->
+<script setup lang="ts">
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import { z } from 'zod'
+
+const schema = toTypedSchema(
+  z.object({
+    email: z.string().email(),
+    password: z.string().min(8),
+  })
+)
+
+const { handleSubmit, errors, defineField } = useForm({
+  validationSchema: schema,
+})
+
+const [email, emailAttrs] = defineField('email')
+</script>
+
+<template>
+  <form @submit="handleSubmit(onSubmit)">
+    <input v-model="email" v-bind="emailAttrs" />
+    <span v-if="errors.email">{{ errors.email }}</span>
+  </form>
+</template>
+```
+
+**Activates when:**
+- Creating forms in Vue
+- User mentions "form", "validation"
+
+**Enforces:**
+- VeeValidate integration
+- Zod schemas for type safety
+- Error display patterns
+
+#### 3. import-convention-enforcer
+**Auto-fixes imports to use Nuxt aliases**
+
+```vue
+<!-- ❌ Detects relative imports -->
+<script setup>
+import { ref } from 'vue'  // Unnecessary
+import { formatDate } from '../../../utils/date'
+</script>
+
+<!-- ✅ Auto-fixes to -->
+<script setup>
+// ref is auto-imported in Nuxt
+import { formatDate } from '~/utils/date'
+</script>
+```
+
+**Activates when:**
+- Writing Vue imports
+- Creating Nuxt components
+
+**Enforces:**
+- ~/ path alias usage
+- Auto-import awareness (no unnecessary imports)
+- Import organization
+
 ## Developer Experience
 
 ### Before Skills
@@ -367,13 +528,13 @@ def get_users_with_orders(request):
 
 ```python
 # 1. import-convention-enforcer auto-fixes imports
-import users.models as _models  # ✅ Fixed automatically
+import users.models as _users_models  # ✅ Fixed automatically
 
 # 2. security-first-validator blocks until permissions added
 # ⚠️ Skill message: "Missing permission_classes. Required for OWASP compliance."
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]  # ✅ Added
-    queryset = _models.User.objects.all()
+    queryset = _users_models.User.objects.all()
 
 # 3. model-entity-validator auto-adds UUID
 # ✅ Skill adds: id = UUIDField, created_at, updated_at, is_deleted
@@ -381,7 +542,7 @@ class UserViewSet(viewsets.ModelViewSet):
 # 4. performance-optimizer detects N+1
 # ⚠️ Skill suggests: "Use select_related('orders') to avoid N+1 query"
 def get_users_with_orders(request):
-    users = _models.User.objects.prefetch_related('orders').all()  # ✅ Fixed
+    users = _users_models.User.objects.prefetch_related('orders').all()  # ✅ Fixed
 
 # Result: All issues caught/fixed during development, 0 code review issues
 ```
@@ -630,11 +791,12 @@ Skills provide **automatic convention enforcement** across the Smicolon marketpl
 
 | Plugin | Skills | Focus |
 |--------|--------|-------|
-| Django | 6 | Security, performance, testing, patterns |
+| Django | 8 | Security, performance, testing, TDD, patterns |
 | Next.js | 3 | Accessibility, forms, imports |
+| Nuxt.js | 3 | Accessibility, forms, imports |
 | NestJS | 2 | Barrel exports, import patterns |
 
-**Total**: 11 auto-enforcing skills that prevent mistakes before they reach code review.
+**Total**: 16 auto-enforcing skills that prevent mistakes before they reach code review.
 
 **Benefits**:
 - 80-100% reduction in convention violations

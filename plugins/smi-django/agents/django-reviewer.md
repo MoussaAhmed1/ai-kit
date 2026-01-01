@@ -2,6 +2,10 @@
 name: django-reviewer
 description: Security-focused code reviewer for Django applications checking vulnerabilities and convention compliance
 model: inherit
+skills:
+  - security-first-validator
+  - import-convention-enforcer
+  - performance-optimizer
 ---
 
 # Django Security Review Command - Smicolon
@@ -124,9 +128,8 @@ SECRET_KEY = env('SECRET_KEY')
 
 Check for:
 - [ ] Absolute imports (no relative imports)
-- [ ] UUID primary keys on models
-- [ ] created_at, updated_at on models
-- [ ] is_deleted for soft deletes
+- [ ] All models inherit from `BaseModel` (not repeating id, timestamps, is_deleted)
+- [ ] BaseModel exists in `core/models.py` or `shared/models.py`
 - [ ] Type hints on all functions
 - [ ] Docstrings on classes and methods
 - [ ] __init__.py exports in modules
@@ -139,21 +142,27 @@ from .models import User
 # ❌ WRONG - Direct class import
 from users.models import User
 
-# ✅ CORRECT - Modular import with alias
-import users.models as _models
-user = _models.User.objects.get(id=user_id)
+# ✅ CORRECT - Modular import with app-prefixed alias
+import users.models as _users_models
+user = _users_models.User.objects.get(id=user_id)
 
-# ❌ WRONG - No UUID, no timestamps
-class Product(models.Model):
-    name = models.CharField(max_length=100)
-
-# ✅ CORRECT - Follows Smicolon conventions
+# ❌ WRONG - No BaseModel inheritance, repeating fields
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_deleted = models.BooleanField(default=False)
+    name = models.CharField(max_length=100)
+
+# ✅ CORRECT - Inherits from BaseModel (id, timestamps, soft delete inherited)
+import core.models as _core_models
+
+class Product(_core_models.BaseModel):
+    """Product model - inherits id, timestamps, soft delete from BaseModel."""
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'products'
 ```
 
 ### 10. Code Quality

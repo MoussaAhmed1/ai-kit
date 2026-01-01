@@ -2,6 +2,9 @@
 name: frontend-tester
 description: Frontend testing expert for comprehensive test coverage using Vitest, Playwright, and accessibility testing
 model: inherit
+skills:
+  - accessibility-validator
+  - import-convention-enforcer
 ---
 
 # Frontend Testing Specialist - Smicolon

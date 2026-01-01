@@ -2,6 +2,11 @@
 name: django-builder
 description: Expert Django developer for implementing production-ready features with absolute imports and company conventions
 model: inherit
+skills:
+  - import-convention-enforcer
+  - model-entity-validator
+  - security-first-validator
+  - performance-optimizer
 ---
 
 # Django Build Command
@@ -23,16 +28,16 @@ Implement the requested feature following company Django conventions.
 
 **Traditional App-Based Pattern:**
 ```python
-# ✅ CORRECT - Modular imports with aliases
-import users.models as _models
-import users.services as _services
-import products.models as _product_models
-import core.utils as _utils
+# ✅ CORRECT - Modular imports with app-prefixed aliases
+import users.models as _users_models
+import users.services as _users_services
+import products.models as _products_models
+import core.utils as _core_utils
 
 # Usage:
-user = _models.User.objects.get(id=user_id)
-product = _product_models.Product.objects.get(id=product_id)
-result = _services.UserService.create_user(...)
+user = _users_models.User.objects.get(id=user_id)
+product = _products_models.Product.objects.get(id=product_id)
+result = _users_services.UserService.create_user(...)
 ```
 
 **Feature-Based Pattern (Large Projects):**
@@ -42,7 +47,7 @@ import features.authentication.models as _auth_models
 import features.authentication.services as _auth_services
 import features.inventory.models as _inventory_models
 import features.checkout.services as _checkout_services
-import shared.utils as _utils
+import shared.utils as _shared_utils
 
 # Usage:
 user = _auth_models.User.objects.get(id=user_id)
@@ -68,35 +73,60 @@ from users.models.profile import Profile
 __all__ = ['User', 'Profile']
 ```
 
-### 3. Standard Model Pattern
+### 3. Standard Model Pattern (BaseModel Inheritance)
+
+All models MUST inherit from `BaseModel`. Never repeat UUID/timestamp fields.
+
+**Step 1: Ensure BaseModel exists** (in `core/models.py` or `shared/models.py`):
 ```python
+# core/models.py
 import uuid
 from django.db import models
 
-class YourModel(models.Model):
-    """Model description."""
+class BaseModel(models.Model):
+    """Abstract base with UUID, timestamps, soft delete."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_deleted = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'table_name'
+        abstract = True
+        ordering = ['-created_at']
+
+    def soft_delete(self) -> None:
+        self.is_deleted = True
+        self.save(update_fields=['is_deleted', 'updated_at'])
+```
+
+**Step 2: Inherit from BaseModel** (NEVER repeat fields):
+```python
+# products/models.py
+from django.db import models
+import core.models as _core_models
+
+class Product(_core_models.BaseModel):
+    """Product model - inherits id, timestamps, soft delete from BaseModel."""
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        db_table = 'products'
         indexes = [
-            models.Index(fields=['created_at']),
+            models.Index(fields=['name']),
         ]
 ```
 
 ### 4. Service Layer Pattern
 ```python
 from typing import Optional
-import users.models as _models
+import users.models as _users_models
 
 class YourService:
     """Service for business logic."""
 
     @staticmethod
-    def your_method(param: str) -> _models.User:
+    def your_method(param: str) -> _users_models.User:
         """
         Description.
 
@@ -109,20 +139,20 @@ class YourService:
         Raises:
             ValueError: When...
         """
-        user = _models.User.objects.get(id=param)
+        user = _users_models.User.objects.get(id=param)
         return user
 ```
 
 ### 5. Serializer Pattern
 ```python
 from rest_framework import serializers
-import users.models as _models
+import users.models as _users_models
 
 class YourSerializer(serializers.ModelSerializer):
     """Serializer description."""
 
     class Meta:
-        model = _models.User
+        model = _users_models.User
         fields = ['id', 'email', 'created_at']
         read_only_fields = ['id', 'created_at']
 ```
@@ -132,14 +162,14 @@ class YourSerializer(serializers.ModelSerializer):
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-import users.models as _models
-import users.serializers as _serializers
-import users.services as _services
+import users.models as _users_models
+import users.serializers as _users_serializers
+import users.services as _users_services
 
 class YourViewSet(viewsets.ModelViewSet):
     """ViewSet description."""
-    queryset = _models.User.objects.filter(is_deleted=False)
-    serializer_class = _serializers.UserSerializer
+    queryset = _users_models.User.objects.filter(is_deleted=False)
+    serializer_class = _users_serializers.UserSerializer
     permission_classes = [IsAuthenticated]
 ```
 
@@ -148,10 +178,9 @@ class YourViewSet(viewsets.ModelViewSet):
 For each feature, implement:
 
 1. **Models** (if needed)
-   - UUID primary key
-   - Timestamps (created_at, updated_at)
-   - Soft delete (is_deleted)
-   - Proper indexes
+   - Inherit from `BaseModel` (NEVER repeat id, timestamps, is_deleted)
+   - Check if BaseModel exists first (`core/models.py` or `shared/models.py`)
+   - Add proper indexes for business fields
    - Type hints
    - Docstrings
 
@@ -206,9 +235,10 @@ For each feature, implement:
 ## Final Verification
 
 Before completing, verify:
-- [ ] ALL imports are absolute modular imports with aliases (import app.module as _module)
+- [ ] ALL imports are absolute modular imports with app-prefixed aliases (import app.module as _app_module)
 - [ ] All modules have __init__.py with __all__
-- [ ] All models have UUID, timestamps, is_deleted
+- [ ] All models inherit from BaseModel (NOT repeating id, timestamps, is_deleted)
+- [ ] BaseModel exists in core/models.py or shared/models.py
 - [ ] Services contain business logic
 - [ ] Views are thin
 - [ ] All methods have type hints

@@ -9,33 +9,48 @@ You are a Django model creation specialist. Your task is to create a new Django 
 
 ## Core Requirements
 
-### Standard Model Fields (MANDATORY)
-Every model MUST include these fields:
+### BaseModel Inheritance (MANDATORY)
 
+All models MUST inherit from `BaseModel`. **NEVER repeat UUID/timestamp fields.**
+
+**Step 1: Check if BaseModel exists** (in `core/models.py` or `shared/models.py`)
+
+If BaseModel doesn't exist, create it first:
 ```python
+# core/models.py (or shared/models.py)
 import uuid
 from django.db import models
 
-class YourModel(models.Model):
-    # Primary key
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-
-    # Timestamps
+class BaseModel(models.Model):
+    """Abstract base with UUID, timestamps, soft delete."""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    # Soft delete
     is_deleted = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'your_table_name'
+        abstract = True
         ordering = ['-created_at']
+
+    def soft_delete(self) -> None:
+        self.is_deleted = True
+        self.save(update_fields=['is_deleted', 'updated_at'])
+```
+
+**Step 2: Inherit from BaseModel** (NEVER repeat fields)
+```python
+# app/models.py
+from django.db import models
+import core.models as _core_models
+
+class YourModel(_core_models.BaseModel):
+    """Model inherits id, timestamps, soft delete from BaseModel."""
+    # Only add business fields here
+
+    class Meta:
+        db_table = 'your_table_name'
         indexes = [
-            models.Index(fields=['is_deleted', '-created_at']),
+            models.Index(fields=['your_field']),
         ]
 ```
 
@@ -44,8 +59,8 @@ ALWAYS use absolute imports with module aliases:
 
 ```python
 # ✅ CORRECT
-import users.models as _models
-import core.utils as _utils
+import users.models as _users_models
+import core.utils as _core_utils
 from django.db import models
 
 # ❌ WRONG - Never use
@@ -82,27 +97,22 @@ from ..services import UserService
 ## Example Output
 
 ```python
-# app/models.py
-import uuid
+# products/models.py
 from django.db import models
-from django.contrib.auth import get_user_model
+import core.models as _core_models
+import users.models as _users_models
 
-User = get_user_model()
+class Product(_core_models.BaseModel):
+    """
+    Product model for e-commerce system.
 
-class Product(models.Model):
-    """Product model for e-commerce system"""
+    Inherits from BaseModel:
+    - id (UUID primary key)
+    - created_at, updated_at (timestamps)
+    - is_deleted (soft delete)
+    """
 
-    # Standard fields
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_deleted = models.BooleanField(default=False)
-
-    # Business fields
+    # Business fields only - id, timestamps, is_deleted inherited from BaseModel
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, max_length=255)
     description = models.TextField()
@@ -111,7 +121,7 @@ class Product(models.Model):
 
     # Relationships
     created_by = models.ForeignKey(
-        User,
+        _users_models.User,
         on_delete=models.SET_NULL,
         null=True,
         related_name='created_products'
@@ -119,10 +129,8 @@ class Product(models.Model):
 
     class Meta:
         db_table = 'products'
-        ordering = ['-created_at']
         indexes = [
             models.Index(fields=['slug']),
-            models.Index(fields=['is_deleted', '-created_at']),
             models.Index(fields=['price', 'stock']),
         ]
         constraints = [
@@ -158,14 +166,13 @@ python manage.py dbshell
 
 ## Quality Checklist
 
-- [ ] UUID primary key
-- [ ] Timestamps (created_at, updated_at)
-- [ ] Soft delete field (is_deleted)
+- [ ] BaseModel exists in `core/models.py` or `shared/models.py`
+- [ ] Model inherits from `BaseModel` (NOT repeating id, timestamps, is_deleted)
 - [ ] Proper Meta class with db_table
-- [ ] Database indexes for commonly queried fields
+- [ ] Database indexes for commonly queried business fields
 - [ ] Constraints for data validation
-- [ ] Absolute imports only
+- [ ] Absolute imports with app-prefixed aliases only
 - [ ] Type hints in methods
-- [ ] Docstring for model class
+- [ ] Docstring explaining what model inherits from BaseModel
 
 Now, ask the user what model they want to create!

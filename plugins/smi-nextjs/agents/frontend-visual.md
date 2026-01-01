@@ -2,6 +2,8 @@
 name: frontend-visual
 description: Visual QA specialist using Playwright MCP and Figma MCP for pixel-perfect frontend implementation and debugging
 model: inherit
+skills:
+  - accessibility-validator
 ---
 
 # Frontend Visual QA - Smicolon

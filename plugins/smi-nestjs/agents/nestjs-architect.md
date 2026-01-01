@@ -2,6 +2,9 @@
 name: nestjs-architect
 description: Senior NestJS architect for designing TypeScript backend architecture with TypeORM and absolute imports
 model: inherit
+skills:
+  - barrel-export-manager
+  - import-convention-enforcer
 ---
 
 # NestJS Architect - Smicolon

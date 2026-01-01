@@ -22,13 +22,13 @@ Smicolon company standards for Django projects.
 - `@django-tester` - Test writing (90%+ coverage target)
 - `@django-reviewer` - Security and code review
 
-### 6 Auto-Enforcing Skills (NEW!)
+### 8 Auto-Enforcing Skills
 
 Skills automatically activate based on context - no manual invocation needed:
 
 **Core Validators:**
 - `import-convention-enforcer` - Auto-fixes import patterns to use absolute modular imports
-- `model-entity-validator` - Auto-adds required fields (UUID, timestamps, soft delete) to all models
+- `model-entity-validator` - Auto-enforces BaseModel inheritance (UUID, timestamps, soft delete)
 - `security-first-validator` - Auto-checks API endpoints for security requirements (permissions, validation)
 
 **Quality Enforcers:**
@@ -36,24 +36,27 @@ Skills automatically activate based on context - no manual invocation needed:
 - `performance-optimizer` - Auto-detects N+1 queries and suggests optimizations
 - `migration-safety-checker` - Auto-validates migrations are production-safe (no data loss)
 
+**TDD Helpers:**
+- `test-validity-checker` - Validates tests are meaningful and not trivial
+- `red-phase-verifier` - Ensures tests fail before implementation (TDD red phase)
+
 **How Skills Work:**
 - Auto-invoke based on what you're doing (writing models, creating APIs, etc.)
 - Proactively fix violations without being asked
 - Explain WHY conventions exist
 - Block unsafe operations (insecure endpoints, data-loss migrations)
-- Work alongside agents and hooks for complete enforcement
 
 ### Automatic Convention Enforcement
 
-The plugin includes hooks and skills that automatically enforce:
+Skills automatically enforce:
 
 **Import Pattern:**
 ```python
 # CORRECT - Absolute modular imports with aliases
-import users.models as _models
-import users.services as _services
+import users.models as _users_models
+import users.services as _users_services
 
-user = _models.User.objects.get(id=user_id)
+user = _users_models.User.objects.get(id=user_id)
 
 # WRONG - Never use
 from .models import User

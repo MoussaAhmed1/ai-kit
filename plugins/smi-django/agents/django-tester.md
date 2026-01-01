@@ -2,6 +2,10 @@
 name: django-tester
 description: Testing expert for writing comprehensive Django tests with 90%+ coverage using pytest and factory_boy
 model: inherit
+skills:
+  - test-coverage-advisor
+  - test-validity-checker
+  - import-convention-enforcer
 ---
 
 # Django Test Writer Command
@@ -34,7 +38,7 @@ app/tests/
 ### 1. Model Tests
 ```python
 import pytest
-import users.models as _models
+import users.models as _users_models
 
 @pytest.mark.django_db
 class TestUserModel:
@@ -42,7 +46,7 @@ class TestUserModel:
 
     def test_create_user(self):
         """Test user creation with required fields."""
-        user = _models.User.objects.create_user(
+        user = _users_models.User.objects.create_user(
             email="test@example.com",
             password="testpass123"
         )
@@ -54,8 +58,8 @@ class TestUserModel:
 ### 2. Service Tests
 ```python
 import pytest
-import users.services as _services
-import users.tests.factories as _factories
+import users.services as _users_services
+import users.tests.factories as _users_factories
 
 @pytest.mark.django_db
 class TestUserService:
@@ -63,7 +67,7 @@ class TestUserService:
 
     def test_create_user_success(self):
         """Test successful user creation."""
-        user = _services.UserService.create_user(
+        user = _users_services.UserService.create_user(
             email="new@example.com",
             password="password123"
         )
@@ -71,10 +75,10 @@ class TestUserService:
 
     def test_create_user_duplicate_email(self):
         """Test creating user with duplicate email raises error."""
-        _factories.UserFactory(email="test@example.com")
+        _users_factories.UserFactory(email="test@example.com")
 
         with pytest.raises(ValueError):
-            _services.UserService.create_user(
+            _users_services.UserService.create_user(
                 email="test@example.com",
                 password="password123"
             )
@@ -84,7 +88,7 @@ class TestUserService:
 ```python
 import pytest
 from rest_framework.test import APIClient
-import users.tests.factories as _factories
+import users.tests.factories as _users_factories
 
 @pytest.mark.django_db
 class TestUserViewSet:
@@ -93,7 +97,7 @@ class TestUserViewSet:
     def test_list_users_authenticated(self):
         """Test authenticated user can list users."""
         client = APIClient()
-        user = _factories.UserFactory()
+        user = _users_factories.UserFactory()
         client.force_authenticate(user=user)
 
         response = client.get('/api/v1/users/')
@@ -114,13 +118,13 @@ class TestUserViewSet:
 ```python
 import factory
 from factory.django import DjangoModelFactory
-import users.models as _models
+import users.models as _users_models
 
 class UserFactory(DjangoModelFactory):
     """Factory for User model."""
 
     class Meta:
-        model = _models.User
+        model = _users_models.User
 
     email = factory.Faker('email')
     first_name = factory.Faker('first_name')
@@ -177,7 +181,7 @@ Create shared fixtures in conftest.py:
 ```python
 import pytest
 from rest_framework.test import APIClient
-import users.tests.factories as _factories
+import users.tests.factories as _users_factories
 
 @pytest.fixture
 def api_client():
@@ -187,14 +191,14 @@ def api_client():
 @pytest.fixture
 def authenticated_client(api_client):
     """Provide authenticated API client."""
-    user = _factories.UserFactory()
+    user = _users_factories.UserFactory()
     api_client.force_authenticate(user=user)
     return api_client
 
 @pytest.fixture
 def sample_user():
     """Provide sample user."""
-    return _factories.UserFactory()
+    return _users_factories.UserFactory()
 ```
 
 ## Coverage Requirements

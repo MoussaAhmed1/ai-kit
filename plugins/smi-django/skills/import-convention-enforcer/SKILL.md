@@ -20,17 +20,22 @@ I automatically run when:
 
 ### ✅ CORRECT Pattern
 ```python
-# Absolute modular imports with underscore aliases
-import users.models as _models
-import users.services as _services
-import users.serializers as _serializers
-import core.utils as _utils
+# Absolute modular imports with app-prefixed aliases
+import users.models as _users_models
+import users.services as _users_services
+import users.serializers as _users_serializers
+import core.utils as _core_utils
 
-# Usage
-user = _models.User.objects.get(id=user_id)
-result = _services.UserService.create_user(data)
-serializer = _serializers.UserSerializer(user)
-token = _utils.generate_token()
+# Usage - clear which app each import is from
+user = _users_models.User.objects.get(id=user_id)
+result = _users_services.UserService.create_user(data)
+serializer = _users_serializers.UserSerializer(user)
+token = _core_utils.generate_token()
+```
+
+### Pattern Rule
+```
+import {app}.{module} as _{app}_{module}
 ```
 
 ### ❌ WRONG Patterns
@@ -82,13 +87,13 @@ from users.services import UserService
 
 **After (Corrected):**
 ```python
-import users.models as _models
-import users.services as _services
+import users.models as _users_models
+import users.services as _users_services
 
 # Update usage
-user = _models.User.objects.get(...)
-profile = _models.Profile.objects.get(...)
-result = _services.UserService.create_user(...)
+user = _users_models.User.objects.get(...)
+profile = _users_models.Profile.objects.get(...)
+result = _users_services.UserService.create_user(...)
 ```
 
 ### Step 3: Explain Why
@@ -96,9 +101,9 @@ result = _services.UserService.create_user(...)
 I tell the developer:
 > **Import Pattern Violation Fixed**
 >
-> Changed relative/direct imports to absolute modular imports with aliases:
-> - `from .models import User` → `import users.models as _models`
-> - Usage: `user = _models.User.objects.get(...)`
+> Changed relative/direct imports to absolute modular imports with app-prefixed aliases:
+> - `from .models import User` → `import users.models as _users_models`
+> - Usage: `user = _users_models.User.objects.get(...)`
 >
 > **Why**: Absolute imports with aliases:
 > - ✅ Clear module boundaries
@@ -114,11 +119,11 @@ I check the entire file to ensure ALL imports follow the pattern:
 ```python
 # Check all imports at top of file
 import uuid
-import users.models as _models          # ✅
-import users.services as _services      # ✅
-import features.auth.models as _auth    # ✅
-from rest_framework import serializers  # ✅ Third-party is fine
-from django.db import models            # ✅ Django imports are fine
+import users.models as _users_models          # ✅
+import users.services as _users_services      # ✅
+import features.auth.models as _auth_models   # ✅
+from rest_framework import serializers        # ✅ Third-party is fine
+from django.db import models                  # ✅ Django imports are fine
 ```
 
 ## Pattern Reference Files
@@ -143,9 +148,9 @@ from .base import BaseModel  # ❌ WRONG
 ```python
 # users/models.py
 from django.db import models
-import users.models.base as _base  # ✅ CORRECT
+import users.models.base as _users_base  # ✅ CORRECT
 
-class User(_base.BaseModel):
+class User(_users_base.BaseModel):
     pass
 ```
 
@@ -161,13 +166,13 @@ from .serializers import UserSerializer  # ❌ WRONG
 **I auto-fix to:**
 ```python
 # users/services.py
-import users.models as _models  # ✅ CORRECT
-import users.serializers as _serializers  # ✅ CORRECT
+import users.models as _users_models  # ✅ CORRECT
+import users.serializers as _users_serializers  # ✅ CORRECT
 
 class UserService:
     def create_user(self, data):
-        user = _models.User.objects.create(**data)
-        serializer = _serializers.UserSerializer(user)
+        user = _users_models.User.objects.create(**data)
+        serializer = _users_serializers.UserSerializer(user)
         return serializer.data
 ```
 
@@ -207,9 +212,9 @@ __all__ = ['User', 'Profile']
 
 Then allow:
 ```python
-import users.models as _models
+import users.models as _users_models
 
-user = _models.User.objects.get(...)  # Clean!
+user = _users_models.User.objects.get(...)  # Clean!
 ```
 
 ## Integration with Hooks

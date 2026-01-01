@@ -172,37 +172,15 @@ Multi-agent orchestration workflows that coordinate specialized agents for compl
 
 ## Hook System
 
-Each backend plugin (smi-django, smi-nestjs) includes hooks that automatically enforce conventions:
+Currently, only `smi-dev-loop` includes hooks for autonomous development loops:
 
-### user-prompt-submit-hook.sh
+### smi-dev-loop Hooks
 
-Located in `plugins/*/hooks/user-prompt-submit-hook.sh`
+Located in `plugins/smi-dev-loop/hooks/`
 
-Runs **before** Claude processes prompts. Detects project type and injects framework-specific conventions into every prompt:
+- `stop-hook.sh` - Handles dev loop continuation logic
 
-**Detection Logic:**
-- Django: Checks for `manage.py` or `config/settings/`
-- Next.js: Checks `package.json` for `"next"`
-- Nuxt.js: Checks `package.json` for `"nuxt"`
-- NestJS: Checks `package.json` for `"@nestjs/core"`
-
-**Injected Conventions Include:**
-- Import patterns (absolute imports with aliases)
-- Model/entity structure (UUID, timestamps, soft deletes)
-- Security requirements (permissions, guards)
-- Validation requirements
-
-### post-write-hook.sh
-
-Located in `plugins/*/hooks/post-write-hook.sh`
-
-Runs **after** Claude writes files. Validates generated code against conventions (implementation depends on framework detection).
-
-### post-write-visual-hook.sh
-
-Located in `plugins/smi-nextjs/hooks/` and `plugins/smi-nuxtjs/hooks/`
-
-Specialized hook for visual testing workflows with Playwright MCP.
+**Note:** Convention enforcement is handled by **skills** (auto-invoked based on context) and **rules** (path-specific patterns), not hooks.
 
 ## Development Standards Enforced
 
@@ -211,11 +189,11 @@ Specialized hook for visual testing workflows with Playwright MCP.
 **Import Pattern:**
 ```python
 # CORRECT - Absolute modular imports with aliases
-import users.models as _models
-import users.services as _services
+import users.models as _users_models
+import users.services as _users_services
 
 # Usage
-user = _models.User.objects.get(id=user_id)
+user = _users_models.User.objects.get(id=user_id)
 
 # WRONG - Never use
 from .models import User  # Relative import
@@ -370,7 +348,7 @@ claude @frontend-visual
 ### Core Configuration
 
 - `.claude-plugin/marketplace.json` - Single source of truth for all plugin configuration
-- `plugins/smi-django/hooks/user-prompt-submit-hook.sh` - Convention injection logic (most critical)
+- `plugins/smi-django/skills/` - Auto-enforcing skills for convention compliance
 - `plugins/smi-django/agents/django-architect.md` - Example agent structure and conventions
 
 ### Documentation
@@ -398,20 +376,22 @@ claude @frontend-visual
 ### Modifying Conventions
 
 1. Edit agent files in `plugins/*/agents/` directory
-2. Update corresponding hook in `plugins/*/hooks/user-prompt-submit-hook.sh`
-3. Test with sample project
-4. Update plugin's README.md if visible changes
-5. Increment plugin version in `.claude-plugin/marketplace.json`
+2. Update corresponding skills in `plugins/*/skills/` directory
+3. Update rules in `plugins/*/rules/` directory if path-specific
+4. Test with sample project
+5. Update plugin's README.md if visible changes
+6. Increment plugin version in `.claude-plugin/marketplace.json`
 
 ### Creating New Plugins
 
 1. Create `plugins/smi-{name}/` directory
 2. Create `agents/` directory with agent files
 3. Create `commands/` directory with command files (if needed)
-4. Create `hooks/` directory with hook scripts (if needed)
-5. Create plugin README.md
-6. Add plugin configuration to `.claude-plugin/marketplace.json` in the `plugins` array
-7. Update root README.md to document the new plugin
+4. Create `skills/` directory with auto-enforcing skills (if needed)
+5. Create `rules/` directory with path-specific rules (if needed)
+6. Create plugin README.md
+7. Add plugin configuration to `.claude-plugin/marketplace.json` in the `plugins` array
+8. Update root README.md to document the new plugin
 
 ### Testing Changes
 
@@ -429,10 +409,10 @@ claude @frontend-visual
 - Check plugin installation: `/help` should show agents
 - Reinstall if needed: `/plugin uninstall smi-django && /plugin install smi-django`
 
-**Hooks not executing:**
-- Hooks are automatic with plugin installation
-- Reinstall the plugin if hooks aren't working
-- Check project detection logic matches your project
+**Skills not activating:**
+- Skills auto-invoke based on context (e.g., writing models triggers model-entity-validator)
+- Check that skill is registered in `marketplace.json`
+- Verify SKILL.md frontmatter has correct `name` and `description`
 
 **Plugin installation fails:**
 - Verify marketplace URL is correct: `https://github.com/smicolon/claude-infra`

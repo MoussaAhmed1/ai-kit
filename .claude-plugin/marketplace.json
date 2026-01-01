@@ -1,10 +1,10 @@
 {
   "name": "smicolon-marketplace",
-  "version": "1.0.0",
-  "description": "Official marketplace for Smicolon development tools and standards",
+  "version": "2.1.0",
+  "description": "Official marketplace for Smicolon development standards - 6 plugins with 14 agents, 16 skills, path-specific rules, and dev loop automation",
   "license": "MIT",
   "metadata": {
-    "description": "Official marketplace for Smicolon development tools and standards - 5 framework-specific plugins with 14 specialized agents, 11 auto-enforcing skills, and comprehensive development workflows for Django, NestJS, Next.js, Nuxt.js, and system architecture"
+    "description": "Official marketplace for Smicolon development standards - 6 framework-specific plugins with 14 specialized agents, 16 auto-enforcing skills, 16 path-specific rules, and autonomous dev loops for Django, NestJS, Next.js, Nuxt.js, and system architecture"
   },
   "owner": {
     "name": "Smicolon Development Team",
@@ -14,9 +14,30 @@
   "repository": "https://github.com/smicolon/claude-infra",
   "plugins": [
     {
+      "name": "smi-dev-loop",
+      "version": "1.0.0",
+      "description": "Autonomous development loops for iterative coding with automatic continuation",
+      "source": "./plugins/smi-dev-loop",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": "https://github.com/smicolon/claude-infra",
+      "license": "MIT",
+      "category": "automation",
+      "keywords": ["dev-loop", "automation", "tdd", "iterative", "ralph-wiggum"],
+      "commands": [
+        "./commands/dev-loop.md",
+        "./commands/cancel-dev.md"
+      ],
+      "hooks": ["./hooks/hooks.json"]
+    },
+    {
       "name": "smi-django",
-      "version": "1.1.0",
-      "description": "Company standards for Django projects with 5 specialized agents, 6 auto-enforcing skills, and automatic convention enforcement",
+      "version": "2.1.0",
+      "description": "Django standards with 5 agents, 8 skills, and 6 path rules",
       "source": "./plugins/smi-django",
       "author": {
         "name": "Smicolon",
@@ -27,7 +48,7 @@
       "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "backend",
-      "keywords": ["django", "python", "backend", "testing", "architecture", "security", "performance"],
+      "keywords": ["django", "python", "backend", "testing", "tdd", "architecture", "security", "performance"],
       "agents": [
         "./agents/django-architect.md",
         "./agents/django-builder.md",
@@ -35,20 +56,34 @@
         "./agents/django-tester.md",
         "./agents/django-reviewer.md"
       ],
-      "commands": ["./commands/model-create.md", "./commands/api-endpoint.md", "./commands/test-generate.md"],
+      "commands": [
+        "./commands/model-create.md",
+        "./commands/api-endpoint.md",
+        "./commands/test-generate.md"
+      ],
       "skills": [
         "./skills/import-convention-enforcer/SKILL.md",
         "./skills/model-entity-validator/SKILL.md",
         "./skills/security-first-validator/SKILL.md",
         "./skills/test-coverage-advisor/SKILL.md",
         "./skills/performance-optimizer/SKILL.md",
-        "./skills/migration-safety-checker/SKILL.md"
+        "./skills/migration-safety-checker/SKILL.md",
+        "./skills/test-validity-checker/SKILL.md",
+        "./skills/red-phase-verifier/SKILL.md"
+      ],
+      "rules": [
+        "./rules/models.md",
+        "./rules/views.md",
+        "./rules/services.md",
+        "./rules/serializers.md",
+        "./rules/tests.md",
+        "./rules/migrations.md"
       ]
     },
     {
       "name": "smi-nestjs",
-      "version": "1.1.0",
-      "description": "Company standards for NestJS/TypeScript backend projects with 3 specialized agents and 2 auto-enforcing skills",
+      "version": "2.1.0",
+      "description": "NestJS standards with 3 agents, 2 skills, and 4 path rules",
       "source": "./plugins/smi-nestjs",
       "author": {
         "name": "Smicolon",
@@ -60,17 +95,27 @@
       "license": "MIT",
       "category": "backend",
       "keywords": ["nestjs", "typescript", "backend", "testing", "architecture", "barrel-exports"],
-      "agents": ["./agents/nestjs-architect.md", "./agents/nestjs-builder.md", "./agents/nestjs-tester.md"],
+      "agents": [
+        "./agents/nestjs-architect.md",
+        "./agents/nestjs-builder.md",
+        "./agents/nestjs-tester.md"
+      ],
       "commands": ["./commands/module-create.md"],
       "skills": [
         "./skills/barrel-export-manager/SKILL.md",
         "./skills/import-convention-enforcer/SKILL.md"
+      ],
+      "rules": [
+        "./rules/controllers.md",
+        "./rules/entities.md",
+        "./rules/services.md",
+        "./rules/dto.md"
       ]
     },
     {
       "name": "smi-nextjs",
-      "version": "1.1.0",
-      "description": "Company standards for Next.js/React projects with 4 specialized agents, 3 auto-enforcing skills, and visual QA",
+      "version": "2.1.0",
+      "description": "Next.js standards with 4 agents, 3 skills, 3 path rules, and visual QA",
       "source": "./plugins/smi-nextjs",
       "author": {
         "name": "Smicolon",
@@ -82,18 +127,28 @@
       "license": "MIT",
       "category": "frontend",
       "keywords": ["nextjs", "react", "frontend", "typescript", "visual-qa", "accessibility", "forms"],
-      "agents": ["./agents/nextjs-architect.md", "./agents/nextjs-modular.md", "./agents/frontend-visual.md", "./agents/frontend-tester.md"],
+      "agents": [
+        "./agents/nextjs-architect.md",
+        "./agents/nextjs-modular.md",
+        "./agents/frontend-visual.md",
+        "./agents/frontend-tester.md"
+      ],
       "commands": ["./commands/component-create.md"],
       "skills": [
         "./skills/accessibility-validator/SKILL.md",
         "./skills/react-form-validator/SKILL.md",
         "./skills/import-convention-enforcer/SKILL.md"
+      ],
+      "rules": [
+        "./rules/components.md",
+        "./rules/api-routes.md",
+        "./rules/hooks.md"
       ]
     },
     {
       "name": "smi-nuxtjs",
-      "version": "1.0.0",
-      "description": "Company standards for Nuxt.js/Vue 3 projects with specialized agents including visual QA",
+      "version": "2.1.0",
+      "description": "Nuxt.js standards with 3 agents, 3 skills, 3 path rules, and visual QA",
       "source": "./plugins/smi-nuxtjs",
       "author": {
         "name": "Smicolon",
@@ -104,9 +159,23 @@
       "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "frontend",
-      "keywords": ["nuxtjs", "vue", "vue3", "frontend", "typescript", "visual-qa", "accessibility"],
-      "agents": ["./agents/nuxtjs-architect.md", "./agents/frontend-visual.md", "./agents/frontend-tester.md"],
-      "commands": []
+      "keywords": ["nuxtjs", "vue", "vue3", "frontend", "typescript", "visual-qa", "accessibility", "forms"],
+      "agents": [
+        "./agents/nuxtjs-architect.md",
+        "./agents/frontend-visual.md",
+        "./agents/frontend-tester.md"
+      ],
+      "commands": ["./commands/component-create.md"],
+      "skills": [
+        "./skills/accessibility-validator/SKILL.md",
+        "./skills/veevalidate-form-validator/SKILL.md",
+        "./skills/import-convention-enforcer/SKILL.md"
+      ],
+      "rules": [
+        "./rules/components.md",
+        "./rules/composables.md",
+        "./rules/server-routes.md"
+      ]
     },
     {
       "name": "smi-architect",

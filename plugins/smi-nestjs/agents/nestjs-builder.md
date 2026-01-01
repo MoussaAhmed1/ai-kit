@@ -2,6 +2,9 @@
 name: nestjs-builder
 description: Expert NestJS developer for implementing production-ready features with TypeScript strict mode and barrel exports
 model: inherit
+skills:
+  - barrel-export-manager
+  - import-convention-enforcer
 ---
 
 # NestJS Builder - Smicolon

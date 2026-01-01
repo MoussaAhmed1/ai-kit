@@ -48,7 +48,7 @@ Done! Agents are now available in **all your projects** automatically.
 
 ## 5 Available Plugins
 
-### 🐍 smi-django (5 agents + 3 commands)
+### 🐍 smi-django (5 agents, 4 commands, 8 skills, 6 rules)
 
 Django backend development with Python
 
@@ -69,8 +69,29 @@ Django backend development with Python
 - `/model-create` - Create Django models with Smicolon conventions
 - `/api-endpoint` - Generate complete REST API endpoints
 - `/test-generate` - Generate comprehensive tests (90%+ coverage)
+- `/tdd-loop` - Start TDD development cycle (Red-Green-Refactor)
 
-### 🦅 smi-nestjs (3 agents + 1 command)
+**Skills (Auto-Enforcing):**
+
+- `import-convention-enforcer` - Auto-fixes to absolute modular imports
+- `model-entity-validator` - Ensures UUID, timestamps, soft delete
+- `security-first-validator` - Checks permissions, authentication, validation
+- `test-coverage-advisor` - Suggests missing tests for 90%+ coverage
+- `performance-optimizer` - Detects N+1 queries, missing indexes
+- `migration-safety-checker` - Validates safe database migrations
+- `test-validity-checker` - Ensures test quality
+- `red-phase-verifier` - Verifies TDD red phase
+
+**Path Rules:**
+
+- `models.md` - Model conventions
+- `views.md` - ViewSet/APIView conventions
+- `services.md` - Service layer patterns
+- `serializers.md` - Serializer patterns
+- `tests.md` - Test patterns
+- `migrations.md` - Migration safety
+
+### 🦅 smi-nestjs (3 agents, 1 command, 2 skills, 4 rules)
 
 NestJS backend development with TypeScript
 
@@ -88,7 +109,19 @@ NestJS backend development with TypeScript
 
 - `/module-create` - Create complete NestJS modules
 
-### ⚛️ smi-nextjs (4 agents + 1 command)
+**Skills (Auto-Enforcing):**
+
+- `barrel-export-manager` - Auto-creates and maintains index.ts exports
+- `import-convention-enforcer` - Enforces absolute imports from barrel exports
+
+**Path Rules:**
+
+- `controllers.md` - Controller conventions
+- `entities.md` - Entity conventions
+- `services.md` - Service patterns
+- `dto.md` - DTO validation patterns
+
+### ⚛️ smi-nextjs (4 agents, 1 command, 3 skills, 3 rules)
 
 Next.js frontend development with React
 
@@ -107,7 +140,19 @@ Next.js frontend development with React
 
 - `/component-create` - Create React/Next.js components
 
-### 💚 smi-nuxtjs (3 agents)
+**Skills (Auto-Enforcing):**
+
+- `accessibility-validator` - WCAG 2.1 AA compliance
+- `react-form-validator` - React Hook Form + Zod enforcement
+- `import-convention-enforcer` - Path alias (@/) enforcement
+
+**Path Rules:**
+
+- `components.md` - Component conventions
+- `api-routes.md` - API route patterns
+- `hooks.md` - Custom hook patterns
+
+### 💚 smi-nuxtjs (3 agents, 1 command, 3 skills, 3 rules)
 
 Nuxt.js frontend development with Vue 3
 
@@ -120,6 +165,22 @@ Nuxt.js frontend development with Vue 3
 - `@nuxtjs-architect` - Vue 3 architecture
 - `@frontend-visual` - Visual QA (Playwright + Figma MCP)
 - `@frontend-tester` - Testing (unit/integration/E2E/accessibility)
+
+**Commands:**
+
+- `/component-create` - Create Vue 3/Nuxt.js components
+
+**Skills (Auto-Enforcing):**
+
+- `accessibility-validator` - WCAG 2.1 AA compliance
+- `veevalidate-form-validator` - VeeValidate + Zod enforcement
+- `import-convention-enforcer` - ~/ path alias enforcement
+
+**Path Rules:**
+
+- `components.md` - Component conventions
+- `composables.md` - Composable patterns
+- `server-routes.md` - Server route patterns
 
 ### 🏗️ smi-architect (1 agent + 1 command)
 
@@ -151,15 +212,39 @@ Each plugin includes agents specialized for that tech stack with deep knowledge 
 - Security requirements
 - Performance optimization
 
-### Interactive Commands (6 total)
+### Auto-Enforcing Skills (16 total)
+
+Skills automatically activate based on context:
+
+- **Import Convention Enforcers** - Auto-fix import patterns per framework
+- **Model/Entity Validators** - Ensure required fields (UUID, timestamps)
+- **Security Validators** - Check permissions, guards, validation
+- **Form Validators** - Enforce React Hook Form/VeeValidate + Zod
+- **Accessibility Validators** - WCAG 2.1 AA compliance
+- **Performance Optimizers** - Detect N+1, missing indexes
+- **Test Validators** - Quality checks, TDD phase verification
+
+### Path-Specific Rules (16 total)
+
+Convention rules automatically apply based on file location:
+
+- `models/` → Model patterns (UUID, timestamps, soft delete)
+- `views/` → ViewSet/Controller patterns
+- `services/` → Service layer patterns
+- `tests/` → Testing patterns (pytest, Jest)
+- `components/` → Component patterns
+- `migrations/` → Safe migration patterns
+
+### Interactive Commands (8 total)
 
 Slash commands provide step-by-step interactive workflows:
 
 - `/model-create` - Django model generation
 - `/api-endpoint` - Complete API endpoint scaffolding
 - `/test-generate` - Comprehensive test generation
+- `/tdd-loop` - Start TDD cycle (Red-Green-Refactor)
 - `/module-create` - NestJS module scaffolding
-- `/component-create` - React/Next.js component creation
+- `/component-create` - React/Vue component creation
 - `/diagram-create` - System diagram generation
 
 ### Multi-Agent Workflows
@@ -272,10 +357,10 @@ See [MCP_SETUP.md](MCP_SETUP.md) for setup instructions.
 
 ```python
 # ✅ CORRECT - Absolute modular imports with aliases
-import users.models as _models
-import users.services as _services
+import users.models as _users_models
+import users.services as _users_services
 
-user = _models.User.objects.get(id=user_id)
+user = _users_models.User.objects.get(id=user_id)
 
 # ❌ WRONG
 from .models import User

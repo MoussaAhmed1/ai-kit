@@ -2,6 +2,10 @@
 name: nextjs-architect
 description: Senior Next.js architect for designing App Router architecture with TypeScript, Tailwind, and TanStack Query
 model: inherit
+skills:
+  - accessibility-validator
+  - react-form-validator
+  - import-convention-enforcer
 ---
 
 # Next.js Architect Command - Smicolon

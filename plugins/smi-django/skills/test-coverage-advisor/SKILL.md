@@ -66,7 +66,7 @@ Missing: Z test cases
 ```python
 # users/tests/test_models.py
 import pytest
-import users.models as _models
+import users.models as _users_models
 
 @pytest.mark.django_db
 class TestUserModel:
@@ -74,7 +74,7 @@ class TestUserModel:
 
     def test_create_user(self):
         """Test user creation with required fields."""
-        user = _models.User.objects.create(
+        user = _users_models.User.objects.create(
             email='test@example.com',
             first_name='Test'
         )
@@ -86,24 +86,24 @@ class TestUserModel:
 
     def test_user_str_representation(self):
         """Test __str__ returns email."""
-        user = _models.User.objects.create(email='test@example.com')
+        user = _users_models.User.objects.create(email='test@example.com')
         assert str(user) == 'test@example.com'
 
     def test_activate_user(self):
         """Test activate method sets is_active."""
-        user = _models.User.objects.create(email='test@example.com')
+        user = _users_models.User.objects.create(email='test@example.com')
         user.activate()
 
         assert user.is_active is True
 
     def test_soft_delete(self):
         """Test soft delete sets is_deleted flag."""
-        user = _models.User.objects.create(email='test@example.com')
+        user = _users_models.User.objects.create(email='test@example.com')
         user.soft_delete()
 
         assert user.is_deleted is True
         # User still in database
-        assert _models.User.objects.filter(id=user.id).exists()
+        assert _users_models.User.objects.filter(id=user.id).exists()
 ```
 
 **For Service:**
@@ -111,8 +111,8 @@ class TestUserModel:
 # users/tests/test_services.py
 import pytest
 from unittest.mock import Mock, patch
-import users.models as _models
-import users.services as _services
+import users.models as _users_models
+import users.services as _users_services
 
 @pytest.mark.django_db
 class TestUserService:
@@ -121,28 +121,28 @@ class TestUserService:
     def test_create_user_success(self):
         """Test successful user creation."""
         data = {'email': 'test@example.com', 'first_name': 'Test'}
-        user = _services.UserService.create_user(data)
+        user = _users_services.UserService.create_user(data)
 
         assert user.email == 'test@example.com'
         assert user.first_name == 'Test'
 
     def test_create_user_duplicate_email(self):
         """Test creation fails with duplicate email."""
-        _models.User.objects.create(email='test@example.com')
+        _users_models.User.objects.create(email='test@example.com')
 
         with pytest.raises(ValidationError):
-            _services.UserService.create_user({'email': 'test@example.com'})
+            _users_services.UserService.create_user({'email': 'test@example.com'})
 
     def test_create_user_invalid_data(self):
         """Test creation fails with invalid data."""
         with pytest.raises(ValidationError):
-            _services.UserService.create_user({'email': 'invalid'})
+            _users_services.UserService.create_user({'email': 'invalid'})
 
     @patch('users.services.send_welcome_email')
     def test_create_user_sends_email(self, mock_send):
         """Test welcome email is sent on user creation."""
         data = {'email': 'test@example.com'}
-        user = _services.UserService.create_user(data)
+        user = _users_services.UserService.create_user(data)
 
         mock_send.assert_called_once_with(user)
 ```
@@ -153,7 +153,7 @@ class TestUserService:
 import pytest
 from rest_framework.test import APIClient
 from rest_framework import status
-import users.models as _models
+import users.models as _users_models
 
 @pytest.mark.django_db
 class TestUserViewSet:
@@ -162,7 +162,7 @@ class TestUserViewSet:
     def setup_method(self):
         """Set up test client and user."""
         self.client = APIClient()
-        self.user = _models.User.objects.create(
+        self.user = _users_models.User.objects.create(
             email='test@example.com'
         )
         self.client.force_authenticate(user=self.user)
@@ -206,7 +206,7 @@ class TestUserViewSet:
 
     def test_update_user_permission_denied(self):
         """Test user cannot update other users."""
-        other_user = _models.User.objects.create(email='other@example.com')
+        other_user = _users_models.User.objects.create(email='other@example.com')
         data = {'first_name': 'Hacked'}
         response = self.client.patch(f'/api/users/{other_user.id}/', data)
 
@@ -300,12 +300,12 @@ I also suggest pytest setup:
 ```python
 # conftest.py
 import pytest
-import users.models as _models
+import users.models as _users_models
 
 @pytest.fixture
 def user():
     """Create test user."""
-    return _models.User.objects.create(
+    return _users_models.User.objects.create(
         email='test@example.com',
         first_name='Test'
     )
@@ -334,11 +334,11 @@ For complex test data, I suggest factories:
 ```python
 # users/tests/factories.py
 import factory
-import users.models as _models
+import users.models as _users_models
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = _models.User
+        model = _users_models.User
 
     email = factory.Sequence(lambda n: f'user{n}@example.com')
     first_name = factory.Faker('first_name')

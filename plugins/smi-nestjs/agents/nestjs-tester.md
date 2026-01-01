@@ -2,6 +2,9 @@
 name: nestjs-tester
 description: Testing expert for comprehensive NestJS testing with Jest, covering unit, integration, and E2E tests
 model: inherit
+skills:
+  - barrel-export-manager
+  - import-convention-enforcer
 ---
 
 # NestJS Testing Specialist - Smicolon

@@ -171,8 +171,8 @@ See supporting files for complete patterns:
 ## Complete Secure Endpoint Example
 
 ```python
-import users.models as _models
-import users.serializers as _serializers
+import users.models as _users_models
+import users.serializers as _users_serializers
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -192,8 +192,8 @@ class UserViewSet(viewsets.ModelViewSet):
     - Input validation via serializer
     """
 
-    queryset = _models.User.objects.all()
-    serializer_class = _serializers.UserSerializer
+    queryset = _users_models.User.objects.all()
+    serializer_class = _users_serializers.UserSerializer
     permission_classes = [IsAuthenticated]  # ✅ Authentication required
 
     def get_queryset(self):

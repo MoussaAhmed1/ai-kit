@@ -14,9 +14,9 @@ ALWAYS use absolute imports with module aliases:
 
 ```python
 # ✅ CORRECT
-import users.models as _models
-import users.serializers as _serializers
-import users.services as _services
+import users.models as _users_models
+import users.serializers as _users_serializers
+import users.services as _users_services
 from rest_framework import viewsets, permissions
 
 # ❌ WRONG
@@ -70,7 +70,7 @@ Every endpoint needs:
 ### Serializer
 ```python
 # app/serializers.py
-import users.models as _models
+import users.models as _users_models
 from rest_framework import serializers
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -111,7 +111,7 @@ class ProductSerializer(serializers.ModelSerializer):
 ### Service Layer
 ```python
 # app/services.py
-import users.models as _models
+import users.models as _users_models
 from django.db import transaction
 from typing import Dict, Any
 
@@ -156,9 +156,9 @@ class ProductService:
 ### ViewSet
 ```python
 # app/views.py
-import users.models as _models
-import users.serializers as _serializers
-import users.services as _services
+import users.models as _users_models
+import users.serializers as _users_serializers
+import users.services as _users_services
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -207,7 +207,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 # app/urls.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-import users.views as _views
+import users.views as _users_views
 
 router = DefaultRouter()
 router.register(r'products', _views.ProductViewSet, basename='product')
@@ -220,7 +220,7 @@ urlpatterns = [
 ### Tests
 ```python
 # app/tests/test_api.py
-import users.models as _models
+import users.models as _users_models
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status

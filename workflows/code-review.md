@@ -28,7 +28,7 @@ This workflow provides a systematic approach to reviewing code across security, 
 **Actions:**
 ```
 1. Review import statements
-   - Django: `import app.models as _models`
+   - Django: `import app.models as _app_models`
    - NestJS: `import { Entity } from 'src/module/entities'`
 
 2. Verify model/entity structure
@@ -308,8 +308,8 @@ import { User } from './entities/user.entity'  # Relative import
 **Fix:**
 ```python
 # Django
-import users.models as _models
-user = _models.User.objects.get(id=user_id)
+import users.models as _users_models
+user = _users_models.User.objects.get(id=user_id)
 
 # NestJS
 import { User } from 'src/users/entities'

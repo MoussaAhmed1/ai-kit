@@ -2,6 +2,10 @@
 name: nextjs-modular
 description: Next.js architect for large-scale modular architecture using feature modules with barrel exports
 model: inherit
+skills:
+  - accessibility-validator
+  - react-form-validator
+  - import-convention-enforcer
 ---
 
 # Next.js Modular Architecture - Smicolon

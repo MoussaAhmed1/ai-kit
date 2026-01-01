@@ -12,9 +12,9 @@ You are a Django testing specialist. Your task is to generate comprehensive test
 ### Import Pattern (CRITICAL)
 ```python
 # ✅ CORRECT
-import users.models as _models
-import users.services as _services
-import users.serializers as _serializers
+import users.models as _users_models
+import users.services as _users_services
+import users.serializers as _users_serializers
 from django.test import TestCase
 from rest_framework.test import APITestCase, APIClient
 ```
@@ -31,7 +31,7 @@ from rest_framework.test import APITestCase, APIClient
 ### Model Tests
 ```python
 # app/tests/test_models.py
-import users.models as _models
+import users.models as _users_models
 from django.test import TestCase
 from django.db import IntegrityError
 
@@ -87,8 +87,8 @@ class ProductModelTest(TestCase):
 ### Service Tests
 ```python
 # app/tests/test_services.py
-import users.models as _models
-import users.services as _services
+import users.models as _users_models
+import users.services as _users_services
 from django.test import TestCase, TransactionTestCase
 from django.db import transaction
 
@@ -157,7 +157,7 @@ class ProductServiceTest(TransactionTestCase):
 ### API Tests
 ```python
 # app/tests/test_api.py
-import users.models as _models
+import users.models as _users_models
 from rest_framework.test import APITestCase
 from rest_framework import status
 
@@ -246,7 +246,7 @@ class ProductAPITest(APITestCase):
 ### Integration Tests
 ```python
 # app/tests/test_integration.py
-import users.models as _models
+import users.models as _users_models
 from rest_framework.test import APITestCase
 
 class ProductWorkflowTest(APITestCase):
