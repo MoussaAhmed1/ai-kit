@@ -1,10 +1,10 @@
 {
   "name": "smicolon-marketplace",
   "version": "2.1.0",
-  "description": "Official marketplace for Smicolon development standards - 7 plugins with 16 agents, 17 skills, failure memory, and dev loop automation",
+  "description": "Official marketplace for Smicolon development standards - 7 plugins with 16 agents, 18 skills, failure memory, and TDD dev loops",
   "license": "MIT",
   "metadata": {
-    "description": "Official marketplace for Smicolon development standards - 7 plugins with 16 specialized agents, 17 auto-enforcing skills, persistent failure memory, and autonomous dev loops for Django, NestJS, Next.js, Nuxt.js, and system architecture"
+    "description": "Official marketplace for Smicolon development standards - 7 plugins with 16 specialized agents, 18 auto-enforcing skills, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, and system architecture"
   },
   "owner": {
     "name": "Smicolon Development Team",
@@ -15,8 +15,8 @@
   "plugins": [
     {
       "name": "smi-dev-loop",
-      "version": "1.0.0",
-      "description": "Autonomous development loops for iterative coding with automatic continuation",
+      "version": "1.1.0",
+      "description": "Autonomous TDD development loops with planning phase and iterative coding",
       "source": "./plugins/smi-dev-loop",
       "author": {
         "name": "Smicolon",
@@ -27,11 +27,13 @@
       "repository": "https://github.com/smicolon/claude-infra",
       "license": "MIT",
       "category": "automation",
-      "keywords": ["dev-loop", "automation", "tdd", "iterative", "ralph-wiggum"],
+      "keywords": ["dev-loop", "automation", "tdd", "iterative", "ralph-wiggum", "planning"],
       "commands": [
         "./commands/dev-loop.md",
+        "./commands/dev-plan.md",
         "./commands/cancel-dev.md"
       ],
+      "skills": ["./skills/tdd-planner/SKILL.md"],
       "hooks": ["./hooks/hooks.json"]
     },
     {

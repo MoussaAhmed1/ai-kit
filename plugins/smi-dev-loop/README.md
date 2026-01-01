@@ -1,10 +1,12 @@
 # smi-dev-loop
 
-Autonomous development loops for iterative coding with automatic continuation.
+Autonomous TDD development loops with planning phase and iterative coding.
 
 ## Overview
 
 This plugin provides a "dev loop" mechanism that keeps Claude working on a task until completion. Based on the Ralph Wiggum pattern, it uses a Stop hook to intercept Claude's exit and re-feed the original prompt.
+
+**New in v1.1**: Planning phase with `/dev-plan` for structured TDD workflows.
 
 ## Installation
 
@@ -12,13 +14,51 @@ This plugin provides a "dev loop" mechanism that keeps Claude working on a task 
 /plugin install smi-dev-loop
 ```
 
+## Recommended Workflow
+
+For best results, use the planning phase first:
+
+```bash
+# 1. Generate structured TDD plan
+/dev-plan "Build user authentication with JWT"
+
+# 2. Review and edit .claude/dev-plan.local.md if needed
+
+# 3. Execute with structured plan
+/dev-loop --from-plan
+```
+
 ## Commands
+
+### /dev-plan
+
+Generate a structured TDD plan for dev-loop execution:
+
+```bash
+# Basic usage - auto-detects framework
+/dev-plan "Build user authentication with JWT"
+
+# With explicit framework
+/dev-plan "Build API endpoints" --framework django
+
+# With interactive questions
+/dev-plan "Implement payment system" --interactive
+```
+
+Creates `.claude/dev-plan.local.md` with:
+- TDD phases (Red-Green-Refactor)
+- Clear verification commands
+- Self-correction rules
+- Stuck handling
 
 ### /dev-loop
 
 Start a development loop:
 
 ```bash
+# Recommended: Use with plan
+/dev-loop --from-plan
+
 # Simple usage - just provide your prompt
 /dev-loop "Build a user authentication system with login and logout"
 
@@ -77,11 +117,25 @@ Or with a custom promise:
 
 ## Use Cases
 
-- **TDD Development**: Write tests, implement, refactor until all tests pass
+- **TDD Development**: Use `/dev-plan` for structured Red-Green-Refactor phases
 - **Bug Fixing**: Keep working until the bug is resolved
 - **Refactoring**: Iteratively improve code structure
-- **Feature Building**: Build complex features step by step
+- **Feature Building**: Build complex features step by step with planning
 - **Code Review Fixes**: Address all review comments
+
+## TDD Planner Skill
+
+The `tdd-planner` skill auto-activates when you ask to:
+- "Plan a feature"
+- "Prepare for dev loop"
+- "Break down this task"
+- "Structure TDD approach"
+
+It generates structured prompts with:
+- Clear success criteria
+- TDD phases (Red → Green → Refactor)
+- Verification commands
+- Self-correction rules
 
 ## Combining with Framework Plugins
 

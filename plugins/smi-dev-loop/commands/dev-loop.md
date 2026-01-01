@@ -1,6 +1,6 @@
 ---
 description: "Start dev loop for iterative development"
-argument-hint: '"Your prompt here"'
+argument-hint: '"Your prompt here" [--from-plan] [--max-iterations N] [--promise TEXT]'
 allowed-tools: ["Bash(${CLAUDE_PLUGIN_ROOT}/scripts/setup-dev-loop.sh:*)"]
 hide-from-slash-command-tool: "true"
 ---
@@ -30,9 +30,12 @@ When your work is complete, output:
 
 This ends the loop successfully.
 
-## Optional Flags
+## Flags
 
 ```bash
+# Use existing plan from /dev-plan command
+/dev-loop --from-plan
+
 # Override max iterations (default: 50)
 /dev-loop "Build feature X" --max-iterations 30
 
@@ -40,8 +43,29 @@ This ends the loop successfully.
 /dev-loop "Refactor module Y" --promise "REFACTOR_COMPLETE"
 ```
 
+## Recommended Workflow
+
+For best results, use the planning phase first:
+
+```bash
+# 1. Generate structured TDD plan
+/dev-plan "Build user authentication"
+
+# 2. Review and edit .claude/dev-plan.local.md if needed
+
+# 3. Execute with structured plan
+/dev-loop --from-plan
+```
+
+This creates a plan with:
+- TDD phases (Red-Green-Refactor)
+- Clear verification commands
+- Self-correction rules
+- Stuck handling
+
 ## Tips
 
+- Use `/dev-plan` first for complex tasks
 - Break complex tasks into smaller steps
 - Test your work before declaring completion
 - Use `<promise>DONE</promise>` only when truly finished

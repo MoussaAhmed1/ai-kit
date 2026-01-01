@@ -37,3 +37,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Agent artifacts (local planning/progress files)
+agent-artifacts/
