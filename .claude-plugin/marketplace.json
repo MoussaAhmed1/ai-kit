@@ -70,14 +70,6 @@
         "./skills/migration-safety-checker/SKILL.md",
         "./skills/test-validity-checker/SKILL.md",
         "./skills/red-phase-verifier/SKILL.md"
-      ],
-      "rules": [
-        "./rules/models.md",
-        "./rules/views.md",
-        "./rules/services.md",
-        "./rules/serializers.md",
-        "./rules/tests.md",
-        "./rules/migrations.md"
       ]
     },
     {
@@ -104,12 +96,6 @@
       "skills": [
         "./skills/barrel-export-manager/SKILL.md",
         "./skills/import-convention-enforcer/SKILL.md"
-      ],
-      "rules": [
-        "./rules/controllers.md",
-        "./rules/entities.md",
-        "./rules/services.md",
-        "./rules/dto.md"
       ]
     },
     {
@@ -138,11 +124,6 @@
         "./skills/accessibility-validator/SKILL.md",
         "./skills/react-form-validator/SKILL.md",
         "./skills/import-convention-enforcer/SKILL.md"
-      ],
-      "rules": [
-        "./rules/components.md",
-        "./rules/api-routes.md",
-        "./rules/hooks.md"
       ]
     },
     {
@@ -170,11 +151,6 @@
         "./skills/accessibility-validator/SKILL.md",
         "./skills/veevalidate-form-validator/SKILL.md",
         "./skills/import-convention-enforcer/SKILL.md"
-      ],
-      "rules": [
-        "./rules/components.md",
-        "./rules/composables.md",
-        "./rules/server-routes.md"
       ]
     },
     {
