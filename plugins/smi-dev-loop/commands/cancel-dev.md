@@ -1,4 +1,5 @@
 ---
+name: cancel-dev
 description: "Cancel active dev loop"
 ---
 

@@ -1,8 +1,8 @@
 ---
+name: dev-loop
 description: "Start dev loop for iterative development"
 argument-hint: '"Your prompt here" [--from-plan] [--max-iterations N] [--promise TEXT]'
 allowed-tools: ["Bash(${CLAUDE_PLUGIN_ROOT}/scripts/setup-dev-loop.sh:*)"]
-hide-from-slash-command-tool: "true"
 ---
 
 ```!
