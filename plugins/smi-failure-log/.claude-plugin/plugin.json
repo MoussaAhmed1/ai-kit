@@ -1,0 +1,14 @@
+{
+  "name": "smi-failure-log",
+  "version": "1.0.0",
+  "description": "Persistent failure memory system that tracks mistakes and prevents repeating them across sessions",
+  "author": {
+    "name": "Smicolon",
+    "email": "dev@smicolon.com",
+    "url": "https://github.com/smicolon"
+  },
+  "homepage": "https://github.com/smicolon/claude-infra",
+  "repository": "https://github.com/smicolon/claude-infra",
+  "license": "MIT",
+  "keywords": ["failure-log", "memory", "learning", "mistakes", "conventions"]
+}

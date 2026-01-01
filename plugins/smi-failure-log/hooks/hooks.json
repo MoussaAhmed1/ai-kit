@@ -1,0 +1,29 @@
+{
+  "description": "Failure log hooks for capturing mistakes and injecting learned lessons",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/inject-failures.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Analyze if this tool use resulted in an error, was corrected by the user, or represents a pattern that should be avoided in the future. If YES (this is a mistake worth remembering), respond with JSON: {\"is_failure\": true, \"category\": \"imports|security|testing|architecture|conventions\", \"summary\": \"brief description\", \"correct_approach\": \"what should be done instead\"}. If NO (normal successful operation), respond with: {\"is_failure\": false}. Tool result: $TOOL_RESULT",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

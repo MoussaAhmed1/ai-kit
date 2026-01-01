@@ -2,7 +2,7 @@
 
 **Company-wide development standards enforcement via Claude Code marketplace.**
 
-5 independent plugins for Django, NestJS, Next.js, Nuxt.js, and system architecture.
+7 plugins for Django, NestJS, Next.js, Nuxt.js, system architecture, dev loops, and failure memory.
 
 ---
 
@@ -20,7 +20,7 @@
 /plugin install smi-architect       # System diagrams (1 agent)
 
 # Or install everything
-/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect smi-dev-loop smi-failure-log
 
 # 3. Verify and start using
 /help
@@ -33,7 +33,7 @@ Done! Agents are now available in **all your projects** automatically.
 
 ## Table of Contents
 
-- [5 Available Plugins](#5-available-plugins)
+- [7 Available Plugins](#7-available-plugins)
 - [What You Get](#what-you-get)
 - [Installation Methods](#installation-methods)
 - [Usage Examples](#usage-examples)
@@ -46,9 +46,9 @@ Done! Agents are now available in **all your projects** automatically.
 
 ---
 
-## 5 Available Plugins
+## 7 Available Plugins
 
-### 🐍 smi-django (5 agents, 4 commands, 8 skills, 6 rules)
+### 🐍 smi-django (5 agents, 3 commands, 8 skills)
 
 Django backend development with Python
 
@@ -69,7 +69,6 @@ Django backend development with Python
 - `/model-create` - Create Django models with Smicolon conventions
 - `/api-endpoint` - Generate complete REST API endpoints
 - `/test-generate` - Generate comprehensive tests (90%+ coverage)
-- `/tdd-loop` - Start TDD development cycle (Red-Green-Refactor)
 
 **Skills (Auto-Enforcing):**
 
@@ -82,16 +81,7 @@ Django backend development with Python
 - `test-validity-checker` - Ensures test quality
 - `red-phase-verifier` - Verifies TDD red phase
 
-**Path Rules:**
-
-- `models.md` - Model conventions
-- `views.md` - ViewSet/APIView conventions
-- `services.md` - Service layer patterns
-- `serializers.md` - Serializer patterns
-- `tests.md` - Test patterns
-- `migrations.md` - Migration safety
-
-### 🦅 smi-nestjs (3 agents, 1 command, 2 skills, 4 rules)
+### 🦅 smi-nestjs (3 agents, 1 command, 2 skills)
 
 NestJS backend development with TypeScript
 
@@ -114,14 +104,7 @@ NestJS backend development with TypeScript
 - `barrel-export-manager` - Auto-creates and maintains index.ts exports
 - `import-convention-enforcer` - Enforces absolute imports from barrel exports
 
-**Path Rules:**
-
-- `controllers.md` - Controller conventions
-- `entities.md` - Entity conventions
-- `services.md` - Service patterns
-- `dto.md` - DTO validation patterns
-
-### ⚛️ smi-nextjs (4 agents, 1 command, 3 skills, 3 rules)
+### ⚛️ smi-nextjs (4 agents, 1 command, 3 skills)
 
 Next.js frontend development with React
 
@@ -146,13 +129,7 @@ Next.js frontend development with React
 - `react-form-validator` - React Hook Form + Zod enforcement
 - `import-convention-enforcer` - Path alias (@/) enforcement
 
-**Path Rules:**
-
-- `components.md` - Component conventions
-- `api-routes.md` - API route patterns
-- `hooks.md` - Custom hook patterns
-
-### 💚 smi-nuxtjs (3 agents, 1 command, 3 skills, 3 rules)
+### 💚 smi-nuxtjs (3 agents, 1 command, 3 skills)
 
 Nuxt.js frontend development with Vue 3
 
@@ -176,13 +153,7 @@ Nuxt.js frontend development with Vue 3
 - `veevalidate-form-validator` - VeeValidate + Zod enforcement
 - `import-convention-enforcer` - ~/ path alias enforcement
 
-**Path Rules:**
-
-- `components.md` - Component conventions
-- `composables.md` - Composable patterns
-- `server-routes.md` - Server route patterns
-
-### 🏗️ smi-architect (1 agent + 1 command)
+### 🏗️ smi-architect (1 agent, 1 command)
 
 System architecture and diagram-as-code
 
@@ -198,11 +169,52 @@ System architecture and diagram-as-code
 
 - `/diagram-create` - Create system diagrams with Eraser.io
 
+### 🔄 smi-dev-loop (2 commands, 1 hook)
+
+Autonomous development loops for iterative coding
+
+```bash
+/plugin install smi-dev-loop
+```
+
+**Commands:**
+
+- `/dev-loop` - Start autonomous development loop (Red-Green-Refactor)
+- `/cancel-dev` - Cancel active development loop
+
+**Hooks:**
+
+- Automatic continuation logic for iterative development
+
+### 🧠 smi-failure-log (2 commands, 1 skill, 2 hooks)
+
+Persistent failure memory that prevents repeating mistakes
+
+```bash
+/plugin install smi-failure-log
+```
+
+**Commands:**
+
+- `/failure-add` - Log a mistake to prevent repeating it
+- `/failure-list` - View all logged failures
+
+**Skills:**
+
+- `failure-log-manager` - Knowledge for reading/writing failure logs
+
+**Features:**
+
+- Automatic context injection of known mistakes
+- Semi-automatic failure detection on Write/Edit
+- Project-specific storage in `.claude/failure-log.local.md`
+- Categories: imports, security, testing, architecture, conventions
+
 ---
 
 ## What You Get
 
-### Specialized Agents (14 total)
+### Specialized Agents (16 total)
 
 Each plugin includes agents specialized for that tech stack with deep knowledge of:
 
@@ -212,7 +224,7 @@ Each plugin includes agents specialized for that tech stack with deep knowledge 
 - Security requirements
 - Performance optimization
 
-### Auto-Enforcing Skills (16 total)
+### Auto-Enforcing Skills (17 total)
 
 Skills automatically activate based on context:
 
@@ -223,29 +235,22 @@ Skills automatically activate based on context:
 - **Accessibility Validators** - WCAG 2.1 AA compliance
 - **Performance Optimizers** - Detect N+1, missing indexes
 - **Test Validators** - Quality checks, TDD phase verification
+- **Failure Log Manager** - Persistent memory of mistakes to avoid
 
-### Path-Specific Rules (16 total)
-
-Convention rules automatically apply based on file location:
-
-- `models/` → Model patterns (UUID, timestamps, soft delete)
-- `views/` → ViewSet/Controller patterns
-- `services/` → Service layer patterns
-- `tests/` → Testing patterns (pytest, Jest)
-- `components/` → Component patterns
-- `migrations/` → Safe migration patterns
-
-### Interactive Commands (8 total)
+### Interactive Commands (11 total)
 
 Slash commands provide step-by-step interactive workflows:
 
 - `/model-create` - Django model generation
 - `/api-endpoint` - Complete API endpoint scaffolding
 - `/test-generate` - Comprehensive test generation
-- `/tdd-loop` - Start TDD cycle (Red-Green-Refactor)
 - `/module-create` - NestJS module scaffolding
-- `/component-create` - React/Vue component creation
+- `/component-create` - React/Vue component creation (Next.js & Nuxt.js)
 - `/diagram-create` - System diagram generation
+- `/dev-loop` - Autonomous development loop
+- `/cancel-dev` - Cancel development loop
+- `/failure-add` - Log a mistake to avoid
+- `/failure-list` - View logged failures
 
 ### Multi-Agent Workflows
 
@@ -459,20 +464,15 @@ claude-infra/                     # Smicolon Marketplace
 ├── .claude-plugin/
 │   └── marketplace.json          # Single source of truth - all plugin config
 ├── plugins/
-│   ├── smi-django/               # Django plugin
-│   │   ├── agents/              # 5 agents
-│   │   ├── commands/            # 3 slash commands
-│   │   ├── hooks/               # 3 hooks
-│   │   └── README.md
-│   ├── smi-nestjs/               # NestJS plugin
-│   ├── smi-nextjs/               # Next.js plugin
-│   ├── smi-nuxtjs/               # Nuxt.js plugin
-│   └── smi-architect/            # System architecture plugin
+│   ├── smi-django/               # Django plugin (5 agents, 3 commands, 8 skills)
+│   ├── smi-nestjs/               # NestJS plugin (3 agents, 1 command, 2 skills)
+│   ├── smi-nextjs/               # Next.js plugin (4 agents, 1 command, 3 skills)
+│   ├── smi-nuxtjs/               # Nuxt.js plugin (3 agents, 1 command, 3 skills)
+│   ├── smi-architect/            # System architecture plugin (1 agent, 1 command)
+│   ├── smi-dev-loop/             # Dev loop automation (2 commands, 1 hook)
+│   └── smi-failure-log/          # Failure memory (2 commands, 1 skill, 2 hooks)
 ├── workflows/                    # Multi-agent orchestration workflows
-│   ├── feature-development.md
-│   └── code-review.md
-├── scripts/
-│   └── cleanup-plugins.sh        # Development cleanup utility
+├── scripts/                      # Development utilities
 ├── templates/                    # Project templates
 ├── MCP_SETUP.md                  # Playwright + Figma setup
 └── README.md                     # This file
@@ -533,7 +533,7 @@ npm run dev
 /plugin update smi-django
 
 # Update all plugins
-/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect smi-dev-loop smi-failure-log
 
 # Check for updates
 /plugin list

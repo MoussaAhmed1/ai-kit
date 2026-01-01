@@ -1,10 +1,10 @@
 {
   "name": "smicolon-marketplace",
   "version": "2.1.0",
-  "description": "Official marketplace for Smicolon development standards - 6 plugins with 14 agents, 16 skills, and dev loop automation",
+  "description": "Official marketplace for Smicolon development standards - 7 plugins with 16 agents, 17 skills, failure memory, and dev loop automation",
   "license": "MIT",
   "metadata": {
-    "description": "Official marketplace for Smicolon development standards - 6 framework-specific plugins with 14 specialized agents, 16 auto-enforcing skills, and autonomous dev loops for Django, NestJS, Next.js, Nuxt.js, and system architecture"
+    "description": "Official marketplace for Smicolon development standards - 7 plugins with 16 specialized agents, 17 auto-enforcing skills, persistent failure memory, and autonomous dev loops for Django, NestJS, Next.js, Nuxt.js, and system architecture"
   },
   "owner": {
     "name": "Smicolon Development Team",
@@ -170,6 +170,28 @@
       "keywords": ["architecture", "diagrams", "eraser", "erd", "flowchart", "cloud-architecture"],
       "agents": ["./agents/system-architect.md"],
       "commands": ["./commands/diagram-create.md"]
+    },
+    {
+      "name": "smi-failure-log",
+      "version": "1.0.0",
+      "description": "Persistent failure memory that tracks mistakes and prevents repeating them across sessions",
+      "source": "./plugins/smi-failure-log",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": "https://github.com/smicolon/claude-infra",
+      "license": "MIT",
+      "category": "automation",
+      "keywords": ["failure-log", "memory", "learning", "mistakes", "conventions"],
+      "commands": [
+        "./commands/failure-add.md",
+        "./commands/failure-list.md"
+      ],
+      "skills": ["./skills/failure-log-manager/SKILL.md"],
+      "hooks": ["./hooks/hooks.json"]
     }
   ]
 }
