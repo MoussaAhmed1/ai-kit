@@ -2,6 +2,22 @@
 
 All notable changes to the smi-dev-loop plugin will be documented in this file.
 
+## [1.2.1] - 2026-01-02
+
+### Fixed
+- Rewrite stop hook based on official Ralph Wiggum pattern
+- Fix infinite loop bug when agent responds with natural language completion
+- Add comprehensive error handling with clear user messages
+- Use `systemMessage` field for iteration status
+- Add anti-gaming instruction ("do not lie to exit!")
+- Atomic file updates with PID suffix
+
+### Changed
+- Setup script now matches Ralph Wiggum quality with better argument parsing
+- Multi-word prompts work without quotes
+- Added `-h|--help` with full documentation
+- Defaults remain: 50 iterations, "DONE" promise
+
 ## [1.2.0] - 2026-01-02
 
 ### Added
