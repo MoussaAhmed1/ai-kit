@@ -33,6 +33,13 @@ Every dev-loop plan follows this structure:
 - Framework: [detected]
 - Test Runner: [command]
 - Lint: [command]
+- Plan File: `.claude/dev-plan.local.md`
+
+## Progress Tracking
+
+**IMPORTANT:** After completing each task, update this file (`.claude/dev-plan.local.md`) by checking the box:
+- Change `- [ ]` to `- [x]` for completed tasks
+- This tracks progress across iterations and prevents redoing work
 
 ## Success Criteria
 - [ ] Measurable outcome 1

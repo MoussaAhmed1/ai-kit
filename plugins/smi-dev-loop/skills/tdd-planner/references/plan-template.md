@@ -20,6 +20,13 @@ Framework: {{FRAMEWORK}}
 - **Test Runner:** {{TEST_COMMAND}}
 - **Lint Command:** {{LINT_COMMAND}}
 - **Coverage:** {{COVERAGE_COMMAND}}
+- **Plan File:** `.claude/dev-plan.local.md`
+
+## Progress Tracking
+
+**IMPORTANT:** After completing each task, update this file (`.claude/dev-plan.local.md`) by checking the box:
+- Change `- [ ]` to `- [x]` for completed tasks
+- This tracks progress across iterations and prevents redoing work
 
 ## Success Criteria
 
@@ -132,6 +139,13 @@ Framework: Django
 - **Test Runner:** pytest --tb=short
 - **Lint Command:** ruff check .
 - **Coverage:** pytest --cov=users --cov-report=term-missing
+- **Plan File:** `.claude/dev-plan.local.md`
+
+## Progress Tracking
+
+**IMPORTANT:** After completing each task, update this file (`.claude/dev-plan.local.md`) by checking the box:
+- Change `- [ ]` to `- [x]` for completed tasks
+- This tracks progress across iterations and prevents redoing work
 
 ## Success Criteria
 
