@@ -15,7 +15,7 @@
   "plugins": [
     {
       "name": "smi-dev-loop",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "description": "Autonomous TDD development loops with planning phase and iterative coding",
       "source": "./plugins/smi-dev-loop",
       "author": {

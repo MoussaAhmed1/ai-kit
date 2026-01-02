@@ -1,6 +1,22 @@
 # Dev Loop Plan Template
 
-Use this template when generating dev-loop plans. Replace placeholders with actual values.
+Use this template when generating dev-loop plans. Every section is **required** unless marked optional.
+
+---
+
+## Quality Checklist
+
+Before saving a plan, verify:
+
+- [ ] Context lists **specific items** to work on (not just "the feature")
+- [ ] Success criteria are **measurable** (numbers, specific behaviors)
+- [ ] **Every task** has a file path
+- [ ] **Code snippets** show implementation structure
+- [ ] Verification has **expected output** (PASS/FAIL + why)
+- [ ] Self-correction is **phase-specific**, not generic
+- [ ] **Files to Modify** table exists
+- [ ] **New Files to Create** table exists
+- [ ] Stuck handling is **framework/task-specific**
 
 ---
 
@@ -10,33 +26,73 @@ Use this template when generating dev-loop plans. Replace placeholders with actu
 # Dev Loop Plan: {{GOAL}}
 
 Generated: {{TIMESTAMP}}
-Framework: {{FRAMEWORK}}
 
 ---
 
 ## Context
 
-- **Framework:** {{FRAMEWORK}}
-- **Test Runner:** {{TEST_COMMAND}}
-- **Lint Command:** {{LINT_COMMAND}}
-- **Coverage:** {{COVERAGE_COMMAND}}
-- **Plan File:** `.claude/dev-plan.local.md`
+- **Framework**: {{FRAMEWORK}}
+- **Current State**: {{CURRENT_STATE}} (e.g., "Provider with ChangeNotifierProvider")
+- **Test Command**: `{{TEST_COMMAND}}`
+- **Lint Command**: `{{LINT_COMMAND}}`
+- **Coverage Command**: `{{COVERAGE_COMMAND}}` (optional)
+- **Items to Work On**:
+{{#WORK_ITEMS}}
+  - `{{ITEM_NAME}}` ({{ITEM_DESCRIPTION}})
+{{/WORK_ITEMS}}
 
-## Progress Tracking
-
-**IMPORTANT:** After completing each task, update this file (`.claude/dev-plan.local.md`) by checking the box:
-- Change `- [ ]` to `- [x]` for completed tasks
-- This tracks progress across iterations and prevents redoing work
+---
 
 ## Success Criteria
 
 All of the following must be true:
 
-- [ ] {{CRITERION_1}}
-- [ ] {{CRITERION_2}}
-- [ ] {{CRITERION_3}}
+{{#SUCCESS_CRITERIA}}
+- [ ] {{CRITERION}}
+{{/SUCCESS_CRITERIA}}
 - [ ] All tests pass (`{{TEST_COMMAND}}`)
 - [ ] Linter clean (`{{LINT_COMMAND}}`)
+
+---
+
+## Acceptance Criteria (Optional but Recommended)
+
+User-facing behaviors to verify:
+
+{{#ACCEPTANCE_CRITERIA}}
+### {{AC_NUMBER}}. {{AC_TITLE}}
+- **Given**: {{GIVEN}}
+- **When**: {{WHEN}}
+- **Then**: {{THEN}}
+{{/ACCEPTANCE_CRITERIA}}
+
+---
+
+## Files to Modify
+
+| File | Action |
+|------|--------|
+{{#FILES_TO_MODIFY}}
+| `{{FILE_PATH}}` | {{ACTION}} |
+{{/FILES_TO_MODIFY}}
+
+---
+
+## New Files to Create
+
+| File | Purpose |
+|------|---------|
+{{#NEW_FILES}}
+| `{{FILE_PATH}}` | {{PURPOSE}} |
+{{/NEW_FILES}}
+
+---
+
+## Progress Tracking
+
+**IMPORTANT:** After completing each task, update this file by checking the box:
+- Change `- [ ]` to `- [x]` for completed tasks
+- This tracks progress across iterations and prevents redoing work
 
 ---
 
@@ -50,17 +106,25 @@ All of the following must be true:
 
 **Tasks:**
 {{#TASKS}}
-- [ ] {{TASK}}
+- [ ] {{TASK_DESCRIPTION}}
+  {{#TASK_DETAILS}}
+  - {{DETAIL}}
+  {{/TASK_DETAILS}}
 {{/TASKS}}
+
+**Implementation Structure:** (include code snippet for Green phases)
+```{{LANGUAGE}}
+{{CODE_SNIPPET}}
+```
 
 **Verification:**
 ```bash
 {{VERIFICATION_COMMAND}}
 ```
-Expected: {{EXPECTED_RESULT}}
+**Expected:** {{EXPECTED_RESULT}}
 
 **Self-correction:**
-- {{SELF_CORRECTION_RULE}}
+- {{PHASE_SPECIFIC_CORRECTION}}
 
 {{/PHASES}}
 
@@ -68,51 +132,55 @@ Expected: {{EXPECTED_RESULT}}
 
 ## Final Verification
 
-Run all checks before declaring complete:
-
 ```bash
 {{FINAL_VERIFICATION}}
 ```
 
-All commands must succeed with exit code 0.
+**Expected Results:**
+{{#FINAL_EXPECTATIONS}}
+- `{{COMMAND}}`: {{EXPECTATION}}
+{{/FINAL_EXPECTATIONS}}
 
 ---
 
 ## Completion
 
-When ALL of the above pass, and you have verified each criterion, output:
-
-```
-<promise>DONE</promise>
-```
-
-**Important:** Only output the promise when genuinely complete. Premature completion wastes iterations.
+When ALL criteria met: <promise>DONE</promise>
 
 ---
 
 ## Stuck Handling
 
-If you encounter the same error for 3+ iterations:
+### If same test keeps failing:
+{{#STUCK_TEST_TIPS}}
+1. {{TIP}}
+{{/STUCK_TEST_TIPS}}
 
-1. **Stop and analyze**
-   - What exactly is the error message?
-   - Which file and line?
-   - What did you try?
+### If app/server won't start:
+{{#STUCK_START_TIPS}}
+1. {{TIP}}
+{{/STUCK_START_TIPS}}
 
-2. **Try alternatives**
-   - Different implementation approach
-   - Simpler version first
-   - Check existing similar code
+### Alternative approaches if blocked:
+{{#ALTERNATIVE_APPROACHES}}
+1. {{APPROACH}}
+{{/ALTERNATIVE_APPROACHES}}
 
-3. **Verify basics**
-   - Are you editing the right file?
-   - Did the file save correctly?
-   - Is the test targeting your code?
+---
 
-4. **Simplify**
-   - Comment out complex parts
-   - Get minimal case working
-   - Add complexity incrementally
+## Rollback Strategy (Optional)
+
+If migration/feature fails completely:
+1. {{ROLLBACK_STEP_1}}
+2. {{ROLLBACK_STEP_2}}
+
+---
+
+## Dependencies & Prerequisites
+
+{{#DEPENDENCIES}}
+- {{DEPENDENCY}}: {{VERSION_OR_NOTES}}
+{{/DEPENDENCIES}}
 
 ---
 
@@ -123,173 +191,85 @@ If you encounter the same error for 3+ iterations:
 
 ---
 
-## Example: Django User Authentication
+## Example: Populated Template
 
-```markdown
-# Dev Loop Plan: User Authentication with JWT
-
-Generated: 2026-01-01T00:00:00Z
-Framework: Django
-
----
-
-## Context
-
-- **Framework:** Django 5.0 with DRF
-- **Test Runner:** pytest --tb=short
-- **Lint Command:** ruff check .
-- **Coverage:** pytest --cov=users --cov-report=term-missing
-- **Plan File:** `.claude/dev-plan.local.md`
-
-## Progress Tracking
-
-**IMPORTANT:** After completing each task, update this file (`.claude/dev-plan.local.md`) by checking the box:
-- Change `- [ ]` to `- [x]` for completed tasks
-- This tracks progress across iterations and prevents redoing work
-
-## Success Criteria
-
-All of the following must be true:
-
-- [ ] User model with email as username
-- [ ] Login endpoint returns JWT token
-- [ ] Logout endpoint invalidates token
-- [ ] Protected endpoint requires valid token
-- [ ] All tests pass (`pytest --tb=short`)
-- [ ] Linter clean (`ruff check .`)
-
----
-
-## Phases
-
-### Phase 1: Red - User Model Tests
-
-**Goal:** Write failing tests for custom User model
-
-**Tasks:**
-- [ ] Create tests/test_models.py
-- [ ] Test user creation with email
-- [ ] Test password hashing
-- [ ] Test email uniqueness
-
-**Verification:**
-```bash
-pytest tests/test_models.py -v
-```
-Expected: Tests should FAIL (model not implemented)
-
-**Self-correction:**
-- If tests pass, model already exists or tests are wrong
-
-### Phase 2: Green - User Model Implementation
-
-**Goal:** Implement User model to pass tests
-
-**Tasks:**
-- [ ] Create custom User model
-- [ ] Set email as USERNAME_FIELD
-- [ ] Create UserManager
-- [ ] Run migrations
-
-**Verification:**
-```bash
-pytest tests/test_models.py -v
-```
-Expected: Tests should PASS
-
-**Self-correction:**
-- If tests fail, read error and fix implementation
-
-### Phase 3: Refactor - User Model Cleanup
-
-**Goal:** Clean code, add documentation
-
-**Tasks:**
-- [ ] Add type hints
-- [ ] Add docstrings
-- [ ] Follow Smicolon import conventions
-
-**Verification:**
-```bash
-pytest tests/test_models.py && ruff check users/
-```
-Expected: Tests pass AND lint clean
-
-### Phase 4: Red - Auth Endpoint Tests
-
-**Goal:** Write failing tests for login/logout
-
-**Tasks:**
-- [ ] Create tests/test_auth.py
-- [ ] Test login returns token
-- [ ] Test logout invalidates token
-- [ ] Test invalid credentials
-
-**Verification:**
-```bash
-pytest tests/test_auth.py -v
-```
-Expected: Tests should FAIL
-
-### Phase 5: Green - Auth Endpoints
-
-**Goal:** Implement auth endpoints
-
-**Tasks:**
-- [ ] Create login view
-- [ ] Create logout view
-- [ ] Configure JWT settings
-- [ ] Add URLs
-
-**Verification:**
-```bash
-pytest tests/test_auth.py -v
-```
-Expected: Tests should PASS
-
-### Phase 6: Refactor - Auth Cleanup
-
-**Goal:** Final cleanup and documentation
-
-**Tasks:**
-- [ ] Add API documentation
-- [ ] Clean up imports
-- [ ] Add error handling
-
-**Verification:**
-```bash
-pytest && ruff check .
-```
-
----
-
-## Final Verification
-
-```bash
-pytest --tb=short && ruff check . && echo "ALL CHECKS PASSED"
-```
-
----
-
-## Completion
-
-<promise>DONE</promise>
-```
+See `references/good-example.md` for a complete, high-quality example.
 
 ---
 
 ## Variable Reference
 
+### Required Variables
+
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `{{GOAL}}` | High-level objective | "User Authentication with JWT" |
-| `{{FRAMEWORK}}` | Detected framework | "Django 5.0" |
-| `{{TEST_COMMAND}}` | Test runner command | "pytest --tb=short" |
-| `{{LINT_COMMAND}}` | Linter command | "ruff check ." |
-| `{{COVERAGE_COMMAND}}` | Coverage command | "pytest --cov" |
-| `{{PHASE_NUMBER}}` | Phase sequence number | "1", "2", "3" |
-| `{{PHASE_TYPE}}` | Red, Green, or Refactor | "Red" |
-| `{{COMPONENT}}` | What's being built | "User Model" |
-| `{{PHASE_GOAL}}` | Specific phase objective | "Write failing tests" |
-| `{{VERIFICATION_COMMAND}}` | Command to verify phase | "pytest tests/test_models.py" |
-| `{{EXPECTED_RESULT}}` | What success looks like | "Tests should PASS" |
+| `{{GOAL}}` | High-level objective | "Migrate to Riverpod State Management" |
+| `{{FRAMEWORK}}` | Detected framework | "Flutter", "Django 5.0", "Next.js 14" |
+| `{{CURRENT_STATE}}` | What exists now | "Provider with ChangeNotifierProvider" |
+| `{{TEST_COMMAND}}` | Test runner command | "flutter test", "pytest" |
+| `{{LINT_COMMAND}}` | Linter command | "flutter analyze", "ruff check ." |
+| `{{WORK_ITEMS}}` | Specific items to work on | List of components, providers, endpoints |
+| `{{FILES_TO_MODIFY}}` | Existing files to change | Table with file paths and actions |
+| `{{NEW_FILES}}` | Files to create | Table with file paths and purposes |
+
+### Phase Variables
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `{{PHASE_TYPE}}` | Red, Green, or Refactor | "Red", "Green", "Refactor" |
+| `{{COMPONENT}}` | What's being built | "Core Providers", "Widget Migration" |
+| `{{CODE_SNIPPET}}` | Implementation structure | Actual code showing pattern |
+| `{{EXPECTED_RESULT}}` | What success looks like | "should FAIL (providers don't exist yet)" |
+| `{{PHASE_SPECIFIC_CORRECTION}}` | Phase-specific stuck handling | "If tests pass, they're not testing the right thing" |
+
+### Task Detail Pattern
+
+Tasks should include file paths and specifics:
+
+**Bad:**
+```markdown
+- [ ] Create login view
+```
+
+**Good:**
+```markdown
+- [ ] Create `lib/screens/login_screen.dart`:
+  - ConsumerStatefulWidget
+  - Form with email/password fields
+  - Calls `ref.read(authProvider.notifier).login()`
+  - Navigates to home on success
+```
+
+---
+
+## Framework-Specific Patterns
+
+### Flutter
+- Use `ConsumerWidget` / `ConsumerStatefulWidget`
+- Wrap app in `ProviderScope`
+- Test with `ProviderScope` in tests
+
+### Django
+- Use absolute imports (`import users.models as _models`)
+- UUID primary keys on all models
+- Service layer for business logic
+
+### Next.js
+- Use `"use client"` directive for client components
+- TanStack Query for data fetching
+- Zod schemas for validation
+
+### NestJS
+- Barrel exports (`index.ts` in each folder)
+- Absolute imports from `src/`
+- DTOs with class-validator
+
+---
+
+## Anti-Patterns to Avoid
+
+1. **Vague tasks**: "Implement the feature" (no file paths)
+2. **Generic self-correction**: "If it fails, try again" (not specific)
+3. **Missing code snippets**: No structure shown for implementation
+4. **No file tables**: Unclear what files are affected
+5. **Unmeasurable criteria**: "App works well" (how do you verify?)

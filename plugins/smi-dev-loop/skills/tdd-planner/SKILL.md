@@ -1,11 +1,27 @@
 ---
 name: tdd-planner
-description: This skill should be used when the user asks to "plan a feature", "prepare for dev loop", "structure TDD approach", "break down this task", "create development plan", or when generating structured prompts for iterative development. Creates dev-loop-ready plans with TDD phases.
+description: This skill should be used when the user asks to "plan a feature", "prepare for dev loop", "structure TDD approach", "break down this task", "create development plan", or when generating structured prompts for iterative development. Creates dev-loop-ready plans with TDD phases, file tables, code snippets, and framework-specific guidance.
 ---
 
 # TDD Planner
 
-Generate structured development plans following Test-Driven Development principles for use with the dev-loop command.
+Generate high-quality, structured development plans following Test-Driven Development principles for use with the dev-loop command.
+
+## Quality Standard
+
+Every plan must meet this checklist before saving:
+
+- [ ] Context lists **specific items** to work on (not just "the feature")
+- [ ] Success criteria are **measurable** (numbers, specific behaviors)
+- [ ] **Every task** has a file path
+- [ ] **Code snippets** show implementation structure
+- [ ] Verification has **expected output** (PASS/FAIL + why)
+- [ ] Self-correction is **phase-specific**, not generic
+- [ ] **Files to Modify** table exists
+- [ ] **New Files to Create** table exists
+- [ ] Stuck handling is **framework/task-specific**
+
+**Reference:** See `references/good-example.md` for expected quality.
 
 ## Activation Triggers
 
@@ -15,83 +31,163 @@ This skill activates when:
 - Breaking down complex tasks into TDD phases
 - Creating structured development workflows
 
-## Core Principles (Ralph Wiggum Pattern)
+## Core Principles
 
-1. **Iteration Over Perfection** - Expect multiple passes, not first-draft solutions
-2. **Failures as Data** - Predictable failures inform improvements
-3. **Clear Completion Criteria** - Measurable outcomes, not vague goals
-4. **Self-Correction** - Embedded debugging loops for troubleshooting
+1. **Specificity Over Vagueness** - File paths, code snippets, measurable outcomes
+2. **Iteration Over Perfection** - Expect multiple passes, not first-draft solutions
+3. **Failures as Data** - Red phase tests MUST fail first
+4. **Framework Awareness** - Use correct patterns for detected framework
 
-## Plan Structure
+## Required Plan Sections
 
-Every dev-loop plan follows this structure:
+### 1. Context
 
 ```markdown
-# Dev Loop Plan: [Goal]
-
 ## Context
-- Framework: [detected]
-- Test Runner: [command]
-- Lint: [command]
-- Plan File: `.claude/dev-plan.local.md`
 
-## Progress Tracking
+- **Framework**: Flutter / Django / Next.js / etc.
+- **Current State**: What exists now
+- **Test Command**: `flutter test` / `pytest` / etc.
+- **Lint Command**: `flutter analyze` / `ruff check .` / etc.
+- **Items to Work On**:
+  - `ComponentA` (description)
+  - `ComponentB` (description)
+```
 
-**IMPORTANT:** After completing each task, update this file (`.claude/dev-plan.local.md`) by checking the box:
-- Change `- [ ]` to `- [x]` for completed tasks
-- This tracks progress across iterations and prevents redoing work
+### 2. Success Criteria (Measurable)
 
+```markdown
 ## Success Criteria
-- [ ] Measurable outcome 1
-- [ ] Measurable outcome 2
-- [ ] All tests pass
-- [ ] Linter clean
 
-## Phases
+- [ ] Login returns JWT token (specific behavior)
+- [ ] 81+ tests pass (quantitative)
+- [ ] Invalid credentials return 401 (negative case)
+- [ ] All tests pass (`flutter test`)
+- [ ] Linter clean (`flutter analyze`)
+```
 
-### Phase N: Red - [Component] Tests
-**Goal:** Write failing tests
-**Verification:** [test command] should FAIL
-**Self-correction:** If tests pass, tests are too weak
+### 3. File Tables (Required)
 
-### Phase N+1: Green - [Component] Implementation
-**Goal:** Make tests pass
-**Verification:** [test command] should PASS
-**Self-correction:** If fails, read error, fix code
+```markdown
+## Files to Modify
 
-### Phase N+2: Refactor - [Component] Cleanup
-**Goal:** Clean code, tests still pass
-**Verification:** [test + lint command]
+| File | Action |
+|------|--------|
+| `lib/main.dart` | Replace MultiProvider with ProviderScope |
+| `pubspec.yaml` | Add flutter_riverpod dependency |
 
-## Completion
-When all criteria met: <promise>DONE</promise>
+## New Files to Create
 
+| File | Purpose |
+|------|---------|
+| `lib/providers/auth_provider.dart` | Riverpod auth state |
+| `test/providers/auth_test.dart` | Auth provider tests |
+```
+
+### 4. Phases with Code Snippets
+
+```markdown
+### Phase 2: Green - Implement Auth Provider
+
+**Goal:** Create Riverpod provider that passes tests
+
+**Tasks:**
+- [ ] Create `lib/providers/auth_provider.dart`:
+  - StateNotifierProvider with AuthNotifier
+  - Methods: login(), logout(), checkAuth()
+  - State: AuthState (authenticated, user, token)
+
+**Implementation Structure:**
+```dart
+final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+  return AuthNotifier();
+});
+
+class AuthNotifier extends StateNotifier<AuthState> {
+  AuthNotifier() : super(AuthState.initial());
+
+  Future<void> login(String email, String password) async {
+    // Implementation
+  }
+}
+```
+
+**Verification:**
+```bash
+flutter test test/providers/auth_test.dart
+```
+**Expected:** Tests should PASS
+
+**Self-correction:**
+- If tests fail, check state class matches test expectations
+- Verify StateNotifier lifecycle is correct
+```
+
+### 5. Stuck Handling (Framework-Specific)
+
+```markdown
 ## Stuck Handling
-If stuck 3+ iterations:
-1. Re-read error carefully
-2. Check correct file
-3. Look at similar code
-4. Simplify approach
+
+### If same test keeps failing:
+1. Read the exact error message
+2. Check if ProviderScope wraps the widget tree
+3. Verify ref.watch vs ref.read usage
+4. Check state class matches expected structure
+
+### If app won't start:
+1. Check ProviderScope is at app root
+2. Verify no circular provider dependencies
+3. Check async initialization is handled
+
+### Alternative approaches if blocked:
+1. Keep hybrid approach temporarily (both Provider and Riverpod)
+2. Migrate one screen at a time
+3. Use ChangeNotifierProvider adapter for gradual migration
 ```
 
 ## Framework Detection
 
-Detect framework by checking for:
+**Package manager auto-detection** (defaults to `bun`):
+- `bun.lockb` → bun
+- `pnpm-lock.yaml` → pnpm
+- `yarn.lock` → yarn
+- `package-lock.json` → npm
+- No lockfile → bun (default)
 
-| Framework | Detection | Test Command | Lint Command |
-|-----------|-----------|--------------|--------------|
-| Django | `manage.py` or `django` in requirements | `pytest` | `ruff check .` |
-| Next.js | `next` in package.json | `npm test` | `npm run lint` |
-| NestJS | `@nestjs/core` in package.json | `npm test` | `npm run lint` |
-| Nuxt.js | `nuxt` in package.json | `npm test` | `npm run lint` |
-| Generic Python | `pytest` in requirements | `pytest` | `ruff check .` |
-| Generic Node | `jest` in package.json | `npm test` | `npm run lint` |
+**Auto-detected frameworks (17+):**
+
+| Category | Framework | Detection | Test | Lint |
+|----------|-----------|-----------|------|------|
+| **Mobile** | Flutter | `pubspec.yaml` | `flutter test` | `flutter analyze` |
+| | React Native | `react-native` in package.json | `${PM} test` | `${PM} run lint` |
+| **Python** | Django | `manage.py` | `pytest` | `ruff check .` |
+| | FastAPI | `fastapi` in pyproject.toml | `pytest` | `ruff check .` |
+| | Flask | `flask` in pyproject.toml | `pytest` | `ruff check .` |
+| **Node.js** | NestJS | `@nestjs/core` | `${PM} test` | `${PM} run lint` |
+| | Next.js | `next` | `${PM} test` | `${PM} run lint` |
+| | Nuxt.js | `nuxt` | `${PM} test` | `${PM} run lint` |
+| | Hono | `hono` | `bun test` | `bun run lint` |
+| | Express | `express` | `${PM} test` | `${PM} run lint` |
+| | TanStack | `@tanstack/react-router` | `bun test` | `bun run lint` |
+| **Systems** | Go | `go.mod` | `go test ./...` | `golangci-lint run` |
+| | Rust | `Cargo.toml` | `cargo test` | `cargo clippy` |
+| **Web** | Rails | `rails` in Gemfile | `bundle exec rspec` | `bundle exec rubocop` |
+| | Laravel | `laravel` in composer.json | `php artisan test` | `./vendor/bin/pint` |
+
+`${PM}` = detected package manager (bun/pnpm/yarn/npm)
+
+**Custom frameworks:**
+
+```bash
+/dev-plan "Build API" --framework elixir --test-cmd "mix test" --lint-cmd "mix credo"
+/dev-plan "Add feature" --test-cmd "make test" --lint-cmd "make lint"
+```
 
 ## Phase Generation Rules
 
 ### For New Features
-1. **Red**: Write tests for the feature interface
-2. **Green**: Implement minimum code to pass
+1. **Red**: Write tests for the feature interface (expect FAIL)
+2. **Green**: Implement minimum code to pass (include code snippet)
 3. **Refactor**: Clean up, add types, documentation
 
 ### For Bug Fixes
@@ -99,59 +195,46 @@ Detect framework by checking for:
 2. **Green**: Fix the bug (test passes)
 3. **Refactor**: Ensure no regression, clean up
 
-### For Refactoring
+### For Refactoring/Migration
 1. **Red**: Ensure existing tests pass (baseline)
-2. **Green**: Apply refactoring incrementally
+2. **Green**: Apply changes incrementally
 3. **Refactor**: Verify tests still pass after each change
 
-## Self-Correction Templates
+## Task Detail Pattern
 
-Include these in every plan:
-
+**Bad Task:**
 ```markdown
-## Self-Correction Rules
-
-**If tests fail:**
-1. Read the full error message
-2. Identify which assertion failed
-3. Check if implementation matches test expectation
-4. Fix implementation, not test (unless test is wrong)
-
-**If stuck in loop:**
-1. Count iterations on same error
-2. After 3 iterations, try different approach
-3. Simplify: remove complexity, get basic case working
-4. Check if you're editing the right file
-
-**If linter fails:**
-1. Run lint command to see specific errors
-2. Fix one error at a time
-3. Re-run to verify fix
+- [ ] Create login view
 ```
 
-## Verification Commands
-
-Always include runnable verification:
-
-```bash
-# Test verification
-pytest --tb=short
-npm test
-
-# Lint verification
-ruff check .
-npm run lint
-
-# Combined verification
-pytest && ruff check . && echo "ALL PASSED"
-npm test && npm run lint && echo "ALL PASSED"
+**Good Task:**
+```markdown
+- [ ] Create `lib/screens/login_screen.dart`:
+  - ConsumerStatefulWidget
+  - Form with email/password TextFormFields
+  - Calls `ref.read(authProvider.notifier).login()`
+  - Shows loading state during auth
+  - Navigates to home on success
+  - Shows error snackbar on failure
 ```
+
+## Anti-Patterns to Avoid
+
+| Don't | Do Instead |
+|-------|------------|
+| "Implement the feature" | "Create `lib/auth/login.dart` with ConsumerWidget" |
+| "If it fails, try again" | "If tests pass in Red, they're too weak - add assertions" |
+| Missing code snippets | Show actual structure with types and patterns |
+| No file tables | Always list files to modify/create |
+| "App works well" | "Login returns JWT, logout invalidates token, 401 on bad creds" |
+| Generic stuck handling | Framework-specific: "Check ProviderScope wraps app" |
 
 ## Usage
 
 ### Generate Plan
 ```bash
-/dev-plan "Build user authentication"
+/dev-plan "Migrate to Riverpod" --framework flutter
+/dev-plan "Add user authentication" --interactive
 ```
 
 ### Execute Plan
@@ -159,12 +242,8 @@ npm test && npm run lint && echo "ALL PASSED"
 /dev-loop --from-plan
 ```
 
-### Combined
-```bash
-/dev-loop "Build feature" --with-planning
-```
-
 ## References
 
-- `references/plan-template.md` - Full plan template with variables
+- `references/plan-template.md` - Full template with all variables
+- `references/good-example.md` - High-quality Flutter migration example
 - `references/framework-patterns.md` - Framework-specific patterns
