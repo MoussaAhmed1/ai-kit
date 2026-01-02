@@ -39,22 +39,42 @@ if [[ -z "$TRANSCRIPT_PATH" ]] || [[ ! -f "$TRANSCRIPT_PATH" ]]; then
   # Update iteration in state file
   sed "s/^iteration: .*/iteration: $NEXT_ITERATION/" "$STATE_FILE" > "$STATE_FILE.tmp" && mv "$STATE_FILE.tmp" "$STATE_FILE"
 
+  # Build continue message
+  CONTINUE_MSG="Continue working on the task. Iteration $NEXT_ITERATION of $MAX_ITERATIONS.
+
+When complete, output: <promise>$COMPLETION_PROMISE</promise>
+
+---
+$PROMPT_TEXT"
+
   jq -n \
-    --arg prompt "$PROMPT_TEXT" \
-    --arg msg "Dev Loop iteration $NEXT_ITERATION of $MAX_ITERATIONS | Complete with: <promise>$COMPLETION_PROMISE</promise>" \
+    --arg prompt "$CONTINUE_MSG" \
     '{
       "decision": "block",
-      "reason": $prompt,
-      "systemMessage": $msg
+      "reason": $prompt
     }'
   exit 0
 fi
 
 # Read the last assistant message from transcript
 # The transcript is JSONL format with role: "assistant" messages
+# Content structure: {"message":{"content":[{"type":"text","text":"..."}]}}
 LAST_OUTPUT=""
 if [[ -f "$TRANSCRIPT_PATH" ]]; then
-  LAST_OUTPUT=$(grep '"role":"assistant"' "$TRANSCRIPT_PATH" 2>/dev/null | tail -1 | jq -r '.message.content // .content // empty' 2>/dev/null || echo "")
+  # Extract text from all text blocks in the last assistant message
+  LAST_OUTPUT=$(grep '"role":"assistant"' "$TRANSCRIPT_PATH" 2>/dev/null | tail -1 | jq -r '
+    if .message.content then
+      [.message.content[] | select(.type == "text") | .text] | join("\n")
+    elif .content then
+      if type == "array" then
+        [.content[] | select(.type == "text") | .text] | join("\n")
+      else
+        .content
+      end
+    else
+      empty
+    end
+  ' 2>/dev/null || echo "")
 fi
 
 # Check for completion promise in output
@@ -78,14 +98,20 @@ PROMPT_TEXT=$(awk '/^---$/{i++; next} i>=2' "$STATE_FILE")
 # Update iteration counter in state file
 sed "s/^iteration: .*/iteration: $NEXT_ITERATION/" "$STATE_FILE" > "$STATE_FILE.tmp" && mv "$STATE_FILE.tmp" "$STATE_FILE"
 
+# Build continue message
+CONTINUE_MSG="Continue working on the task. Iteration $NEXT_ITERATION of $MAX_ITERATIONS.
+
+When complete, output: <promise>$COMPLETION_PROMISE</promise>
+
+---
+$PROMPT_TEXT"
+
 # Return JSON to block exit and continue with prompt
 jq -n \
-  --arg prompt "$PROMPT_TEXT" \
-  --arg msg "Dev Loop iteration $NEXT_ITERATION of $MAX_ITERATIONS | Complete with: <promise>$COMPLETION_PROMISE</promise>" \
+  --arg prompt "$CONTINUE_MSG" \
   '{
     "decision": "block",
-    "reason": $prompt,
-    "systemMessage": $msg
+    "reason": $prompt
   }'
 
 exit 0
