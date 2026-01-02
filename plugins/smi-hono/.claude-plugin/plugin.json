@@ -1,0 +1,19 @@
+{
+  "name": "smi-hono",
+  "version": "0.1.0",
+  "description": "Hono web framework plugin for Claude Code - scaffolding, conventions, testing, and deployment for Bun and Cloudflare Workers",
+  "author": {
+    "name": "Smicolon",
+    "email": "dev@smicolon.com"
+  },
+  "repository": "https://github.com/smicolon/claude-infra",
+  "license": "MIT",
+  "keywords": [
+    "hono",
+    "bun",
+    "cloudflare-workers",
+    "edge",
+    "typescript",
+    "api"
+  ]
+}

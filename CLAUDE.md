@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-This repository is a **Claude Code Marketplace** providing 5 independent plugins for enforcing Smicolon company-wide development standards across Django, NestJS, Next.js, Nuxt.js, and system architecture. Each plugin includes specialized agents and hooks that automatically inject conventions and validate code.
+This repository is a **Claude Code Marketplace** providing 11 independent plugins for enforcing Smicolon company-wide development standards across Django, NestJS, Next.js, Nuxt.js, Hono, TanStack Router, Better Auth, Flutter, system architecture, dev loops, and failure memory. Each plugin includes specialized agents and hooks that automatically inject conventions and validate code.
 
 ## Core Architecture
 
@@ -15,15 +15,21 @@ claude-infra/                     # Smicolon Marketplace
 ├── .claude-plugin/
 │   └── marketplace.json          # Single source of truth - all plugin configuration
 ├── plugins/
-│   ├── smi-django/               # Django plugin (5 agents, 3 commands)
+│   ├── smi-django/               # Django plugin (5 agents, 3 commands, 8 skills)
 │   │   ├── agents/               # Agent definitions
 │   │   ├── commands/             # Slash commands
-│   │   ├── hooks/                # Auto-injection hooks
+│   │   ├── skills/               # Auto-enforcing skills
 │   │   └── README.md
-│   ├── smi-nestjs/               # NestJS plugin (3 agents, 1 command)
-│   ├── smi-nextjs/               # Next.js plugin (4 agents, 1 command)
-│   ├── smi-nuxtjs/               # Nuxt.js plugin (3 agents, 0 commands)
-│   └── smi-architect/            # System architecture plugin (1 agent, 1 command)
+│   ├── smi-nestjs/               # NestJS plugin (3 agents, 1 command, 2 skills)
+│   ├── smi-nextjs/               # Next.js plugin (4 agents, 1 command, 3 skills)
+│   ├── smi-nuxtjs/               # Nuxt.js plugin (3 agents, 1 command, 3 skills)
+│   ├── smi-hono/                 # Hono Edge plugin (4 agents, 4 commands, 4 skills)
+│   ├── smi-tanstack-router/      # TanStack SPA plugin (3 agents, 4 commands, 11 skills)
+│   ├── smi-better-auth/          # Better Auth plugin (1 agent, 2 commands, 2 skills)
+│   ├── smi-flutter/              # Flutter mobile plugin (3 agents, 5 commands, 3 skills)
+│   ├── smi-architect/            # System architecture plugin (1 agent, 1 command)
+│   ├── smi-dev-loop/             # Dev loop automation (3 commands, 1 skill, 1 hook)
+│   └── smi-failure-log/          # Failure memory plugin (2 commands, 1 skill, 2 hooks)
 ├── workflows/                    # Multi-agent orchestration workflows
 │   ├── feature-development.md
 │   └── code-review.md
@@ -48,16 +54,18 @@ claude-infra/                     # Smicolon Marketplace
 
 # Install specific plugins
 /plugin install smi-django          # Django only (5 agents)
-/plugin install smi-nextjs          # Next.js only (4 agents)
+/plugin install smi-hono            # Hono Edge (4 agents)
+/plugin install smi-tanstack-router # TanStack SPA (3 agents)
+/plugin install smi-better-auth     # Better Auth (1 agent + MCP)
 /plugin install smi-architect       # System diagrams (1 agent)
 
 # Or install all
-/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
 ```
 
 ## Agent System
 
-### Agent Categories (14 Total Across 5 Plugins)
+### Agent Categories (27 Total Across 11 Plugins)
 
 **smi-django Plugin** (5 agents):
 - `@django-architect` - Architecture design
@@ -82,6 +90,25 @@ claude-infra/                     # Smicolon Marketplace
 - `@frontend-visual` - Visual QA with Playwright MCP + Figma MCP (shared with Next.js)
 - `@frontend-tester` - Frontend testing (shared with Next.js)
 
+**smi-hono Plugin** (4 agents):
+- `@hono-architect` - Edge API architecture design
+- `@hono-builder` - Route and middleware implementation
+- `@hono-tester` - Test writing with Bun test/Vitest
+- `@hono-reviewer` - Security and performance review
+
+**smi-tanstack-router Plugin** (3 agents):
+- `@tanstack-architect` - SPA architecture design
+- `@tanstack-builder` - Feature implementation with TanStack ecosystem
+- `@tanstack-tester` - Testing strategies for SPAs
+
+**smi-better-auth Plugin** (1 agent):
+- `@auth-architect` - Authentication architecture and security flows
+
+**smi-flutter Plugin** (3 agents):
+- `@flutter-architect` - Mobile app architecture design
+- `@flutter-builder` - Feature implementation
+- `@release-manager` - App Store/Play Store publishing
+
 **smi-architect Plugin** (1 agent):
 - `@system-architect` - Eraser.io diagram-as-code specialist (ERD, flowcharts, cloud, sequence, BPMN)
 
@@ -93,7 +120,7 @@ Agents are invoked with `@agent-name` syntax in Claude Code. They enforce specif
 
 Each plugin includes specialized slash commands that provide interactive workflows for common development tasks.
 
-### Command Categories
+### Command Categories (24 Total)
 
 **smi-django Commands:**
 - `/model-create` - Create Django models following Smicolon conventions
@@ -106,8 +133,43 @@ Each plugin includes specialized slash commands that provide interactive workflo
 **smi-nextjs Commands:**
 - `/component-create` - Create React/Next.js components (UI, forms, server components)
 
+**smi-nuxtjs Commands:**
+- `/component-create` - Create Vue 3/Nuxt.js components
+
+**smi-hono Commands:**
+- `/route-create` - Create routes with handlers and validators
+- `/middleware-create` - Create typed middleware
+- `/project-init` - Initialize Hono project (Bun/CF Workers)
+- `/rpc-client` - Generate type-safe RPC client
+
+**smi-tanstack-router Commands:**
+- `/route-create` - Create type-safe file-based routes
+- `/query-create` - Create TanStack Query with factory key pattern
+- `/form-create` - Create TanStack Form with Zod validation
+- `/table-create` - Create TanStack Table component
+
+**smi-better-auth Commands:**
+- `/auth-setup` - Initialize Better Auth configuration
+- `/auth-provider-add` - Add OAuth providers (Google, GitHub, Discord, etc.)
+
+**smi-flutter Commands:**
+- `/flutter-build` - Build iOS/Android apps
+- `/flutter-test` - Run tests with coverage
+- `/flutter-deploy` - Deploy to stores via Fastlane
+- `/fastlane-setup` - Initialize Fastlane configuration
+- `/signing-setup` - Configure code signing
+
 **smi-architect Commands:**
 - `/diagram-create` - Create system diagrams using Eraser.io (ERD, cloud, sequence, flowcharts)
+
+**smi-dev-loop Commands:**
+- `/dev-loop` - Start autonomous development loop (Red-Green-Refactor)
+- `/dev-plan` - Generate TDD development plan
+- `/cancel-dev` - Cancel active development loop
+
+**smi-failure-log Commands:**
+- `/failure-add` - Log a mistake to prevent repeating it
+- `/failure-list` - View all logged failures
 
 ### Command Usage Pattern
 
@@ -258,15 +320,17 @@ import { User } from '../entities'
 
 # Install specific plugins
 /plugin install smi-django          # Django only
-/plugin install smi-nextjs          # Next.js only
+/plugin install smi-hono            # Hono Edge only
+/plugin install smi-tanstack-router # TanStack SPA only
+/plugin install smi-better-auth     # Better Auth only
 /plugin install smi-architect       # System architecture only
 
 # Or install all
-/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
 
 # Update plugins
 /plugin update smi-django
-/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
 ```
 
 ### Testing Installation
@@ -286,6 +350,10 @@ Used by hooks to determine which agents and conventions to apply:
 2. **NestJS**: `[ -f "package.json" ] && grep -q "@nestjs/core" package.json`
 3. **Next.js**: `[ -f "package.json" ] && grep -q "\"next\"" package.json`
 4. **Nuxt.js**: `[ -f "package.json" ] && grep -q "nuxt" package.json`
+5. **Hono**: `[ -f "package.json" ] && grep -q "\"hono\"" package.json`
+6. **TanStack Router**: `[ -f "package.json" ] && grep -q "@tanstack/react-router" package.json`
+7. **Better Auth**: `[ -f "package.json" ] && grep -q "\"better-auth\"" package.json`
+8. **Flutter**: `[ -f "pubspec.yaml" ]`
 
 ## Distribution System
 
@@ -354,8 +422,11 @@ claude @frontend-visual
 ### Documentation
 
 - `README.md` - Complete user-facing documentation (Quick Start, installation, usage, conventions)
+- `CLAUDE.md` - Project instructions for Claude Code (this file)
+- `VERSIONING.md` - Version strategy, bump rules, promotion criteria
 - `MCP_SETUP.md` - Playwright + Figma MCP integration setup
 - `plugins/*/README.md` - Plugin-specific documentation
+- `plugins/*/CHANGELOG.md` - Version history per plugin
 
 ### Not Committed
 
@@ -369,9 +440,11 @@ claude @frontend-visual
 2. Create agent file in `plugins/smi-django/agents/{role}.md`
 3. Follow existing agent structure (role definition, conventions, deliverables)
 4. Update `.claude-plugin/marketplace.json` to register the agent in the plugin's `agents` array
-5. Update plugin's README.md to document new agent
-6. Update root README.md to reflect new agent count
-7. Test plugin installation in sample project
+5. Bump plugin version (MINOR bump for new agent)
+6. Add changelog entry to `plugins/{name}/CHANGELOG.md`
+7. Update plugin's README.md to document new agent
+8. Update root README.md to reflect new agent count
+9. Test plugin installation in sample project
 
 ### Modifying Conventions
 
@@ -380,7 +453,8 @@ claude @frontend-visual
 3. Update rules in `plugins/*/rules/` directory if path-specific
 4. Test with sample project
 5. Update plugin's README.md if visible changes
-6. Increment plugin version in `.claude-plugin/marketplace.json`
+6. Bump version in `.claude-plugin/marketplace.json` (see VERSIONING.md for bump type)
+7. Add changelog entry to `plugins/{name}/CHANGELOG.md`
 
 ### Creating New Plugins
 
@@ -390,8 +464,12 @@ claude @frontend-visual
 4. Create `skills/` directory with auto-enforcing skills (if needed)
 5. Create `rules/` directory with path-specific rules (if needed)
 6. Create plugin README.md
-7. Add plugin configuration to `.claude-plugin/marketplace.json` in the `plugins` array
-8. Update root README.md to document the new plugin
+7. Create plugin CHANGELOG.md with initial `[0.1.0]` entry
+8. Add plugin configuration to `.claude-plugin/marketplace.json` with `"version": "0.1.0"`
+9. Update root README.md to document the new plugin
+10. Update VERSIONING.md plugin status table
+
+**Important:** New plugins always start at `0.1.0` (experimental). See VERSIONING.md for promotion criteria to `1.0.0`.
 
 ### Testing Changes
 
@@ -434,7 +512,27 @@ Old/experimental code goes in `archive/` directory. Do not delete - useful for r
 
 ### Version Management
 
-- Each plugin has independent versioning in `.claude-plugin/marketplace.json` (in each plugin object)
-- Marketplace version in `.claude-plugin/marketplace.json` (at root level)
-- Semantic versioning recommended (MAJOR.MINOR.PATCH)
-- Test your own work, and make sure it's working please
+See **VERSIONING.md** for complete strategy. Key points:
+
+**Version Meanings:**
+| Range | Status | Description |
+|-------|--------|-------------|
+| 0.x.x | Experimental | New plugin, needs testing, API may change |
+| 1.x.x | Stable | Production-ready, tested in real projects |
+| 2.x.x+ | Mature | Battle-tested, widely used |
+
+**Semantic Versioning:**
+- **PATCH** (x.x.+1): Bug fixes, typos, no behavior change
+- **MINOR** (x.+1.0): New features, backward compatible
+- **MAJOR** (+1.0.0): Breaking changes
+
+**Before Committing Plugin Changes:**
+1. Bump version in `.claude-plugin/marketplace.json`
+2. Add entry to `plugins/{name}/CHANGELOG.md`
+3. Use correct bump type (patch/minor/major)
+
+**Promotion to 1.0.0 requires:**
+- Used in 2+ real projects
+- No major bugs in 30 days
+- Complete documentation
+- User feedback addressed

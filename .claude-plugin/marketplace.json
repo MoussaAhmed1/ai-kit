@@ -1,10 +1,10 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.2.0",
-  "description": "Official marketplace for Smicolon development standards - 8 plugins with 19 agents, 21 skills, Flutter mobile development, failure memory, and TDD dev loops",
+  "version": "2.4.0",
+  "description": "Official marketplace for Smicolon development standards - 11 plugins with 27 agents, 38 skills, TanStack SPA, Better Auth, and TDD dev loops",
   "license": "MIT",
   "metadata": {
-    "description": "Official marketplace for Smicolon development standards - 8 plugins with 19 specialized agents, 21 auto-enforcing skills, Flutter mobile development, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Flutter, and system architecture"
+    "description": "Official marketplace for Smicolon development standards - 11 plugins with 27 specialized agents, 38 auto-enforcing skills, TanStack Router SPA development, Better Auth integration, Hono Edge framework, Flutter mobile, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Hono, Flutter, TanStack, and system architecture"
   },
   "owner": {
     "name": "Smicolon Development Team",
@@ -228,6 +228,109 @@
         "./skills/store-publishing/SKILL.md"
       ],
       "hooks": ["./hooks/hooks.json"]
+    },
+    {
+      "name": "smi-hono",
+      "version": "0.1.0",
+      "description": "Hono Edge framework standards with 4 agents and 4 auto-enforcing skills for Bun and Cloudflare Workers",
+      "source": "./plugins/smi-hono",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": "https://github.com/smicolon/claude-infra",
+      "license": "MIT",
+      "category": "backend",
+      "keywords": ["hono", "bun", "cloudflare-workers", "edge", "typescript", "api", "rpc"],
+      "agents": [
+        "./agents/hono-architect.md",
+        "./agents/hono-builder.md",
+        "./agents/hono-tester.md",
+        "./agents/hono-reviewer.md"
+      ],
+      "commands": [
+        "./commands/route-create.md",
+        "./commands/middleware-create.md",
+        "./commands/project-init.md",
+        "./commands/rpc-client.md"
+      ],
+      "skills": [
+        "./skills/hono-patterns/SKILL.md",
+        "./skills/cloudflare-bindings/SKILL.md",
+        "./skills/zod-validation/SKILL.md",
+        "./skills/rpc-typesafe/SKILL.md"
+      ],
+      "hooks": ["./hooks/hooks.json"]
+    },
+    {
+      "name": "smi-tanstack-router",
+      "version": "0.1.0",
+      "description": "TanStack Router SPA development with 3 agents, 11 skills for React SPAs using TanStack ecosystem",
+      "source": "./plugins/smi-tanstack-router",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": "https://github.com/smicolon/claude-infra",
+      "license": "MIT",
+      "category": "frontend",
+      "keywords": ["tanstack", "react", "router", "query", "form", "table", "virtual", "spa", "typescript", "bun"],
+      "agents": [
+        "./agents/tanstack-architect.md",
+        "./agents/tanstack-builder.md",
+        "./agents/tanstack-tester.md"
+      ],
+      "commands": [
+        "./commands/route-create.md",
+        "./commands/query-create.md",
+        "./commands/form-create.md",
+        "./commands/table-create.md"
+      ],
+      "skills": [
+        "./skills/router-patterns/SKILL.md",
+        "./skills/query-patterns/SKILL.md",
+        "./skills/form-patterns/SKILL.md",
+        "./skills/table-patterns/SKILL.md",
+        "./skills/virtual-patterns/SKILL.md",
+        "./skills/store-patterns/SKILL.md",
+        "./skills/db-patterns/SKILL.md",
+        "./skills/ai-patterns/SKILL.md",
+        "./skills/pacer-patterns/SKILL.md",
+        "./skills/devtools-patterns/SKILL.md",
+        "./skills/tanstack-conventions/SKILL.md"
+      ]
+    },
+    {
+      "name": "smi-better-auth",
+      "version": "0.1.0",
+      "description": "Better Auth integration with 1 agent, 2 skills, and MCP server for authentication",
+      "source": "./plugins/smi-better-auth",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": "https://github.com/smicolon/claude-infra",
+      "license": "MIT",
+      "category": "authentication",
+      "keywords": ["better-auth", "authentication", "oauth", "2fa", "passkeys", "social-login", "session"],
+      "agents": [
+        "./agents/auth-architect.md"
+      ],
+      "commands": [
+        "./commands/auth-setup.md",
+        "./commands/auth-provider-add.md"
+      ],
+      "skills": [
+        "./skills/better-auth-patterns/SKILL.md",
+        "./skills/auth-security/SKILL.md"
+      ],
+      "mcpServers": "./.mcp.json"
     }
   ]
 }

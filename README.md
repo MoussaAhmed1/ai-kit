@@ -2,7 +2,7 @@
 
 **Company-wide development standards enforcement via Claude Code marketplace.**
 
-7 plugins for Django, NestJS, Next.js, Nuxt.js, system architecture, dev loops, and failure memory.
+11 plugins for Django, NestJS, Next.js, Nuxt.js, Hono, TanStack Router, Better Auth, Flutter, system architecture, dev loops, and failure memory.
 
 ---
 
@@ -16,15 +16,17 @@
 
 # 2. Install plugins for your tech stack
 /plugin install smi-django          # Django (5 agents)
-/plugin install smi-nextjs          # Next.js (4 agents)
+/plugin install smi-hono            # Hono Edge (4 agents)
+/plugin install smi-tanstack-router # TanStack SPA (3 agents)
 /plugin install smi-architect       # System diagrams (1 agent)
 
 # Or install everything
-/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect smi-dev-loop smi-failure-log
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
 
 # 3. Verify and start using
 /help
 @django-architect "Design a user authentication system"
+@hono-architect "Design an Edge API for user management"
 ```
 
 Done! Agents are now available in **all your projects** automatically.
@@ -33,7 +35,7 @@ Done! Agents are now available in **all your projects** automatically.
 
 ## Table of Contents
 
-- [7 Available Plugins](#7-available-plugins)
+- [11 Available Plugins](#11-available-plugins)
 - [What You Get](#what-you-get)
 - [Installation Methods](#installation-methods)
 - [Usage Examples](#usage-examples)
@@ -46,7 +48,7 @@ Done! Agents are now available in **all your projects** automatically.
 
 ---
 
-## 7 Available Plugins
+## 11 Available Plugins
 
 ### 🐍 smi-django (5 agents, 3 commands, 8 skills)
 
@@ -210,11 +212,129 @@ Persistent failure memory that prevents repeating mistakes
 - Project-specific storage in `.claude/failure-log.local.md`
 - Categories: imports, security, testing, architecture, conventions
 
+### 📱 smi-flutter (3 agents, 5 commands, 3 skills)
+
+Flutter mobile development with Fastlane automation
+
+```bash
+/plugin install smi-flutter
+```
+
+**Agents:**
+
+- `@flutter-architect` - Mobile app architecture design
+- `@flutter-builder` - Feature implementation
+- `@release-manager` - App Store/Play Store publishing
+
+**Commands:**
+
+- `/flutter-build` - Build iOS/Android apps
+- `/flutter-test` - Run tests with coverage
+- `/flutter-deploy` - Deploy to stores via Fastlane
+- `/fastlane-setup` - Initialize Fastlane configuration
+- `/signing-setup` - Configure code signing
+
+**Skills (Auto-Enforcing):**
+
+- `flutter-architecture` - Clean architecture patterns
+- `fastlane-knowledge` - Fastlane automation expertise
+- `store-publishing` - App Store/Play Store guidelines
+
+### 🔥 smi-hono (4 agents, 4 commands, 4 skills)
+
+Hono Edge framework for Bun and Cloudflare Workers
+
+```bash
+/plugin install smi-hono
+```
+
+**Agents:**
+
+- `@hono-architect` - Edge API architecture design
+- `@hono-builder` - Route and middleware implementation
+- `@hono-tester` - Test writing with Bun test/Vitest
+- `@hono-reviewer` - Security and performance review
+
+**Commands:**
+
+- `/route-create` - Create routes with handlers and validators
+- `/middleware-create` - Create typed middleware
+- `/project-init` - Initialize Hono project (Bun/CF Workers)
+- `/rpc-client` - Generate type-safe RPC client
+
+**Skills (Auto-Enforcing):**
+
+- `hono-patterns` - Routing, handlers, middleware patterns
+- `cloudflare-bindings` - D1, KV, R2 integration
+- `zod-validation` - Request validation with Zod
+- `rpc-typesafe` - Type-safe client-server communication
+
+### ⚡ smi-tanstack-router (3 agents, 4 commands, 11 skills)
+
+TanStack Router SPA development with React
+
+```bash
+/plugin install smi-tanstack-router
+```
+
+**Agents:**
+
+- `@tanstack-architect` - SPA architecture design
+- `@tanstack-builder` - Feature implementation
+- `@tanstack-tester` - Testing strategies
+
+**Commands:**
+
+- `/route-create` - Create type-safe routes
+- `/query-create` - Create TanStack Query hooks
+- `/form-create` - Create TanStack Form with validation
+- `/table-create` - Create TanStack Table components
+
+**Skills (Auto-Enforcing):**
+
+- `router-patterns` - File-based routing patterns
+- `query-patterns` - Data fetching and caching
+- `form-patterns` - Form handling with validation
+- `table-patterns` - Data table components
+- `virtual-patterns` - Virtualized lists
+- `store-patterns` - State management
+- `db-patterns` - Client-side database
+- `ai-patterns` - AI/LLM integration
+- `pacer-patterns` - Rate limiting and debouncing
+- `devtools-patterns` - Developer tooling
+- `tanstack-conventions` - Project conventions
+
+### 🔐 smi-better-auth (1 agent, 2 commands, 2 skills)
+
+Better Auth authentication integration
+
+```bash
+/plugin install smi-better-auth
+```
+
+**Agents:**
+
+- `@auth-architect` - Authentication architecture design
+
+**Commands:**
+
+- `/auth-setup` - Initialize Better Auth configuration
+- `/auth-provider-add` - Add OAuth providers
+
+**Skills (Auto-Enforcing):**
+
+- `better-auth-patterns` - Authentication patterns
+- `auth-security` - Security best practices
+
+**MCP Integration:**
+
+- Better Auth MCP server for documentation access
+
 ---
 
 ## What You Get
 
-### Specialized Agents (16 total)
+### Specialized Agents (27 total)
 
 Each plugin includes agents specialized for that tech stack with deep knowledge of:
 
@@ -224,20 +344,24 @@ Each plugin includes agents specialized for that tech stack with deep knowledge 
 - Security requirements
 - Performance optimization
 
-### Auto-Enforcing Skills (17 total)
+### Auto-Enforcing Skills (38 total)
 
 Skills automatically activate based on context:
 
 - **Import Convention Enforcers** - Auto-fix import patterns per framework
 - **Model/Entity Validators** - Ensure required fields (UUID, timestamps)
 - **Security Validators** - Check permissions, guards, validation
-- **Form Validators** - Enforce React Hook Form/VeeValidate + Zod
+- **Form Validators** - Enforce React Hook Form/VeeValidate/TanStack Form + Zod
 - **Accessibility Validators** - WCAG 2.1 AA compliance
 - **Performance Optimizers** - Detect N+1, missing indexes
 - **Test Validators** - Quality checks, TDD phase verification
 - **Failure Log Manager** - Persistent memory of mistakes to avoid
+- **Edge Framework Patterns** - Hono, Cloudflare bindings, RPC
+- **TanStack Ecosystem** - Router, Query, Form, Table, Virtual
+- **Authentication Patterns** - Better Auth, OAuth, sessions
+- **Mobile Development** - Flutter architecture, Fastlane, store publishing
 
-### Interactive Commands (11 total)
+### Interactive Commands (24 total)
 
 Slash commands provide step-by-step interactive workflows:
 
@@ -248,9 +372,23 @@ Slash commands provide step-by-step interactive workflows:
 - `/component-create` - React/Vue component creation (Next.js & Nuxt.js)
 - `/diagram-create` - System diagram generation
 - `/dev-loop` - Autonomous development loop
+- `/dev-plan` - Generate TDD development plan
 - `/cancel-dev` - Cancel development loop
 - `/failure-add` - Log a mistake to avoid
 - `/failure-list` - View logged failures
+- `/route-create` - Hono/TanStack route creation
+- `/middleware-create` - Hono middleware creation
+- `/project-init` - Initialize Hono project
+- `/rpc-client` - Generate type-safe RPC client
+- `/query-create` - TanStack Query hooks
+- `/form-create` - TanStack Form components
+- `/table-create` - TanStack Table components
+- `/flutter-build` - Build Flutter apps
+- `/flutter-test` - Run Flutter tests
+- `/flutter-deploy` - Deploy to app stores
+- `/fastlane-setup` - Initialize Fastlane
+- `/signing-setup` - Configure code signing
+- `/auth-setup` - Initialize Better Auth
 
 ### Multi-Agent Workflows
 
@@ -468,8 +606,12 @@ claude-infra/                     # Smicolon Marketplace
 │   ├── smi-nestjs/               # NestJS plugin (3 agents, 1 command, 2 skills)
 │   ├── smi-nextjs/               # Next.js plugin (4 agents, 1 command, 3 skills)
 │   ├── smi-nuxtjs/               # Nuxt.js plugin (3 agents, 1 command, 3 skills)
+│   ├── smi-hono/                 # Hono plugin (4 agents, 4 commands, 4 skills)
+│   ├── smi-tanstack-router/      # TanStack plugin (3 agents, 4 commands, 11 skills)
+│   ├── smi-better-auth/          # Better Auth plugin (1 agent, 2 commands, 2 skills)
+│   ├── smi-flutter/              # Flutter plugin (3 agents, 5 commands, 3 skills)
 │   ├── smi-architect/            # System architecture plugin (1 agent, 1 command)
-│   ├── smi-dev-loop/             # Dev loop automation (2 commands, 1 hook)
+│   ├── smi-dev-loop/             # Dev loop automation (3 commands, 1 skill, 1 hook)
 │   └── smi-failure-log/          # Failure memory (2 commands, 1 skill, 2 hooks)
 ├── workflows/                    # Multi-agent orchestration workflows
 ├── scripts/                      # Development utilities
@@ -533,7 +675,7 @@ npm run dev
 /plugin update smi-django
 
 # Update all plugins
-/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect smi-dev-loop smi-failure-log
+/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
 
 # Check for updates
 /plugin list

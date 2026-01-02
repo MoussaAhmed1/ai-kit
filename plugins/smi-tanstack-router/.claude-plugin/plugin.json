@@ -1,0 +1,14 @@
+{
+  "name": "smi-tanstack-router",
+  "version": "0.1.0",
+  "description": "TanStack SPA development with Router, Query, Form, Table, Virtual and full ecosystem",
+  "author": {
+    "name": "Smicolon",
+    "email": "dev@smicolon.com",
+    "url": "https://github.com/smicolon"
+  },
+  "homepage": "https://github.com/smicolon/claude-infra",
+  "repository": "https://github.com/smicolon/claude-infra",
+  "license": "MIT",
+  "keywords": ["tanstack", "react", "router", "query", "form", "table", "virtual", "bun", "spa"]
+}
