@@ -1,0 +1,19 @@
+{
+  "name": "smi-worktree",
+  "version": "0.1.0",
+  "description": "Git worktree manager for parallel development with automatic env copying and dependency installation",
+  "author": {
+    "name": "Smicolon",
+    "email": "dev@smicolon.com",
+    "url": "https://github.com/smicolon"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/smicolon/claude-infra",
+  "keywords": [
+    "git",
+    "worktree",
+    "parallel-development",
+    "branch-management",
+    "monorepo"
+  ]
+}

@@ -1,10 +1,10 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.4.0",
-  "description": "Official marketplace for Smicolon development standards - 11 plugins with 27 agents, 38 skills, TanStack SPA, Better Auth, and TDD dev loops",
+  "version": "2.5.0",
+  "description": "Official marketplace for Smicolon development standards - 12 plugins with 27 agents, 39 skills, TanStack SPA, Better Auth, and TDD dev loops",
   "license": "MIT",
   "metadata": {
-    "description": "Official marketplace for Smicolon development standards - 11 plugins with 27 specialized agents, 38 auto-enforcing skills, TanStack Router SPA development, Better Auth integration, Hono Edge framework, Flutter mobile, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Hono, Flutter, TanStack, and system architecture"
+    "description": "Official marketplace for Smicolon development standards - 12 plugins with 27 specialized agents, 39 auto-enforcing skills, TanStack Router SPA development, Better Auth integration, Hono Edge framework, Flutter mobile, git worktree management, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Hono, Flutter, TanStack, and system architecture"
   },
   "owner": {
     "name": "Smicolon Development Team",
@@ -331,6 +331,24 @@
         "./skills/auth-security/SKILL.md"
       ],
       "mcpServers": "./.mcp.json"
+    },
+    {
+      "name": "smi-worktree",
+      "version": "0.1.0",
+      "description": "Git worktree manager for parallel development with automatic env copying and dependency installation",
+      "source": "./plugins/smi-worktree",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": "https://github.com/smicolon/claude-infra",
+      "license": "MIT",
+      "category": "automation",
+      "keywords": ["git", "worktree", "parallel-development", "branch-management", "monorepo"],
+      "commands": ["./commands/wt.md"],
+      "skills": ["./skills/worktree-manager/SKILL.md"]
     }
   ]
 }
