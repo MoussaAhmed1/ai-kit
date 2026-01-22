@@ -1,6 +1,6 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Official marketplace for Smicolon development standards - 12 plugins with 27 agents, 39 skills, TanStack SPA, Better Auth, and TDD dev loops",
   "license": "MIT",
   "metadata": {
@@ -15,7 +15,7 @@
   "plugins": [
     {
       "name": "smi-dev-loop",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "description": "Autonomous TDD development loops with planning phase and iterative coding",
       "source": "./plugins/smi-dev-loop",
       "author": {
@@ -38,7 +38,7 @@
     },
     {
       "name": "smi-django",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "description": "Django standards with 5 agents and 8 auto-enforcing skills",
       "source": "./plugins/smi-django",
       "author": {
@@ -76,7 +76,7 @@
     },
     {
       "name": "smi-nestjs",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "description": "NestJS standards with 3 agents and 2 auto-enforcing skills",
       "source": "./plugins/smi-nestjs",
       "author": {
@@ -102,7 +102,7 @@
     },
     {
       "name": "smi-nextjs",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "description": "Next.js standards with 4 agents, 3 auto-enforcing skills, and visual QA",
       "source": "./plugins/smi-nextjs",
       "author": {
@@ -130,7 +130,7 @@
     },
     {
       "name": "smi-nuxtjs",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "description": "Nuxt.js standards with 3 agents, 3 auto-enforcing skills, and visual QA",
       "source": "./plugins/smi-nuxtjs",
       "author": {
@@ -175,7 +175,7 @@
     },
     {
       "name": "smi-failure-log",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Persistent failure memory that tracks mistakes and prevents repeating them across sessions",
       "source": "./plugins/smi-failure-log",
       "author": {
@@ -197,7 +197,7 @@
     },
     {
       "name": "smi-flutter",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Flutter development with Fastlane automation, store publishing, and architecture patterns",
       "source": "./plugins/smi-flutter",
       "author": {
@@ -231,7 +231,7 @@
     },
     {
       "name": "smi-hono",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Hono Edge framework standards with 4 agents and 4 auto-enforcing skills for Bun and Cloudflare Workers",
       "source": "./plugins/smi-hono",
       "author": {
@@ -306,7 +306,7 @@
     },
     {
       "name": "smi-better-auth",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Better Auth integration with 1 agent, 2 skills, and MCP server for authentication",
       "source": "./plugins/smi-better-auth",
       "author": {
@@ -334,7 +334,7 @@
     },
     {
       "name": "smi-worktree",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Git worktree manager for parallel development with automatic env copying and dependency installation",
       "source": "./plugins/smi-worktree",
       "author": {
