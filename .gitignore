@@ -17,14 +17,11 @@ dist/
 *.tar.gz
 *.zip
 
-# Claude Code - ignore local settings and test installations
-.claude/settings.local.json
-.claude/agents/
-.claude/hooks/
-.claude/custom/
+# Claude Code - ignore local directory entirely
+.claude/
 
-# Keep CLAUDE.md (documentation for contributors)
-!.claude/CLAUDE.md
+# Speckit - ignore local directory
+.specify/
 
 # OS files
 Thumbs.db
@@ -40,3 +37,6 @@ Thumbs.db
 
 # Agent artifacts (local planning/progress files)
 agent-artifacts/
+
+# Ignore claude-mem generated files inside plugins
+plugins/**/CLAUDE.md
