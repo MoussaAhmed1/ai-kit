@@ -1,6 +1,6 @@
 ---
-name: import-convention-enforcer
-description: This skill should be used when the user asks to "fix imports", "organize imports", "add path alias", "create component", or when writing Next.js/React files that need consistent import patterns. Enforces @/ path aliases.
+name: nextjs-import-enforcer
+description: Automatically enforce consistent import patterns using Next.js path aliases and proper organization. Use when writing imports, creating new files, or organizing code structure.
 ---
 
 # Import Convention Enforcer (Next.js/React)

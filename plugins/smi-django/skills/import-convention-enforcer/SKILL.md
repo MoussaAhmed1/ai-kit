@@ -1,6 +1,6 @@
 ---
-name: import-convention-enforcer
-description: This skill should be used when the user asks to "fix imports", "add imports", "create a Python file", "write a Django model", "create a service", or when writing any Django Python code. Enforces absolute modular import pattern with aliases.
+name: django-import-enforcer
+description: Automatically validate and fix Django import patterns to use absolute modular imports with aliases. Use when writing imports, creating new Python files, modifying existing files, or seeing import statements in code.
 ---
 
 # Import Convention Enforcer

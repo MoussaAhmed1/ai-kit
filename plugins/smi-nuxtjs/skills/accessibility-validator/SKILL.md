@@ -1,6 +1,6 @@
 ---
-name: accessibility-validator
-description: This skill should be used when the user asks to "check accessibility", "make accessible", "add ARIA", "fix a11y", or when creating Vue 3/Nuxt.js components, forms, buttons, or interactive UI elements. Enforces WCAG 2.1 AA.
+name: vue-accessibility-validator
+description: Automatically validate Vue 3/Nuxt.js components meet WCAG 2.1 AA standards. Use when creating components, forms, buttons, modals, navigation, or any interactive UI elements.
 ---
 
 # Vue Accessibility Validator

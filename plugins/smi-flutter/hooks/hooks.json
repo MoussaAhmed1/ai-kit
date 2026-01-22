@@ -1,11 +1,17 @@
 {
-  "hooks": [
-    {
-      "matcher": "Bash",
-      "pattern": "fastlane.*(?:beta|release|internal|production)",
-      "event": "PreToolUse",
-      "type": "prompt",
-      "prompt": "Before deploying to stores, verify:\n\n1. **Version Check**: Has the version been bumped in pubspec.yaml?\n2. **Changelog**: Is CHANGELOG.md updated with release notes?\n3. **Tests**: Have all tests passed?\n4. **Code Signing**: Is signing properly configured?\n\nIf any of these are not done, stop and help the user complete them before proceeding with deployment.\n\nCheck pubspec.yaml for current version. Check CHANGELOG.md for recent entries. If issues found, explain what needs to be done."
-    }
-  ]
+  "description": "Flutter deployment validation hooks",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "pattern": "fastlane.*(?:beta|release|internal|production)",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Before deploying to stores, verify:\n\n1. **Version Check**: Has the version been bumped in pubspec.yaml?\n2. **Changelog**: Is CHANGELOG.md updated with release notes?\n3. **Tests**: Have all tests passed?\n4. **Code Signing**: Is signing properly configured?\n\nIf any of these are not done, stop and help the user complete them before proceeding with deployment.\n\nCheck pubspec.yaml for current version. Check CHANGELOG.md for recent entries. If issues found, explain what needs to be done."
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -1,6 +1,6 @@
 ---
-name: accessibility-validator
-description: This skill should be used when the user asks to "check accessibility", "make accessible", "add ARIA", "fix a11y", or when creating React/Next.js components, forms, buttons, modals, or interactive UI elements. Enforces WCAG 2.1 AA.
+name: react-accessibility-validator
+description: Automatically validate React/Next.js components meet WCAG 2.1 AA standards. Use when creating components, forms, buttons, modals, navigation, or any interactive UI elements.
 ---
 
 # Accessibility Validator
