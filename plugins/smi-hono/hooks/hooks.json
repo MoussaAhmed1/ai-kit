@@ -1,16 +1,4 @@
 {
-  "description": "Hono TypeScript validation hooks",
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "If the file just written/edited is a TypeScript file in a Hono project (check for hono imports or route patterns), verify:\n\n1. **Typed App**: Uses `new Hono<Env>()` not just `new Hono()`\n2. **Zod Validation**: All route handlers with JSON/form/query inputs use `zValidator`\n3. **Proper Status Codes**: POST returns 201, DELETE returns 204, errors return appropriate codes\n4. **Error Handling**: Uses HTTPException for errors, not plain throws\n5. **Type Export**: If this is the main app file, exports `AppType`\n\nIf violations found, report them briefly. If the file is not Hono-related, respond with just 'ok'."
-          }
-        ]
-      }
-    ]
-  }
+  "description": "Hono hooks - currently empty (convention enforcement handled by skills)",
+  "hooks": {}
 }

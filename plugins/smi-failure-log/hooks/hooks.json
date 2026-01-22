@@ -1,9 +1,8 @@
 {
-  "description": "Failure log hooks for capturing mistakes and injecting learned lessons",
+  "description": "Failure log hooks for injecting learned lessons at session start",
   "hooks": {
-    "UserPromptSubmit": [
+    "SessionStart": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
