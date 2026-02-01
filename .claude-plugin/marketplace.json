@@ -1,10 +1,10 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.5.1",
-  "description": "Official marketplace for Smicolon development standards - 12 plugins with 27 agents, 39 skills, TanStack SPA, Better Auth, and TDD dev loops",
+  "version": "2.6.0",
+  "description": "Official marketplace for Smicolon development standards - 13 plugins with 28 agents, 40 skills, TanStack SPA, Better Auth, onboarding, and TDD dev loops",
   "license": "MIT",
   "metadata": {
-    "description": "Official marketplace for Smicolon development standards - 12 plugins with 27 specialized agents, 39 auto-enforcing skills, TanStack Router SPA development, Better Auth integration, Hono Edge framework, Flutter mobile, git worktree management, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Hono, Flutter, TanStack, and system architecture"
+    "description": "Official marketplace for Smicolon development standards - 13 plugins with 28 specialized agents, 40 auto-enforcing skills, intelligent engineer onboarding, TanStack Router SPA development, Better Auth integration, Hono Edge framework, Flutter mobile, git worktree management, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Hono, Flutter, TanStack, and system architecture"
   },
   "owner": {
     "name": "Smicolon Development Team",
@@ -349,6 +349,25 @@
       "keywords": ["git", "worktree", "parallel-development", "branch-management", "monorepo"],
       "commands": ["./commands/wt.md"],
       "skills": ["./skills/worktree-manager/SKILL.md"]
+    },
+    {
+      "name": "smi-onboard",
+      "version": "0.1.0",
+      "description": "Intelligent engineer onboarding with personalized guidance based on skills, project analysis, and first task",
+      "source": "./plugins/smi-onboard",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "homepage": "https://github.com/smicolon/claude-infra",
+      "repository": "https://github.com/smicolon/claude-infra",
+      "license": "MIT",
+      "category": "onboarding",
+      "keywords": ["onboarding", "learning", "personalization", "guidance", "ramp-up"],
+      "agents": ["./agents/onboard-guide.md"],
+      "commands": ["./commands/onboard.md"],
+      "skills": ["./skills/onboard-context-provider/SKILL.md"]
     }
   ]
 }

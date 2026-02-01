@@ -2,7 +2,7 @@
 
 **Company-wide development standards enforcement via Claude Code marketplace.**
 
-11 plugins for Django, NestJS, Next.js, Nuxt.js, Hono, TanStack Router, Better Auth, Flutter, system architecture, dev loops, and failure memory.
+13 plugins for Django, NestJS, Next.js, Nuxt.js, Hono, TanStack Router, Better Auth, Flutter, system architecture, dev loops, failure memory, worktree management, and engineer onboarding.
 
 ---
 
@@ -21,7 +21,7 @@
 /plugin install smi-architect       # System diagrams (1 agent)
 
 # Or install everything
-/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
+/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log smi-onboard
 
 # 3. Verify and start using
 /help
@@ -35,7 +35,7 @@ Done! Agents are now available in **all your projects** automatically.
 
 ## Table of Contents
 
-- [11 Available Plugins](#11-available-plugins)
+- [13 Available Plugins](#13-available-plugins)
 - [What You Get](#what-you-get)
 - [Installation Methods](#installation-methods)
 - [Usage Examples](#usage-examples)
@@ -48,7 +48,7 @@ Done! Agents are now available in **all your projects** automatically.
 
 ---
 
-## 11 Available Plugins
+## 13 Available Plugins
 
 ### 🐍 smi-django (5 agents, 3 commands, 8 skills)
 
@@ -330,11 +330,31 @@ Better Auth authentication integration
 
 - Better Auth MCP server for documentation access
 
+### 🚀 smi-onboard (1 agent, 1 command, 1 skill)
+
+Intelligent engineer onboarding with personalized guidance
+
+```bash
+/plugin install smi-onboard
+```
+
+**Command:**
+
+- `/onboard` - Interactive onboarding flow (skill assessment, project analysis, task planning)
+
+**Agents:**
+
+- `@onboard-guide` - Ongoing personalized Q&A after onboarding
+
+**Skills (Auto-Enforcing):**
+
+- `onboard-context-provider` - Personalizes explanations based on engineer's background
+
 ---
 
 ## What You Get
 
-### Specialized Agents (27 total)
+### Specialized Agents (28 total)
 
 Each plugin includes agents specialized for that tech stack with deep knowledge of:
 
@@ -344,7 +364,7 @@ Each plugin includes agents specialized for that tech stack with deep knowledge 
 - Security requirements
 - Performance optimization
 
-### Auto-Enforcing Skills (38 total)
+### Auto-Enforcing Skills (40 total)
 
 Skills automatically activate based on context:
 
