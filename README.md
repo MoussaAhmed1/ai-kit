@@ -1,35 +1,42 @@
-# Smicolon Claude Code Infrastructure
+# @smicolon/ai-kit
 
-**Company-wide development standards enforcement via Claude Code marketplace.**
+**Convention packs for any AI coding tool.** Install agents, skills, commands, rules, and hooks for 15 AI tools including Claude Code, Cursor, Windsurf, Copilot, and more.
 
-13 plugins for Django, NestJS, Next.js, Nuxt.js, Hono, TanStack Router, Better Auth, Flutter, system architecture, dev loops, failure memory, worktree management, and engineer onboarding.
+13 packs for Django, NestJS, Next.js, Nuxt.js, Hono, TanStack Router, Better Auth, Flutter, system architecture, dev loops, failure memory, worktree management, and engineer onboarding.
 
 ---
 
-## Quick Start (2 minutes)
+## Quick Start
+
+### Any AI Tool (CLI)
 
 ```bash
-# 1. Add Smicolon marketplace
-/plugin marketplace add https://github.com/smicolon/ai-kit
-# or
-/plugin marketplace add smicolon/ai-kit
+npx @smicolon/ai-kit init
+```
 
-# 2. Install plugins for your tech stack
+This walks you through selecting your AI tools and stack, then installs the right files in the right places.
+
+```bash
+# Or non-interactively
+npx @smicolon/ai-kit add django
+npx @smicolon/ai-kit add django --skills-only
+npx @smicolon/ai-kit add django --tools claude-code,cursor
+```
+
+### Claude Code (native plugin)
+
+```bash
+# Add marketplace (one-time)
+/plugin marketplace add https://github.com/smicolon/ai-kit
+
+# Install packs
 /plugin install django          # Django (5 agents)
 /plugin install hono            # Hono Edge (4 agents)
 /plugin install tanstack-router # TanStack SPA (3 agents)
-/plugin install architect       # System diagrams (1 agent)
 
 # Or install everything
 /plugin install django nestjs nextjs nuxtjs hono tanstack-router better-auth flutter architect dev-loop failure-log onboard
-
-# 3. Verify and start using
-/help
-@django-architect "Design a user authentication system"
-@hono-architect "Design an Edge API for user management"
 ```
-
-Done! Agents are now available in **all your projects** automatically.
 
 ---
 
@@ -441,22 +448,54 @@ See [MCP_SETUP.md](MCP_SETUP.md) for setup instructions.
 
 ## Installation
 
-**Simple plugin installation:**
+### CLI (any AI tool)
 
 ```bash
-# Add marketplace (one-time)
+# Interactive setup — pick your tools and stack
+npx @smicolon/ai-kit init
+
+# Add packs
+npx @smicolon/ai-kit add django
+npx @smicolon/ai-kit add nextjs --skills-only
+
+# Manage packs
+npx @smicolon/ai-kit list              # available packs
+npx @smicolon/ai-kit list --installed   # installed packs
+npx @smicolon/ai-kit update             # update all
+npx @smicolon/ai-kit remove django      # remove a pack
+
+# Monorepo support
+npx @smicolon/ai-kit init --cwd apps/web
+npx @smicolon/ai-kit add django --cwd apps/web
+```
+
+### Claude Code plugin (native)
+
+```bash
 /plugin marketplace add https://github.com/smicolon/ai-kit
-
-# Install specific plugins
 /plugin install django
-/plugin install nextjs
-
-# Or install all
-/plugin install django nestjs nextjs nuxtjs architect
-
-# Update later
 /plugin update django
 ```
+
+### Supported AI Tools
+
+| Tool | Skills | Agents | Commands | Rules | Hooks |
+|------|:------:|:------:|:--------:|:-----:|:-----:|
+| Claude Code | yes | yes | yes | yes | yes |
+| Cursor | yes | - | - | yes (.mdc) | - |
+| Windsurf | yes | - | - | yes | - |
+| GitHub Copilot | yes | yes | - | - | - |
+| Codex | yes | yes | - | - | - |
+| Cline | yes | - | - | yes | - |
+| Continue | yes | - | - | yes | - |
+| Gemini | yes | yes | - | - | - |
+| Junie | yes | - | - | yes | - |
+| Kiro | yes | - | - | yes | - |
+| Amp | yes | yes | - | - | - |
+| Antigravity | yes | - | - | yes | - |
+| Augment | yes | - | - | yes | - |
+| Roo Code | yes | - | - | yes | - |
+| Amazon Q | yes | - | - | yes | - |
 
 ---
 
@@ -618,26 +657,35 @@ export class User {
 ## Repository Structure
 
 ```
-ai-kit/                     # Smicolon Marketplace
+ai-kit/
 ├── .claude-plugin/
-│   └── marketplace.json          # Single source of truth - all plugin config
+│   └── marketplace.json          # Pack metadata (single source of truth)
+├── packages/
+│   └── cli/                      # @smicolon/ai-kit CLI (npm)
+│       └── src/
+│           ├── index.ts          # CLI entry (commander)
+│           ├── commands/         # init, add, list, remove, update
+│           ├── converters/       # Rule format converters (e.g., .md → .mdc)
+│           ├── installer.ts      # Copy, symlink, hook rewrite
+│           ├── discovery.ts      # Read marketplace.json, resolve packs
+│           ├── tools.ts          # 15 AI tool registry
+│           └── config.ts         # .ai-kit.json management
 ├── packs/
-│   ├── django/               # Django plugin (5 agents, 3 commands, 8 skills)
-│   ├── nestjs/               # NestJS plugin (3 agents, 1 command, 2 skills)
-│   ├── nextjs/               # Next.js plugin (4 agents, 1 command, 3 skills)
-│   ├── nuxtjs/               # Nuxt.js plugin (3 agents, 1 command, 3 skills)
-│   ├── hono/                 # Hono plugin (4 agents, 4 commands, 4 skills)
-│   ├── tanstack-router/      # TanStack plugin (3 agents, 4 commands, 11 skills)
-│   ├── better-auth/          # Better Auth plugin (1 agent, 2 commands, 2 skills)
-│   ├── flutter/              # Flutter plugin (3 agents, 5 commands, 3 skills)
-│   ├── architect/            # System architecture plugin (1 agent, 1 command)
-│   ├── dev-loop/             # Dev loop automation (3 commands, 1 skill, 1 hook)
-│   └── failure-log/          # Failure memory (2 commands, 1 skill, 2 hooks)
+│   ├── django/                   # 5 agents, 3 commands, 8 skills, 6 rules
+│   ├── nestjs/                   # 3 agents, 1 command, 2 skills, 4 rules
+│   ├── nextjs/                   # 4 agents, 1 command, 3 skills, 3 rules
+│   ├── nuxtjs/                   # 3 agents, 1 command, 3 skills, 3 rules
+│   ├── hono/                     # 4 agents, 4 commands, 4 skills
+│   ├── tanstack-router/          # 3 agents, 4 commands, 11 skills
+│   ├── better-auth/              # 1 agent, 2 commands, 2 skills
+│   ├── flutter/                  # 3 agents, 5 commands, 3 skills
+│   ├── architect/                # 1 agent, 1 command
+│   ├── dev-loop/                 # 3 commands, 1 skill, 1 hook
+│   ├── failure-log/              # 2 commands, 1 skill, 1 hook
+│   ├── worktree/                 # 1 command, 1 skill
+│   └── onboard/                  # 1 agent, 1 command, 1 skill
 ├── workflows/                    # Multi-agent orchestration workflows
-├── scripts/                      # Development utilities
-├── templates/                    # Project templates
-├── MCP_SETUP.md                  # Playwright + Figma setup
-└── README.md                     # This file
+└── .github/workflows/            # CI + release (changesets → npm)
 ```
 
 ---
@@ -691,14 +739,12 @@ npm run dev
 ## Updates
 
 ```bash
-# Update specific plugin
+# CLI
+npx @smicolon/ai-kit update          # update all packs
+npx @smicolon/ai-kit update django   # update one pack
+
+# Claude Code plugin
 /plugin update django
-
-# Update all plugins
-/plugin update django nestjs nextjs nuxtjs hono tanstack-router better-auth flutter architect dev-loop failure-log
-
-# Check for updates
-/plugin list
 ```
 
 ---
@@ -808,6 +854,4 @@ Install additional plugins:
 
 ## License
 
-Copyright (c) 2024-2025 Smicolon Company. All rights reserved.
-
-This is for Internal use only.
+MIT
