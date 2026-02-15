@@ -5,7 +5,7 @@ AI coding tool pack manager. Install convention packs (agents, skills, commands,
 ## Quick Start
 
 ```bash
-npx @smicolon/ai-kit init
+npx @smicolon/ai-kit@latest init
 ```
 
 This walks you through selecting your AI tools and stack, then installs the right files in the right places.
@@ -17,8 +17,8 @@ This walks you through selecting your AI tools and stack, then installs the righ
 Interactive first-time setup. Prompts for your AI tools, stack, and component preferences.
 
 ```bash
-npx @smicolon/ai-kit init
-npx @smicolon/ai-kit init --cwd apps/web  # monorepo sub-package
+npx @smicolon/ai-kit@latest init
+npx @smicolon/ai-kit@latest init --cwd apps/web  # monorepo sub-package
 ```
 
 ### `add <pack>`
@@ -26,11 +26,11 @@ npx @smicolon/ai-kit init --cwd apps/web  # monorepo sub-package
 Add a pack to your project.
 
 ```bash
-npx @smicolon/ai-kit add django
-npx @smicolon/ai-kit add django --skills-only
-npx @smicolon/ai-kit add django --agents-only
-npx @smicolon/ai-kit add django --rules-only
-npx @smicolon/ai-kit add django --tools claude-code,cursor
+npx @smicolon/ai-kit@latest add django
+npx @smicolon/ai-kit@latest add django --skills-only
+npx @smicolon/ai-kit@latest add django --agents-only
+npx @smicolon/ai-kit@latest add django --rules-only
+npx @smicolon/ai-kit@latest add django --tools claude-code,cursor
 ```
 
 ### `list`
@@ -38,8 +38,8 @@ npx @smicolon/ai-kit add django --tools claude-code,cursor
 Show available or installed packs.
 
 ```bash
-npx @smicolon/ai-kit list              # available packs
-npx @smicolon/ai-kit list --installed   # installed packs
+npx @smicolon/ai-kit@latest list              # available packs
+npx @smicolon/ai-kit@latest list --installed   # installed packs
 ```
 
 ### `remove <pack>`
@@ -47,7 +47,17 @@ npx @smicolon/ai-kit list --installed   # installed packs
 Remove a pack and all its installed files.
 
 ```bash
-npx @smicolon/ai-kit remove django
+npx @smicolon/ai-kit@latest remove django
+```
+
+### `search <query>`
+
+Search packs by name or keyword.
+
+```bash
+npx @smicolon/ai-kit@latest search auth
+npx @smicolon/ai-kit@latest search frontend
+npx @smicolon/ai-kit@latest search tdd
 ```
 
 ### `update [pack]`
@@ -55,8 +65,8 @@ npx @smicolon/ai-kit remove django
 Update installed packs to latest versions.
 
 ```bash
-npx @smicolon/ai-kit update          # update all
-npx @smicolon/ai-kit update django   # update one
+npx @smicolon/ai-kit@latest update          # update all
+npx @smicolon/ai-kit@latest update django   # update one
 ```
 
 ## Supported AI Tools
@@ -116,15 +126,15 @@ your-project/
 └── .gitignore               # auto-updated
 ```
 
-Config is stored in `.ai-kit.json` which tracks installed packs and all created files for clean removal.
+Tool preferences are stored globally at `~/.config/ai-kit/config.json` (pick once, works in all projects). Local `.ai-kit.json` tracks installed packs and files for clean removal — it's auto-added to `.gitignore`.
 
 ## Monorepo Support
 
 Use `--cwd` to target a sub-package. Both the sub-package and root `.gitignore` are updated.
 
 ```bash
-npx @smicolon/ai-kit init --cwd apps/web
-npx @smicolon/ai-kit add django --cwd apps/web
+npx @smicolon/ai-kit@latest init --cwd apps/web
+npx @smicolon/ai-kit@latest add django --cwd apps/web
 ```
 
 ## License

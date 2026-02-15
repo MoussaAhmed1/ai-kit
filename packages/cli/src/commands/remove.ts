@@ -13,8 +13,8 @@ export const removeCommand = new Command('remove')
     const config = readConfig(projectDir)
 
     if (!config) {
-      console.error(pc.red('No .ai-kit.json found.'))
-      process.exit(1)
+      console.log(pc.dim('No packs installed.'))
+      return
     }
 
     const packConfig = config.packs[packName]

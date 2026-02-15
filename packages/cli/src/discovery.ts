@@ -49,6 +49,8 @@ function resolvePack(
     name: plugin.name,
     version: plugin.version,
     description: plugin.description,
+    category: plugin.category ?? '',
+    keywords: plugin.keywords ?? [],
     sourceDir,
     agents: resolveFiles(plugin.agents),
     commands: resolveFiles(plugin.commands),

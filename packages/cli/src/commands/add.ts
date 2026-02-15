@@ -1,11 +1,60 @@
 import { Command } from 'commander'
 import path from 'node:path'
 import pc from 'picocolors'
+import * as p from '@clack/prompts'
 import { findPack, discoverPacks } from '../discovery.js'
-import { readConfig, writeConfig, mergeInstall } from '../config.js'
+import { readConfig, writeConfig, mergeInstall, createDefaultConfig } from '../config.js'
 import { updateGitignore } from '../gitignore.js'
 import { installPack, getWrittenDirs } from '../installer.js'
+import { getGlobalTools, saveGlobalTools } from '../global-config.js'
+import { TOOL_REGISTRY, TOOL_IDS } from '../tools.js'
 import type { ToolId, ComponentType } from '../types.js'
+
+/**
+ * Resolve which tools to use. Priority:
+ * 1. --tools flag
+ * 2. Local .ai-kit.json config
+ * 3. Global ~/.config/ai-kit/config.json
+ * 4. Interactive prompt (saved to global config)
+ */
+async function resolveTools(
+  toolsFlag: string | undefined,
+  projectDir: string,
+): Promise<ToolId[] | null> {
+  // 1. Explicit flag
+  if (toolsFlag) {
+    return toolsFlag.split(',').map(t => t.trim()) as ToolId[]
+  }
+
+  // 2. Local config
+  const config = readConfig(projectDir)
+  if (config?.tools?.length) {
+    return config.tools
+  }
+
+  // 3. Global config
+  const globalTools = getGlobalTools()
+  if (globalTools?.length) {
+    return globalTools
+  }
+
+  // 4. Prompt
+  const selection = await p.autocompleteMultiselect({
+    message: 'Which AI coding tools do you use? (type to filter)',
+    options: TOOL_IDS.map(id => ({
+      value: id,
+      label: TOOL_REGISTRY[id].label,
+      hint: TOOL_REGISTRY[id].hint,
+    })),
+    required: true,
+  })
+
+  if (p.isCancel(selection)) return null
+
+  const tools = selection as ToolId[]
+  saveGlobalTools(tools)
+  return tools
+}
 
 export const addCommand = new Command('add')
   .description('Add a pack to your project')
@@ -19,16 +68,6 @@ export const addCommand = new Command('add')
   .option('--cwd <dir>', 'Project directory (for monorepo sub-packages)')
   .action(async (packName: string, opts: Record<string, unknown>) => {
     const projectDir = opts.cwd ? path.resolve(opts.cwd as string) : process.cwd()
-    const config = readConfig(projectDir)
-
-    if (!config) {
-      console.error(
-        pc.red('No .ai-kit.json found. Run ') +
-        pc.cyan('ai-kit init') +
-        pc.red(' first.'),
-      )
-      process.exit(1)
-    }
 
     // Resolve pack
     const pack = findPack(packName)
@@ -41,10 +80,12 @@ export const addCommand = new Command('add')
       process.exit(1)
     }
 
-    // Determine tools
-    const tools: ToolId[] = opts.tools
-      ? (opts.tools as string).split(',').map(t => t.trim()) as ToolId[]
-      : config.tools
+    // Resolve tools (auto-configures if needed)
+    const tools = await resolveTools(opts.tools as string | undefined, projectDir)
+    if (!tools) {
+      console.log(pc.dim('Cancelled.'))
+      return
+    }
 
     // Determine filter
     let filter: ComponentType[] | undefined
@@ -57,7 +98,10 @@ export const addCommand = new Command('add')
     // Install
     const result = installPack({ pack, tools, filter, projectDir })
 
-    // Update config + gitignore
+    // Read or create local config
+    let config = readConfig(projectDir) ?? createDefaultConfig(tools)
+    config.tools = tools
+
     const updated = mergeInstall(config, result)
     updated.packs[pack.name].version = pack.version
     writeConfig(projectDir, updated)

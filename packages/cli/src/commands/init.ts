@@ -7,6 +7,7 @@ import { discoverPacks } from '../discovery.js'
 import { readConfig, writeConfig, createDefaultConfig, mergeInstall } from '../config.js'
 import { updateGitignore } from '../gitignore.js'
 import { installPack, getWrittenDirs } from '../installer.js'
+import { getGlobalTools, saveGlobalTools } from '../global-config.js'
 import type { ToolId, ComponentType } from '../types.js'
 
 export const initCommand = new Command('init')
@@ -39,14 +40,17 @@ export const initCommand = new Command('init')
       }
     }
 
-    // Step 1: Select AI coding tools
-    const toolSelection = await p.multiselect({
-      message: 'Which AI coding tools do you use?',
+    // Step 1: Select AI coding tools (pre-select from global config)
+    const savedTools = getGlobalTools()
+
+    const toolSelection = await p.autocompleteMultiselect({
+      message: 'Which AI coding tools do you use? (type to filter)',
       options: TOOL_IDS.map(id => ({
         value: id,
         label: TOOL_REGISTRY[id].label,
         hint: TOOL_REGISTRY[id].hint,
       })),
+      initialValues: savedTools ?? [],
       required: true,
     })
 
@@ -56,6 +60,9 @@ export const initCommand = new Command('init')
     }
 
     const selectedTools = toolSelection as ToolId[]
+
+    // Save tools globally for future use
+    saveGlobalTools(selectedTools)
 
     // Step 2: Discover and select packs
     let packs
@@ -67,8 +74,8 @@ export const initCommand = new Command('init')
       return
     }
 
-    const packSelection = await p.multiselect({
-      message: "What's your stack?",
+    const packSelection = await p.autocompleteMultiselect({
+      message: 'Which packs do you want to install? (type to filter)',
       options: packs.map(pack => ({
         value: pack.name,
         label: pack.name,
@@ -154,5 +161,5 @@ export const initCommand = new Command('init')
       p.log.message(`  ${pc.green('+')} ${pack.name} ${pc.dim(`v${pack.version}`)}`)
     }
 
-    p.outro(pc.dim('Config saved to .ai-kit.json'))
+    p.outro(pc.dim('Run ai-kit add <pack> to add more packs anytime.'))
   })

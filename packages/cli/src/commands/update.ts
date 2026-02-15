@@ -5,28 +5,25 @@ import { findPack } from '../discovery.js'
 import { readConfig, writeConfig, mergeInstall } from '../config.js'
 import { updateGitignore } from '../gitignore.js'
 import { installPack, removePack, getWrittenDirs } from '../installer.js'
+import { initCommand } from './init.js'
 
 export const updateCommand = new Command('update')
   .description('Update installed packs')
   .argument('[pack]', 'Pack name (omit to update all)')
   .option('--cwd <dir>', 'Project directory')
-  .action((packName: string | undefined, opts: { cwd?: string }) => {
+  .action(async (packName: string | undefined, opts: { cwd?: string }) => {
     const projectDir = opts.cwd ? path.resolve(opts.cwd) : process.cwd()
     const config = readConfig(projectDir)
 
-    if (!config) {
-      console.error(pc.red('No .ai-kit.json found. Run ') + pc.cyan('ai-kit init') + pc.red(' first.'))
-      process.exit(1)
+    if (!config || Object.keys(config.packs).length === 0) {
+      console.log(pc.dim('No packs installed yet. Starting setup...\n'))
+      await initCommand.parseAsync(['init', ...(opts.cwd ? ['--cwd', opts.cwd] : [])], { from: 'user' })
+      return
     }
 
     const packsToUpdate = packName
       ? [packName]
       : Object.keys(config.packs)
-
-    if (packsToUpdate.length === 0) {
-      console.log(pc.dim('No packs installed.'))
-      return
-    }
 
     let updated = 0
     let skipped = 0

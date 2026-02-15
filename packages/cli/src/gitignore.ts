@@ -66,6 +66,7 @@ export function updateGitignore(projectDir: string, dirs: string[]): void {
   if (dirs.length === 0) return
 
   const entries = dirs.map(d => (d.endsWith('/') ? d : `${d}/`))
+  entries.push('.ai-kit.json')
 
   // Always update .gitignore in the project directory
   const projectGitignore = path.join(projectDir, '.gitignore')

@@ -4,6 +4,7 @@ import { addCommand } from './commands/add.js'
 import { listCommand } from './commands/list.js'
 import { removeCommand } from './commands/remove.js'
 import { updateCommand } from './commands/update.js'
+import { searchCommand } from './commands/search.js'
 
 const program = new Command()
   .name('ai-kit')
@@ -15,4 +16,5 @@ program.addCommand(addCommand)
 program.addCommand(listCommand)
 program.addCommand(removeCommand)
 program.addCommand(updateCommand)
+program.addCommand(searchCommand)
 program.parse()

@@ -11,16 +11,16 @@
 ### Any AI Tool (CLI)
 
 ```bash
-npx @smicolon/ai-kit init
+npx @smicolon/ai-kit@latest init
 ```
 
 This walks you through selecting your AI tools and stack, then installs the right files in the right places.
 
 ```bash
 # Or non-interactively
-npx @smicolon/ai-kit add django
-npx @smicolon/ai-kit add django --skills-only
-npx @smicolon/ai-kit add django --tools claude-code,cursor
+npx @smicolon/ai-kit@latest add django
+npx @smicolon/ai-kit@latest add django --skills-only
+npx @smicolon/ai-kit@latest add django --tools claude-code,cursor
 ```
 
 ### Claude Code (native plugin)
@@ -452,21 +452,21 @@ See [MCP_SETUP.md](MCP_SETUP.md) for setup instructions.
 
 ```bash
 # Interactive setup — pick your tools and stack
-npx @smicolon/ai-kit init
+npx @smicolon/ai-kit@latest init
 
 # Add packs
-npx @smicolon/ai-kit add django
-npx @smicolon/ai-kit add nextjs --skills-only
+npx @smicolon/ai-kit@latest add django
+npx @smicolon/ai-kit@latest add nextjs --skills-only
 
 # Manage packs
-npx @smicolon/ai-kit list              # available packs
-npx @smicolon/ai-kit list --installed   # installed packs
-npx @smicolon/ai-kit update             # update all
-npx @smicolon/ai-kit remove django      # remove a pack
+npx @smicolon/ai-kit@latest list              # available packs
+npx @smicolon/ai-kit@latest list --installed   # installed packs
+npx @smicolon/ai-kit@latest update             # update all
+npx @smicolon/ai-kit@latest remove django      # remove a pack
 
 # Monorepo support
-npx @smicolon/ai-kit init --cwd apps/web
-npx @smicolon/ai-kit add django --cwd apps/web
+npx @smicolon/ai-kit@latest init --cwd apps/web
+npx @smicolon/ai-kit@latest add django --cwd apps/web
 ```
 
 ### Claude Code plugin (native)
@@ -740,8 +740,8 @@ npm run dev
 
 ```bash
 # CLI
-npx @smicolon/ai-kit update          # update all packs
-npx @smicolon/ai-kit update django   # update one pack
+npx @smicolon/ai-kit@latest update          # update all packs
+npx @smicolon/ai-kit@latest update django   # update one pack
 
 # Claude Code plugin
 /plugin update django

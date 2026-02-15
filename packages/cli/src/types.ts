@@ -17,6 +17,8 @@ export interface MarketplacePlugin {
   version: string
   description: string
   source: string
+  category?: string
+  keywords?: string[]
   agents?: string[]
   commands?: string[]
   skills?: string[]
@@ -32,6 +34,8 @@ export interface ResolvedPack {
   name: string
   version: string
   description: string
+  category: string
+  keywords: string[]
   sourceDir: string
   agents: string[]
   commands: string[]
