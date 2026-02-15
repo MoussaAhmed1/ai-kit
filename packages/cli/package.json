@@ -15,10 +15,11 @@
   "main": "./dist/index.js",
   "files": [
     "dist",
-    "packs"
+    "packs",
+    ".claude-plugin"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node -e \"const fs=require('fs');fs.cpSync('../../packs','./packs',{recursive:true});fs.cpSync('../../.claude-plugin','./.claude-plugin',{recursive:true})\"",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit"
   },
