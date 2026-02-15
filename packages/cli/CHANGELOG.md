@@ -1,5 +1,11 @@
 # @smicolon/ai-kit
 
+## 0.3.0
+
+### Minor Changes
+
+- 29f26a0: Add worktree isolation for parallel development — .worktreeinclude config, env var rewriting, Docker port offsets, and database auto-creation
+
 ## 0.2.1
 
 ### Patch Changes
