@@ -2,6 +2,12 @@
   "name": "@smicolon/ai-kit",
   "version": "0.1.0",
   "description": "AI coding tool pack manager for Smicolon standards",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smicolon/ai-kit",
+    "directory": "packages/cli"
+  },
   "type": "module",
   "bin": {
     "ai-kit": "./dist/index.js"
