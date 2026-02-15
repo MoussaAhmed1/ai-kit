@@ -1,13 +1,13 @@
 ---
 name: wt
-description: Git worktree manager - create, list, remove, and open worktrees with automatic env copying and dependency installation
+description: Git worktree manager - create, list, remove, and open worktrees with env isolation, Docker port offsets, and database auto-creation
 argument-hint: '<command> [branch] [options]'
 allowed-tools: ["Bash(${CLAUDE_PLUGIN_ROOT}/scripts/wt.sh:*)"]
 ---
 
 # Git Worktree Manager
 
-Manage git worktrees with automatic setup for parallel development.
+Manage git worktrees with automatic isolation for parallel development.
 
 ## Usage
 
@@ -19,9 +19,9 @@ Manage git worktrees with automatic setup for parallel development.
 
 | Command | Alias | Description |
 |---------|-------|-------------|
-| `create <branch>` | `c` | Create worktree, copy .env files, install deps |
+| `create <branch>` | `c` | Create worktree with isolation (env, docker, db) |
 | `list` | `ls` | List all worktrees for current repo |
-| `remove <branch>` | `rm` | Remove worktree (add `-d` to delete branch) |
+| `remove <branch>` | `rm` | Remove worktree (stops Docker, add `-d` to delete branch) |
 | `open <branch> [--editor]` | `o` | Open worktree (--cursor\|-c, --agy\|-a, --code\|-v) |
 
 ## Instructions
@@ -35,7 +35,7 @@ Run the worktree manager script:
 ## Examples
 
 ```bash
-# Create worktree for new feature
+# Create worktree for new feature (with full isolation)
 /wt create feature/authentication
 
 # Short form
@@ -44,7 +44,7 @@ Run the worktree manager script:
 # List all worktrees
 /wt ls
 
-# Remove worktree
+# Remove worktree (stops Docker containers first)
 /wt rm feature/authentication
 
 # Remove worktree AND delete branch
@@ -67,7 +67,27 @@ Run the worktree manager script:
 
 ## Auto-Setup on Create
 
-1. Copies all `.env*` files from root
-2. Copies nested `.env*` from `apps/*/`, `packages/*/`, `services/*/`
-3. Detects package manager (bun → pnpm → yarn → npm)
-4. Runs install at root (monorepo-aware)
+1. Loads `.worktreeinclude` (generates default if missing)
+2. Copies files matching glob patterns
+3. Rewrites env vars (DB_NAME, DATABASE_URL, etc.) with branch suffix
+4. Generates `docker-compose.worktree.yml` with port offsets
+5. Auto-creates database in running Postgres
+6. Detects package manager (bun → pnpm → yarn → npm)
+7. Runs install at root (monorepo-aware)
+
+## `.worktreeinclude` Format
+
+```ini
+# File patterns to copy
+.env*
+apps/*/.env*
+
+[rewrite]
+auto                    # suffix DB_NAME, DATABASE_URL, etc.
+# MY_DB=app_{{BRANCH}} # template mode
+
+[docker]
+auto                    # auto-detect compose file
+# file=apps/backend/docker-compose.local.yml
+# port_offset=10
+```

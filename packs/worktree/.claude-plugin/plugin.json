@@ -1,7 +1,7 @@
 {
   "name": "worktree",
-  "version": "0.1.0",
-  "description": "Git worktree manager for parallel development with automatic env copying and dependency installation",
+  "version": "0.2.0",
+  "description": "Git worktree manager for parallel development with env isolation, Docker port offsets, and database auto-creation",
   "author": {
     "name": "Smicolon",
     "email": "dev@smicolon.com",
