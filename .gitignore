@@ -42,8 +42,9 @@ Thumbs.db
 # Agent artifacts (local planning/progress files)
 agent-artifacts/
 
-# Ignore claude-mem generated files inside plugins
+# Ignore claude-mem generated files
 packs/**/CLAUDE.md
+.claude-plugin/CLAUDE.md
 
 # AI coding tools (managed by @smicolon/ai-kit)
 .ai-kit.json

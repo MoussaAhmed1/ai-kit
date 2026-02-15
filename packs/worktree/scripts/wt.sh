@@ -204,6 +204,7 @@ sanitize_branch_for_suffix() {
 rewrite_env_file() {
     local env_file="$1"
     local branch_slug="$2"
+    [[ -f "$env_file" ]] || return 0
     local has_auto=false
 
     # Check if auto mode is enabled
@@ -288,7 +289,7 @@ rewrite_all_env_files() {
         local result
         result=$(rewrite_env_file "$env_file" "$branch_slug")
         [[ "$result" == "true" ]] && ((count++))
-    done < <(find "$wt_path" -name '.env*' -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 2>/dev/null)
+    done < <(find "$wt_path" -type f -name '.env*' -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 2>/dev/null)
 
     echo "$count"
 }
