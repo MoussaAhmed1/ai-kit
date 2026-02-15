@@ -33,8 +33,7 @@
         "./commands/dev-plan.md",
         "./commands/cancel-dev.md"
       ],
-      "skills": ["./skills/tdd-planner/SKILL.md"],
-      "hooks": ["./hooks/hooks.json"]
+      "skills": ["./skills/tdd-planner/SKILL.md"]
     },
     {
       "name": "django",
@@ -192,8 +191,7 @@
         "./commands/failure-add.md",
         "./commands/failure-list.md"
       ],
-      "skills": ["./skills/failure-log-manager/SKILL.md"],
-      "hooks": ["./hooks/hooks.json"]
+      "skills": ["./skills/failure-log-manager/SKILL.md"]
     },
     {
       "name": "flutter",
@@ -226,8 +224,7 @@
         "./skills/flutter-architecture/SKILL.md",
         "./skills/fastlane-knowledge/SKILL.md",
         "./skills/store-publishing/SKILL.md"
-      ],
-      "hooks": ["./hooks/hooks.json"]
+      ]
     },
     {
       "name": "hono",
@@ -261,8 +258,7 @@
         "./skills/cloudflare-bindings/SKILL.md",
         "./skills/zod-validation/SKILL.md",
         "./skills/rpc-typesafe/SKILL.md"
-      ],
-      "hooks": ["./hooks/hooks.json"]
+      ]
     },
     {
       "name": "tanstack-router",
