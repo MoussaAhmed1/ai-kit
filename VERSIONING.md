@@ -87,8 +87,8 @@ Bump marketplace version when:
 Each plugin MUST maintain a `CHANGELOG.md` file:
 
 ```
-plugins/smi-django/CHANGELOG.md
-plugins/smi-nestjs/CHANGELOG.md
+packs/django/CHANGELOG.md
+packs/nestjs/CHANGELOG.md
 ...
 ```
 
@@ -130,7 +130,7 @@ All notable changes to this plugin will be documented in this file.
 Before committing changes to a plugin:
 
 - [ ] Updated version in `.claude-plugin/marketplace.json`
-- [ ] Added entry to `plugins/{name}/CHANGELOG.md`
+- [ ] Added entry to `packs/{name}/CHANGELOG.md`
 - [ ] Used correct bump type (patch/minor/major)
 - [ ] Updated marketplace version if adding new plugin
 
@@ -138,17 +138,17 @@ Before committing changes to a plugin:
 
 | Plugin | Version | Status | Notes |
 |--------|---------|--------|-------|
-| smi-django | 2.1.0 | Mature | Production-tested |
-| smi-nestjs | 2.1.0 | Mature | Production-tested |
-| smi-nextjs | 2.1.0 | Mature | Production-tested |
-| smi-nuxtjs | 2.1.0 | Mature | Production-tested |
-| smi-dev-loop | 1.1.0 | Stable | TDD automation |
-| smi-architect | 1.0.0 | Stable | Diagram generation |
-| smi-failure-log | 1.0.0 | Stable | Failure memory |
-| smi-hono | 0.1.0 | New | Needs testing |
-| smi-flutter | 0.1.0 | New | Needs testing |
-| smi-tanstack-router | 0.1.0 | New | Needs testing |
-| smi-better-auth | 0.1.0 | New | Needs testing |
+| django | 2.1.0 | Mature | Production-tested |
+| nestjs | 2.1.0 | Mature | Production-tested |
+| nextjs | 2.1.0 | Mature | Production-tested |
+| nuxtjs | 2.1.0 | Mature | Production-tested |
+| dev-loop | 1.1.0 | Stable | TDD automation |
+| architect | 1.0.0 | Stable | Diagram generation |
+| failure-log | 1.0.0 | Stable | Failure memory |
+| hono | 0.1.0 | New | Needs testing |
+| flutter | 0.1.0 | New | Needs testing |
+| tanstack-router | 0.1.0 | New | Needs testing |
+| better-auth | 0.1.0 | New | Needs testing |
 
 ## Promotion Criteria
 

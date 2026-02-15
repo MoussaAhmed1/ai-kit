@@ -11,20 +11,20 @@
     "email": "dev@smicolon.com",
     "url": "https://github.com/smicolon"
   },
-  "repository": "https://github.com/smicolon/claude-infra",
+  "repository": "https://github.com/smicolon/ai-kit",
   "plugins": [
     {
-      "name": "smi-dev-loop",
+      "name": "dev-loop",
       "version": "1.2.2",
       "description": "Autonomous TDD development loops with planning phase and iterative coding",
-      "source": "./plugins/smi-dev-loop",
+      "source": "./packs/dev-loop",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "automation",
       "keywords": ["dev-loop", "automation", "tdd", "iterative", "ralph-wiggum", "planning"],
@@ -37,17 +37,17 @@
       "hooks": ["./hooks/hooks.json"]
     },
     {
-      "name": "smi-django",
+      "name": "django",
       "version": "2.1.1",
       "description": "Django standards with 5 agents and 8 auto-enforcing skills",
-      "source": "./plugins/smi-django",
+      "source": "./packs/django",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "backend",
       "keywords": ["django", "python", "backend", "testing", "tdd", "architecture", "security", "performance"],
@@ -75,17 +75,17 @@
       ]
     },
     {
-      "name": "smi-nestjs",
+      "name": "nestjs",
       "version": "2.1.1",
       "description": "NestJS standards with 3 agents and 2 auto-enforcing skills",
-      "source": "./plugins/smi-nestjs",
+      "source": "./packs/nestjs",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "backend",
       "keywords": ["nestjs", "typescript", "backend", "testing", "architecture", "barrel-exports"],
@@ -101,17 +101,17 @@
       ]
     },
     {
-      "name": "smi-nextjs",
+      "name": "nextjs",
       "version": "2.1.1",
       "description": "Next.js standards with 4 agents, 3 auto-enforcing skills, and visual QA",
-      "source": "./plugins/smi-nextjs",
+      "source": "./packs/nextjs",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "frontend",
       "keywords": ["nextjs", "react", "frontend", "typescript", "visual-qa", "accessibility", "forms"],
@@ -129,17 +129,17 @@
       ]
     },
     {
-      "name": "smi-nuxtjs",
+      "name": "nuxtjs",
       "version": "2.1.1",
       "description": "Nuxt.js standards with 3 agents, 3 auto-enforcing skills, and visual QA",
-      "source": "./plugins/smi-nuxtjs",
+      "source": "./packs/nuxtjs",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "frontend",
       "keywords": ["nuxtjs", "vue", "vue3", "frontend", "typescript", "visual-qa", "accessibility", "forms"],
@@ -156,17 +156,17 @@
       ]
     },
     {
-      "name": "smi-architect",
+      "name": "architect",
       "version": "1.0.0",
       "description": "System architecture and diagram-as-code with Eraser.io integration",
-      "source": "./plugins/smi-architect",
+      "source": "./packs/architect",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "architecture",
       "keywords": ["architecture", "diagrams", "eraser", "erd", "flowchart", "cloud-architecture"],
@@ -174,17 +174,17 @@
       "commands": ["./commands/diagram-create.md"]
     },
     {
-      "name": "smi-failure-log",
+      "name": "failure-log",
       "version": "1.0.1",
       "description": "Persistent failure memory that tracks mistakes and prevents repeating them across sessions",
-      "source": "./plugins/smi-failure-log",
+      "source": "./packs/failure-log",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "automation",
       "keywords": ["failure-log", "memory", "learning", "mistakes", "conventions"],
@@ -196,17 +196,17 @@
       "hooks": ["./hooks/hooks.json"]
     },
     {
-      "name": "smi-flutter",
+      "name": "flutter",
       "version": "0.1.1",
       "description": "Flutter development with Fastlane automation, store publishing, and architecture patterns",
-      "source": "./plugins/smi-flutter",
+      "source": "./packs/flutter",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "mobile",
       "keywords": ["flutter", "dart", "mobile", "ios", "android", "fastlane", "app-store", "google-play"],
@@ -230,17 +230,17 @@
       "hooks": ["./hooks/hooks.json"]
     },
     {
-      "name": "smi-hono",
+      "name": "hono",
       "version": "0.1.1",
       "description": "Hono Edge framework standards with 4 agents and 4 auto-enforcing skills for Bun and Cloudflare Workers",
-      "source": "./plugins/smi-hono",
+      "source": "./packs/hono",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "backend",
       "keywords": ["hono", "bun", "cloudflare-workers", "edge", "typescript", "api", "rpc"],
@@ -265,17 +265,17 @@
       "hooks": ["./hooks/hooks.json"]
     },
     {
-      "name": "smi-tanstack-router",
+      "name": "tanstack-router",
       "version": "0.1.0",
       "description": "TanStack Router SPA development with 3 agents, 11 skills for React SPAs using TanStack ecosystem",
-      "source": "./plugins/smi-tanstack-router",
+      "source": "./packs/tanstack-router",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "frontend",
       "keywords": ["tanstack", "react", "router", "query", "form", "table", "virtual", "spa", "typescript", "bun"],
@@ -305,17 +305,17 @@
       ]
     },
     {
-      "name": "smi-better-auth",
+      "name": "better-auth",
       "version": "0.1.1",
       "description": "Better Auth integration with 1 agent, 2 skills, and MCP server for authentication",
-      "source": "./plugins/smi-better-auth",
+      "source": "./packs/better-auth",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "authentication",
       "keywords": ["better-auth", "authentication", "oauth", "2fa", "passkeys", "social-login", "session"],
@@ -333,17 +333,17 @@
       "mcpServers": "./.mcp.json"
     },
     {
-      "name": "smi-worktree",
+      "name": "worktree",
       "version": "0.1.1",
       "description": "Git worktree manager for parallel development with automatic env copying and dependency installation",
-      "source": "./plugins/smi-worktree",
+      "source": "./packs/worktree",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "automation",
       "keywords": ["git", "worktree", "parallel-development", "branch-management", "monorepo"],
@@ -351,17 +351,17 @@
       "skills": ["./skills/worktree-manager/SKILL.md"]
     },
     {
-      "name": "smi-onboard",
+      "name": "onboard",
       "version": "0.1.0",
       "description": "Intelligent engineer onboarding with personalized guidance based on skills, project analysis, and first task",
-      "source": "./plugins/smi-onboard",
+      "source": "./packs/onboard",
       "author": {
         "name": "Smicolon",
         "email": "dev@smicolon.com",
         "url": "https://github.com/smicolon"
       },
-      "homepage": "https://github.com/smicolon/claude-infra",
-      "repository": "https://github.com/smicolon/claude-infra",
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "onboarding",
       "keywords": ["onboarding", "learning", "personalization", "guidance", "ramp-up"],

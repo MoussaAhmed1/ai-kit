@@ -39,4 +39,4 @@ Thumbs.db
 agent-artifacts/
 
 # Ignore claude-mem generated files inside plugins
-plugins/**/CLAUDE.md
+packs/**/CLAUDE.md

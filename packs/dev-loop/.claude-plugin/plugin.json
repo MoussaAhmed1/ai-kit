@@ -1,0 +1,10 @@
+{
+  "name": "dev-loop",
+  "description": "Autonomous development loops for iterative coding with automatic continuation",
+  "version": "1.0.0",
+  "author": {
+    "name": "Smicolon",
+    "email": "dev@smicolon.com",
+    "url": "https://github.com/smicolon"
+  }
+}

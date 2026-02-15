@@ -80,8 +80,8 @@ src/
 
 1. Install Smicolon plugins:
    ```bash
-   /plugin marketplace add https://github.com/smicolon/claude-infra
-   /plugin install smi-nextjs
+   /plugin marketplace add https://github.com/smicolon/ai-kit
+   /plugin install nextjs
    ```
 
 2. Authenticate MCP servers (first time only):

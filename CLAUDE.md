@@ -11,25 +11,25 @@ This repository is a **Claude Code Marketplace** providing 11 independent plugin
 ### Directory Structure
 
 ```
-claude-infra/                     # Smicolon Marketplace
+ai-kit/                     # Smicolon Marketplace
 ├── .claude-plugin/
 │   └── marketplace.json          # Single source of truth - all plugin configuration
-├── plugins/
-│   ├── smi-django/               # Django plugin (5 agents, 3 commands, 8 skills)
+├── packs/
+│   ├── django/               # Django plugin (5 agents, 3 commands, 8 skills)
 │   │   ├── agents/               # Agent definitions
 │   │   ├── commands/             # Slash commands
 │   │   ├── skills/               # Auto-enforcing skills
 │   │   └── README.md
-│   ├── smi-nestjs/               # NestJS plugin (3 agents, 1 command, 2 skills)
-│   ├── smi-nextjs/               # Next.js plugin (4 agents, 1 command, 3 skills)
-│   ├── smi-nuxtjs/               # Nuxt.js plugin (3 agents, 1 command, 3 skills)
-│   ├── smi-hono/                 # Hono Edge plugin (4 agents, 4 commands, 4 skills)
-│   ├── smi-tanstack-router/      # TanStack SPA plugin (3 agents, 4 commands, 11 skills)
-│   ├── smi-better-auth/          # Better Auth plugin (1 agent, 2 commands, 2 skills)
-│   ├── smi-flutter/              # Flutter mobile plugin (3 agents, 5 commands, 3 skills)
-│   ├── smi-architect/            # System architecture plugin (1 agent, 1 command)
-│   ├── smi-dev-loop/             # Dev loop automation (3 commands, 1 skill, 1 hook)
-│   └── smi-failure-log/          # Failure memory plugin (2 commands, 1 skill, 2 hooks)
+│   ├── nestjs/               # NestJS plugin (3 agents, 1 command, 2 skills)
+│   ├── nextjs/               # Next.js plugin (4 agents, 1 command, 3 skills)
+│   ├── nuxtjs/               # Nuxt.js plugin (3 agents, 1 command, 3 skills)
+│   ├── hono/                 # Hono Edge plugin (4 agents, 4 commands, 4 skills)
+│   ├── tanstack-router/      # TanStack SPA plugin (3 agents, 4 commands, 11 skills)
+│   ├── better-auth/          # Better Auth plugin (1 agent, 2 commands, 2 skills)
+│   ├── flutter/              # Flutter mobile plugin (3 agents, 5 commands, 3 skills)
+│   ├── architect/            # System architecture plugin (1 agent, 1 command)
+│   ├── dev-loop/             # Dev loop automation (3 commands, 1 skill, 1 hook)
+│   └── failure-log/          # Failure memory plugin (2 commands, 1 skill, 2 hooks)
 ├── workflows/                    # Multi-agent orchestration workflows
 │   ├── feature-development.md
 │   └── code-review.md
@@ -50,66 +50,66 @@ claude-infra/                     # Smicolon Marketplace
 
 ```bash
 # Add marketplace
-/plugin marketplace add https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/ai-kit
 
 # Install specific plugins
-/plugin install smi-django          # Django only (5 agents)
-/plugin install smi-hono            # Hono Edge (4 agents)
-/plugin install smi-tanstack-router # TanStack SPA (3 agents)
-/plugin install smi-better-auth     # Better Auth (1 agent + MCP)
-/plugin install smi-architect       # System diagrams (1 agent)
+/plugin install django          # Django only (5 agents)
+/plugin install hono            # Hono Edge (4 agents)
+/plugin install tanstack-router # TanStack SPA (3 agents)
+/plugin install better-auth     # Better Auth (1 agent + MCP)
+/plugin install architect       # System diagrams (1 agent)
 
 # Or install all
-/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
+/plugin install django nestjs nextjs nuxtjs hono tanstack-router better-auth flutter architect dev-loop failure-log
 ```
 
 ## Agent System
 
 ### Agent Categories (27 Total Across 11 Plugins)
 
-**smi-django Plugin** (5 agents):
+**django Plugin** (5 agents):
 - `@django-architect` - Architecture design
 - `@django-builder` - Feature implementation
 - `@django-feature-based` - Large-scale feature-based architecture
 - `@django-tester` - Test writing (90%+ coverage target)
 - `@django-reviewer` - Security and code review
 
-**smi-nestjs Plugin** (3 agents):
+**nestjs Plugin** (3 agents):
 - `@nestjs-architect` - Backend architecture
 - `@nestjs-builder` - Feature implementation
 - `@nestjs-tester` - Test writing
 
-**smi-nextjs Plugin** (4 agents):
+**nextjs Plugin** (4 agents):
 - `@nextjs-architect` - Next.js/React architecture
 - `@nextjs-modular` - Large-scale Next.js modular architecture
 - `@frontend-visual` - Visual QA with Playwright MCP + Figma MCP
 - `@frontend-tester` - Frontend testing (unit, integration, E2E, accessibility)
 
-**smi-nuxtjs Plugin** (3 agents):
+**nuxtjs Plugin** (3 agents):
 - `@nuxtjs-architect` - Nuxt.js/Vue 3 architecture
 - `@frontend-visual` - Visual QA with Playwright MCP + Figma MCP (shared with Next.js)
 - `@frontend-tester` - Frontend testing (shared with Next.js)
 
-**smi-hono Plugin** (4 agents):
+**hono Plugin** (4 agents):
 - `@hono-architect` - Edge API architecture design
 - `@hono-builder` - Route and middleware implementation
 - `@hono-tester` - Test writing with Bun test/Vitest
 - `@hono-reviewer` - Security and performance review
 
-**smi-tanstack-router Plugin** (3 agents):
+**tanstack-router Plugin** (3 agents):
 - `@tanstack-architect` - SPA architecture design
 - `@tanstack-builder` - Feature implementation with TanStack ecosystem
 - `@tanstack-tester` - Testing strategies for SPAs
 
-**smi-better-auth Plugin** (1 agent):
+**better-auth Plugin** (1 agent):
 - `@auth-architect` - Authentication architecture and security flows
 
-**smi-flutter Plugin** (3 agents):
+**flutter Plugin** (3 agents):
 - `@flutter-architect` - Mobile app architecture design
 - `@flutter-builder` - Feature implementation
 - `@release-manager` - App Store/Play Store publishing
 
-**smi-architect Plugin** (1 agent):
+**architect Plugin** (1 agent):
 - `@system-architect` - Eraser.io diagram-as-code specialist (ERD, flowcharts, cloud, sequence, BPMN)
 
 ### Agent Usage Pattern
@@ -122,52 +122,52 @@ Each plugin includes specialized slash commands that provide interactive workflo
 
 ### Command Categories (24 Total)
 
-**smi-django Commands:**
+**django Commands:**
 - `/model-create` - Create Django models following Smicolon conventions
 - `/api-endpoint` - Create complete REST API endpoints (serializer, service, view, tests)
 - `/test-generate` - Generate comprehensive tests (90%+ coverage target)
 
-**smi-nestjs Commands:**
+**nestjs Commands:**
 - `/module-create` - Create complete NestJS modules (entity, DTOs, service, controller)
 
-**smi-nextjs Commands:**
+**nextjs Commands:**
 - `/component-create` - Create React/Next.js components (UI, forms, server components)
 
-**smi-nuxtjs Commands:**
+**nuxtjs Commands:**
 - `/component-create` - Create Vue 3/Nuxt.js components
 
-**smi-hono Commands:**
+**hono Commands:**
 - `/route-create` - Create routes with handlers and validators
 - `/middleware-create` - Create typed middleware
 - `/project-init` - Initialize Hono project (Bun/CF Workers)
 - `/rpc-client` - Generate type-safe RPC client
 
-**smi-tanstack-router Commands:**
+**tanstack-router Commands:**
 - `/route-create` - Create type-safe file-based routes
 - `/query-create` - Create TanStack Query with factory key pattern
 - `/form-create` - Create TanStack Form with Zod validation
 - `/table-create` - Create TanStack Table component
 
-**smi-better-auth Commands:**
+**better-auth Commands:**
 - `/auth-setup` - Initialize Better Auth configuration
 - `/auth-provider-add` - Add OAuth providers (Google, GitHub, Discord, etc.)
 
-**smi-flutter Commands:**
+**flutter Commands:**
 - `/flutter-build` - Build iOS/Android apps
 - `/flutter-test` - Run tests with coverage
 - `/flutter-deploy` - Deploy to stores via Fastlane
 - `/fastlane-setup` - Initialize Fastlane configuration
 - `/signing-setup` - Configure code signing
 
-**smi-architect Commands:**
+**architect Commands:**
 - `/diagram-create` - Create system diagrams using Eraser.io (ERD, cloud, sequence, flowcharts)
 
-**smi-dev-loop Commands:**
+**dev-loop Commands:**
 - `/dev-loop` - Start autonomous development loop (Red-Green-Refactor)
 - `/dev-plan` - Generate TDD development plan
 - `/cancel-dev` - Cancel active development loop
 
-**smi-failure-log Commands:**
+**failure-log Commands:**
 - `/failure-add` - Log a mistake to prevent repeating it
 - `/failure-list` - View all logged failures
 
@@ -234,11 +234,11 @@ Multi-agent orchestration workflows that coordinate specialized agents for compl
 
 ## Hook System
 
-Currently, only `smi-dev-loop` includes hooks for autonomous development loops:
+Currently, only `dev-loop` includes hooks for autonomous development loops:
 
-### smi-dev-loop Hooks
+### dev-loop Hooks
 
-Located in `plugins/smi-dev-loop/hooks/`
+Located in `packs/dev-loop/hooks/`
 
 - `stop-hook.sh` - Handles dev loop continuation logic
 
@@ -316,29 +316,29 @@ import { User } from '../entities'
 
 ```bash
 # Add Smicolon marketplace
-/plugin marketplace add https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/ai-kit
 
 # Install specific plugins
-/plugin install smi-django          # Django only
-/plugin install smi-hono            # Hono Edge only
-/plugin install smi-tanstack-router # TanStack SPA only
-/plugin install smi-better-auth     # Better Auth only
-/plugin install smi-architect       # System architecture only
+/plugin install django          # Django only
+/plugin install hono            # Hono Edge only
+/plugin install tanstack-router # TanStack SPA only
+/plugin install better-auth     # Better Auth only
+/plugin install architect       # System architecture only
 
 # Or install all
-/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
+/plugin install django nestjs nextjs nuxtjs hono tanstack-router better-auth flutter architect dev-loop failure-log
 
 # Update plugins
-/plugin update smi-django
-/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
+/plugin update django
+/plugin update django nestjs nextjs nuxtjs hono tanstack-router better-auth flutter architect dev-loop failure-log
 ```
 
 ### Testing Installation
 
 ```bash
 # Test plugin installation
-/plugin marketplace add https://github.com/smicolon/claude-infra
-/plugin install smi-django
+/plugin marketplace add https://github.com/smicolon/ai-kit
+/plugin install django
 /help  # Should show @django-* agents
 ```
 
@@ -359,7 +359,7 @@ Used by hooks to determine which agents and conventions to apply:
 
 The repository uses GitHub-native distribution via Claude Code's plugin system. No packaging or publishing scripts are needed:
 
-1. **Development**: Make changes to plugins in `plugins/` directory
+1. **Development**: Make changes to plugins in `packs/` directory
 2. **Commit**: Commit and push changes to GitHub
 3. **Distribution**: Users install/update directly from GitHub via `/plugin marketplace add` and `/plugin install`
 
@@ -416,8 +416,8 @@ claude @frontend-visual
 ### Core Configuration
 
 - `.claude-plugin/marketplace.json` - Single source of truth for all plugin configuration
-- `plugins/smi-django/skills/` - Auto-enforcing skills for convention compliance
-- `plugins/smi-django/agents/django-architect.md` - Example agent structure and conventions
+- `packs/django/skills/` - Auto-enforcing skills for convention compliance
+- `packs/django/agents/django-architect.md` - Example agent structure and conventions
 
 ### Documentation
 
@@ -425,8 +425,8 @@ claude @frontend-visual
 - `CLAUDE.md` - Project instructions for Claude Code (this file)
 - `VERSIONING.md` - Version strategy, bump rules, promotion criteria
 - `MCP_SETUP.md` - Playwright + Figma MCP integration setup
-- `plugins/*/README.md` - Plugin-specific documentation
-- `plugins/*/CHANGELOG.md` - Version history per plugin
+- `packs/*/README.md` - Plugin-specific documentation
+- `packs/*/CHANGELOG.md` - Version history per plugin
 
 ### Not Committed
 
@@ -436,29 +436,29 @@ claude @frontend-visual
 
 ### Adding New Agents
 
-1. Choose the appropriate plugin (e.g., `plugins/smi-django/`)
-2. Create agent file in `plugins/smi-django/agents/{role}.md`
+1. Choose the appropriate plugin (e.g., `packs/django/`)
+2. Create agent file in `packs/django/agents/{role}.md`
 3. Follow existing agent structure (role definition, conventions, deliverables)
 4. Update `.claude-plugin/marketplace.json` to register the agent in the plugin's `agents` array
 5. Bump plugin version (MINOR bump for new agent)
-6. Add changelog entry to `plugins/{name}/CHANGELOG.md`
+6. Add changelog entry to `packs/{name}/CHANGELOG.md`
 7. Update plugin's README.md to document new agent
 8. Update root README.md to reflect new agent count
 9. Test plugin installation in sample project
 
 ### Modifying Conventions
 
-1. Edit agent files in `plugins/*/agents/` directory
-2. Update corresponding skills in `plugins/*/skills/` directory
-3. Update rules in `plugins/*/rules/` directory if path-specific
+1. Edit agent files in `packs/*/agents/` directory
+2. Update corresponding skills in `packs/*/skills/` directory
+3. Update rules in `packs/*/rules/` directory if path-specific
 4. Test with sample project
 5. Update plugin's README.md if visible changes
 6. Bump version in `.claude-plugin/marketplace.json` (see VERSIONING.md for bump type)
-7. Add changelog entry to `plugins/{name}/CHANGELOG.md`
+7. Add changelog entry to `packs/{name}/CHANGELOG.md`
 
 ### Creating New Plugins
 
-1. Create `plugins/smi-{name}/` directory
+1. Create `packs/{name}/` directory
 2. Create `agents/` directory with agent files
 3. Create `commands/` directory with command files (if needed)
 4. Create `skills/` directory with auto-enforcing skills (if needed)
@@ -475,8 +475,8 @@ claude @frontend-visual
 
 ```bash
 # Test plugin installation
-/plugin marketplace add https://github.com/smicolon/claude-infra
-/plugin install smi-django
+/plugin marketplace add https://github.com/smicolon/ai-kit
+/plugin install django
 /help  # Verify agents appear
 ```
 
@@ -485,7 +485,7 @@ claude @frontend-visual
 **Agents not appearing after plugin installation:**
 - Verify plugin is installed: `/plugin list`
 - Check plugin installation: `/help` should show agents
-- Reinstall if needed: `/plugin uninstall smi-django && /plugin install smi-django`
+- Reinstall if needed: `/plugin uninstall django && /plugin install django`
 
 **Skills not activating:**
 - Skills auto-invoke based on context (e.g., writing models triggers model-entity-validator)
@@ -493,7 +493,7 @@ claude @frontend-visual
 - Verify SKILL.md frontmatter has correct `name` and `description`
 
 **Plugin installation fails:**
-- Verify marketplace URL is correct: `https://github.com/smicolon/claude-infra`
+- Verify marketplace URL is correct: `https://github.com/smicolon/ai-kit`
 - Check GitHub repository is accessible
 - Try removing and re-adding marketplace
 
@@ -506,7 +506,7 @@ Old/experimental code goes in `archive/` directory. Do not delete - useful for r
 ### Update Propagation
 
 **Plugin Installation:**
-- Updates via Claude Code plugin system: `/plugin update smi-django`
+- Updates via Claude Code plugin system: `/plugin update django`
 - Automatic version checking
 - Per-plugin independent updates
 
@@ -528,7 +528,7 @@ See **VERSIONING.md** for complete strategy. Key points:
 
 **Before Committing Plugin Changes:**
 1. Bump version in `.claude-plugin/marketplace.json`
-2. Add entry to `plugins/{name}/CHANGELOG.md`
+2. Add entry to `packs/{name}/CHANGELOG.md`
 3. Use correct bump type (patch/minor/major)
 
 **Promotion to 1.0.0 requires:**

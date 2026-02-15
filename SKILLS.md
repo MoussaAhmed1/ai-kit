@@ -590,13 +590,13 @@ Skills complement agents, commands, and hooks:
 
 ```bash
 # Install Django plugin (includes 6 skills)
-/plugin install smi-django
+/plugin install django
 
 # Install Next.js plugin (includes 3 skills)
-/plugin install smi-nextjs
+/plugin install nextjs
 
 # Install NestJS plugin (includes 2 skills)
-/plugin install smi-nestjs
+/plugin install nestjs
 ```
 
 ### Skills Activate Automatically
@@ -652,7 +652,7 @@ Skills are configured in `.claude-plugin/marketplace.json`:
 {
   "plugins": [
     {
-      "name": "smi-django",
+      "name": "django",
       "version": "1.1.0",
       "skills": [
         "./skills/import-convention-enforcer/SKILL.md",
@@ -715,7 +715,7 @@ Use agents for complex workflows, skills for conventions:
 **Solutions**:
 1. Verify plugin installation: `/plugin list`
 2. Check you're in a relevant project (Django/Next.js/NestJS)
-3. Reinstall plugin: `/plugin update smi-django`
+3. Reinstall plugin: `/plugin update django`
 
 ### False Positives
 

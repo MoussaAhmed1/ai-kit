@@ -4,7 +4,7 @@
 
 set -e
 
-echo "Testing Smicolon Marketplace Plugins"
+echo "Testing Smicolon Marketplace Packs"
 echo "====================================="
 echo ""
 
@@ -32,14 +32,14 @@ warn() {
     WARNINGS=$((WARNINGS + 1))
 }
 
-# Test each plugin
-for plugin in "$ROOT_DIR"/plugins/smi-*/; do
+# Test each pack
+for plugin in "$ROOT_DIR"/packs/*/; do
     name=$(basename "$plugin")
     echo "Testing $name..."
 
     # Check agents directory (optional for utility plugins)
     if [ ! -d "$plugin/agents" ]; then
-        # Utility plugins (like smi-dev-loop) may not have agents
+        # Utility packs (like dev-loop) may not have agents
         if [ -d "$plugin/hooks" ] || [ -d "$plugin/commands" ]; then
             pass "Utility plugin (no agents, has hooks/commands)"
         else
@@ -90,8 +90,8 @@ for plugin in "$ROOT_DIR"/plugins/smi-*/; do
     fi
 
     # Check agent frontmatter has skills (where applicable)
-    # Skip for utility plugins without agents and smi-architect
-    if [ -d "$plugin/agents" ] && [ "$name" != "smi-architect" ]; then
+    # Skip for utility packs without agents and architect
+    if [ -d "$plugin/agents" ] && [ "$name" != "architect" ]; then
         agents_with_skills=0
         for agent in "$plugin/agents"/*.md; do
             if grep -q "^skills:" "$agent" 2>/dev/null; then

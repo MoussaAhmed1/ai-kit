@@ -74,8 +74,8 @@ app/
 
 1. Install Smicolon plugins:
    ```bash
-   /plugin marketplace add https://github.com/smicolon/claude-infra
-   /plugin install smi-django
+   /plugin marketplace add https://github.com/smicolon/ai-kit
+   /plugin install django
    ```
 
 2. Configure MCP servers (project-scoped):

@@ -1,0 +1,7 @@
+{
+  "name": "ai-kit",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "packageManager": "bun@1.2.4",
+  "engines": { "node": ">=22" }
+}

@@ -403,7 +403,7 @@ https://www.figma.com/file/ABC123/Design-System"
 
 ```bash
 # 1. Clone template
-npx degit smicolon/claude-infra/templates/django-project my-project
+npx degit smicolon/ai-kit/templates/django-project my-project
 cd my-project
 
 # 2. Update .mcp.json

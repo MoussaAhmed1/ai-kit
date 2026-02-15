@@ -168,8 +168,8 @@ app/
 
 1. Install Smicolon plugins:
    ```bash
-   /plugin marketplace add https://github.com/smicolon/claude-infra
-   /plugin install smi-nuxtjs
+   /plugin marketplace add https://github.com/smicolon/ai-kit
+   /plugin install nuxtjs
    ```
 
 2. Authenticate MCP servers (first time only):

@@ -10,18 +10,18 @@
 
 ```bash
 # 1. Add Smicolon marketplace
-/plugin marketplace add https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/ai-kit
 # or
-/plugin marketplace add smicolon/claude-infra
+/plugin marketplace add smicolon/ai-kit
 
 # 2. Install plugins for your tech stack
-/plugin install smi-django          # Django (5 agents)
-/plugin install smi-hono            # Hono Edge (4 agents)
-/plugin install smi-tanstack-router # TanStack SPA (3 agents)
-/plugin install smi-architect       # System diagrams (1 agent)
+/plugin install django          # Django (5 agents)
+/plugin install hono            # Hono Edge (4 agents)
+/plugin install tanstack-router # TanStack SPA (3 agents)
+/plugin install architect       # System diagrams (1 agent)
 
 # Or install everything
-/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log smi-onboard
+/plugin install django nestjs nextjs nuxtjs hono tanstack-router better-auth flutter architect dev-loop failure-log onboard
 
 # 3. Verify and start using
 /help
@@ -50,12 +50,12 @@ Done! Agents are now available in **all your projects** automatically.
 
 ## 13 Available Plugins
 
-### 🐍 smi-django (5 agents, 3 commands, 8 skills)
+### 🐍 django (5 agents, 3 commands, 8 skills)
 
 Django backend development with Python
 
 ```bash
-/plugin install smi-django
+/plugin install django
 ```
 
 **Agents:**
@@ -83,12 +83,12 @@ Django backend development with Python
 - `test-validity-checker` - Ensures test quality
 - `red-phase-verifier` - Verifies TDD red phase
 
-### 🦅 smi-nestjs (3 agents, 1 command, 2 skills)
+### 🦅 nestjs (3 agents, 1 command, 2 skills)
 
 NestJS backend development with TypeScript
 
 ```bash
-/plugin install smi-nestjs
+/plugin install nestjs
 ```
 
 **Agents:**
@@ -106,12 +106,12 @@ NestJS backend development with TypeScript
 - `barrel-export-manager` - Auto-creates and maintains index.ts exports
 - `import-convention-enforcer` - Enforces absolute imports from barrel exports
 
-### ⚛️ smi-nextjs (4 agents, 1 command, 3 skills)
+### ⚛️ nextjs (4 agents, 1 command, 3 skills)
 
 Next.js frontend development with React
 
 ```bash
-/plugin install smi-nextjs
+/plugin install nextjs
 ```
 
 **Agents:**
@@ -131,12 +131,12 @@ Next.js frontend development with React
 - `react-form-validator` - React Hook Form + Zod enforcement
 - `import-convention-enforcer` - Path alias (@/) enforcement
 
-### 💚 smi-nuxtjs (3 agents, 1 command, 3 skills)
+### 💚 nuxtjs (3 agents, 1 command, 3 skills)
 
 Nuxt.js frontend development with Vue 3
 
 ```bash
-/plugin install smi-nuxtjs
+/plugin install nuxtjs
 ```
 
 **Agents:**
@@ -155,12 +155,12 @@ Nuxt.js frontend development with Vue 3
 - `veevalidate-form-validator` - VeeValidate + Zod enforcement
 - `import-convention-enforcer` - ~/ path alias enforcement
 
-### 🏗️ smi-architect (1 agent, 1 command)
+### 🏗️ architect (1 agent, 1 command)
 
 System architecture and diagram-as-code
 
 ```bash
-/plugin install smi-architect
+/plugin install architect
 ```
 
 **Agent:**
@@ -171,12 +171,12 @@ System architecture and diagram-as-code
 
 - `/diagram-create` - Create system diagrams with Eraser.io
 
-### 🔄 smi-dev-loop (2 commands, 1 hook)
+### 🔄 dev-loop (2 commands, 1 hook)
 
 Autonomous development loops for iterative coding
 
 ```bash
-/plugin install smi-dev-loop
+/plugin install dev-loop
 ```
 
 **Commands:**
@@ -188,12 +188,12 @@ Autonomous development loops for iterative coding
 
 - Automatic continuation logic for iterative development
 
-### 🧠 smi-failure-log (2 commands, 1 skill, 2 hooks)
+### 🧠 failure-log (2 commands, 1 skill, 2 hooks)
 
 Persistent failure memory that prevents repeating mistakes
 
 ```bash
-/plugin install smi-failure-log
+/plugin install failure-log
 ```
 
 **Commands:**
@@ -212,12 +212,12 @@ Persistent failure memory that prevents repeating mistakes
 - Project-specific storage in `.claude/failure-log.local.md`
 - Categories: imports, security, testing, architecture, conventions
 
-### 📱 smi-flutter (3 agents, 5 commands, 3 skills)
+### 📱 flutter (3 agents, 5 commands, 3 skills)
 
 Flutter mobile development with Fastlane automation
 
 ```bash
-/plugin install smi-flutter
+/plugin install flutter
 ```
 
 **Agents:**
@@ -240,12 +240,12 @@ Flutter mobile development with Fastlane automation
 - `fastlane-knowledge` - Fastlane automation expertise
 - `store-publishing` - App Store/Play Store guidelines
 
-### 🔥 smi-hono (4 agents, 4 commands, 4 skills)
+### 🔥 hono (4 agents, 4 commands, 4 skills)
 
 Hono Edge framework for Bun and Cloudflare Workers
 
 ```bash
-/plugin install smi-hono
+/plugin install hono
 ```
 
 **Agents:**
@@ -269,12 +269,12 @@ Hono Edge framework for Bun and Cloudflare Workers
 - `zod-validation` - Request validation with Zod
 - `rpc-typesafe` - Type-safe client-server communication
 
-### ⚡ smi-tanstack-router (3 agents, 4 commands, 11 skills)
+### ⚡ tanstack-router (3 agents, 4 commands, 11 skills)
 
 TanStack Router SPA development with React
 
 ```bash
-/plugin install smi-tanstack-router
+/plugin install tanstack-router
 ```
 
 **Agents:**
@@ -304,12 +304,12 @@ TanStack Router SPA development with React
 - `devtools-patterns` - Developer tooling
 - `tanstack-conventions` - Project conventions
 
-### 🔐 smi-better-auth (1 agent, 2 commands, 2 skills)
+### 🔐 better-auth (1 agent, 2 commands, 2 skills)
 
 Better Auth authentication integration
 
 ```bash
-/plugin install smi-better-auth
+/plugin install better-auth
 ```
 
 **Agents:**
@@ -330,12 +330,12 @@ Better Auth authentication integration
 
 - Better Auth MCP server for documentation access
 
-### 🚀 smi-onboard (1 agent, 1 command, 1 skill)
+### 🚀 onboard (1 agent, 1 command, 1 skill)
 
 Intelligent engineer onboarding with personalized guidance
 
 ```bash
-/plugin install smi-onboard
+/plugin install onboard
 ```
 
 **Command:**
@@ -445,17 +445,17 @@ See [MCP_SETUP.md](MCP_SETUP.md) for setup instructions.
 
 ```bash
 # Add marketplace (one-time)
-/plugin marketplace add https://github.com/smicolon/claude-infra
+/plugin marketplace add https://github.com/smicolon/ai-kit
 
 # Install specific plugins
-/plugin install smi-django
-/plugin install smi-nextjs
+/plugin install django
+/plugin install nextjs
 
 # Or install all
-/plugin install smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-architect
+/plugin install django nestjs nextjs nuxtjs architect
 
 # Update later
-/plugin update smi-django
+/plugin update django
 ```
 
 ---
@@ -498,15 +498,15 @@ See [MCP_SETUP.md](MCP_SETUP.md) for setup instructions.
 
 ```bash
 # Backend
-/plugin install smi-django
+/plugin install django
 @django-architect "Design REST API for inventory management"
 
 # Frontend
-/plugin install smi-nextjs
+/plugin install nextjs
 @nextjs-architect "Design admin dashboard consuming the API"
 
 # System design
-/plugin install smi-architect
+/plugin install architect
 @system-architect "Create system architecture diagram showing frontend, API, and database"
 ```
 
@@ -618,21 +618,21 @@ export class User {
 ## Repository Structure
 
 ```
-claude-infra/                     # Smicolon Marketplace
+ai-kit/                     # Smicolon Marketplace
 ├── .claude-plugin/
 │   └── marketplace.json          # Single source of truth - all plugin config
-├── plugins/
-│   ├── smi-django/               # Django plugin (5 agents, 3 commands, 8 skills)
-│   ├── smi-nestjs/               # NestJS plugin (3 agents, 1 command, 2 skills)
-│   ├── smi-nextjs/               # Next.js plugin (4 agents, 1 command, 3 skills)
-│   ├── smi-nuxtjs/               # Nuxt.js plugin (3 agents, 1 command, 3 skills)
-│   ├── smi-hono/                 # Hono plugin (4 agents, 4 commands, 4 skills)
-│   ├── smi-tanstack-router/      # TanStack plugin (3 agents, 4 commands, 11 skills)
-│   ├── smi-better-auth/          # Better Auth plugin (1 agent, 2 commands, 2 skills)
-│   ├── smi-flutter/              # Flutter plugin (3 agents, 5 commands, 3 skills)
-│   ├── smi-architect/            # System architecture plugin (1 agent, 1 command)
-│   ├── smi-dev-loop/             # Dev loop automation (3 commands, 1 skill, 1 hook)
-│   └── smi-failure-log/          # Failure memory (2 commands, 1 skill, 2 hooks)
+├── packs/
+│   ├── django/               # Django plugin (5 agents, 3 commands, 8 skills)
+│   ├── nestjs/               # NestJS plugin (3 agents, 1 command, 2 skills)
+│   ├── nextjs/               # Next.js plugin (4 agents, 1 command, 3 skills)
+│   ├── nuxtjs/               # Nuxt.js plugin (3 agents, 1 command, 3 skills)
+│   ├── hono/                 # Hono plugin (4 agents, 4 commands, 4 skills)
+│   ├── tanstack-router/      # TanStack plugin (3 agents, 4 commands, 11 skills)
+│   ├── better-auth/          # Better Auth plugin (1 agent, 2 commands, 2 skills)
+│   ├── flutter/              # Flutter plugin (3 agents, 5 commands, 3 skills)
+│   ├── architect/            # System architecture plugin (1 agent, 1 command)
+│   ├── dev-loop/             # Dev loop automation (3 commands, 1 skill, 1 hook)
+│   └── failure-log/          # Failure memory (2 commands, 1 skill, 2 hooks)
 ├── workflows/                    # Multi-agent orchestration workflows
 ├── scripts/                      # Development utilities
 ├── templates/                    # Project templates
@@ -674,15 +674,15 @@ npm run dev
 
 **For Companies:** Fork this repository to create your own standards!
 
-1. Fork https://github.com/smicolon/claude-infra
-2. Customize agents in `plugins/*/agents/`
-3. Modify hooks in `plugins/*/hooks/`
+1. Fork https://github.com/smicolon/ai-kit
+2. Customize agents in `packs/*/agents/`
+3. Modify hooks in `packs/*/hooks/`
 4. Update plugin names and descriptions
 5. Distribute to team:
 
 ```bash
 # Team members install from your fork
-/plugin marketplace add yourcompany https://github.com/yourcompany/claude-infra
+/plugin marketplace add yourcompany https://github.com/yourcompany/ai-kit
 /plugin install yourcompany-django
 ```
 
@@ -692,10 +692,10 @@ npm run dev
 
 ```bash
 # Update specific plugin
-/plugin update smi-django
+/plugin update django
 
 # Update all plugins
-/plugin update smi-django smi-nestjs smi-nextjs smi-nuxtjs smi-hono smi-tanstack-router smi-better-auth smi-flutter smi-architect smi-dev-loop smi-failure-log
+/plugin update django nestjs nextjs nuxtjs hono tanstack-router better-auth flutter architect dev-loop failure-log
 
 # Check for updates
 /plugin list
@@ -710,13 +710,13 @@ npm run dev
 1. **Fork this repository**
 
    ```bash
-   git clone https://github.com/smicolon/claude-infra.git your-company-standards
+   git clone https://github.com/smicolon/ai-kit.git your-company-standards
    ```
 
 2. **Customize**
 
-   - Edit `plugins/*/agents/` for your conventions
-   - Modify `plugins/*/hooks/` for your standards
+   - Edit `packs/*/agents/` for your conventions
+   - Modify `packs/*/hooks/` for your standards
    - Update `.claude-plugin/marketplace.json`
 
 3. **Distribute**
@@ -762,8 +762,8 @@ claude @nestjs-builder
 /plugin list
 
 # Reinstall if needed
-/plugin uninstall smi-django
-/plugin install smi-django
+/plugin uninstall django
+/plugin install django
 
 # Verify
 /help
@@ -775,8 +775,8 @@ Hooks are automatic with plugin installation. If hooks aren't working:
 
 ```bash
 # Reinstall the plugin
-/plugin uninstall smi-django
-/plugin install smi-django
+/plugin uninstall django
+/plugin install django
 ```
 
 ### Need different agents?
@@ -785,7 +785,7 @@ Install additional plugins:
 
 ```bash
 # Add frontend to Django project
-/plugin install smi-nextjs
+/plugin install nextjs
 
 # Now you have Django + Next.js agents
 ```
@@ -795,13 +795,13 @@ Install additional plugins:
 ## Documentation
 
 - **[MCP_SETUP.md](MCP_SETUP.md)** - Playwright + Figma MCP integration setup
-- **Plugin READMEs** - Each plugin has its own documentation in `plugins/*/README.md`
+- **Plugin READMEs** - Each plugin has its own documentation in `packs/*/README.md`
 
 ---
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/smicolon/claude-infra/issues)
+- **Issues**: [GitHub Issues](https://github.com/smicolon/ai-kit/issues)
 - **Custom Marketplace**: Fork and customize
 
 ---

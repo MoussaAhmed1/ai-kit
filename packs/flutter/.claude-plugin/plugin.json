@@ -1,0 +1,10 @@
+{
+  "name": "flutter",
+  "version": "0.1.0",
+  "description": "Flutter development plugin with Fastlane automation, store publishing, and architecture patterns",
+  "author": {
+    "name": "Smicolon",
+    "email": "dev@smicolon.com"
+  },
+  "keywords": ["flutter", "fastlane", "ios", "android", "app-store", "google-play", "mobile"]
+}

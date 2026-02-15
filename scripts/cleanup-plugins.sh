@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Cleanup script for Smicolon Claude Code plugins
-# This removes all marketplace and plugin registrations for a fresh install
+# Cleanup script for Smicolon Claude Code packs
+# This removes all marketplace and pack registrations for a fresh install
 
 set -e
 
-echo "🧹 Cleaning up Smicolon plugin installations..."
+echo "🧹 Cleaning up Smicolon pack installations..."
 echo ""
 
 # Backup current files
@@ -39,15 +39,15 @@ except Exception as e:
 "
 fi
 
-# 2. Check for any installed plugin directories
+# 2. Check for any installed pack directories
 echo ""
-echo "🔍 Checking for installed plugin directories..."
+echo "🔍 Checking for installed pack directories..."
 PLUGIN_DIRS=(
-    "$HOME/.claude/plugins/smi-django"
-    "$HOME/.claude/plugins/smi-nestjs"
-    "$HOME/.claude/plugins/smi-nextjs"
-    "$HOME/.claude/plugins/smi-nuxtjs"
-    "$HOME/.claude/plugins/smi-architect"
+    "$HOME/.claude/plugins/django"
+    "$HOME/.claude/plugins/nestjs"
+    "$HOME/.claude/plugins/nextjs"
+    "$HOME/.claude/plugins/nuxtjs"
+    "$HOME/.claude/plugins/architect"
 )
 
 for dir in "${PLUGIN_DIRS[@]}"; do
@@ -83,10 +83,10 @@ echo "📂 Backup saved to: $BACKUP_DIR"
 echo ""
 echo "🚀 You can now do a fresh installation:"
 echo ""
-echo "   /plugin marketplace add https://github.com/smicolon/claude-infra"
-echo "   /plugin install smi-django"
+echo "   /plugin marketplace add https://github.com/smicolon/ai-kit"
+echo "   /plugin install django"
 echo ""
 echo "   Or for local testing:"
 echo "   /plugin marketplace add smicolon file://$(pwd)"
-echo "   /plugin install smi-django"
+echo "   /plugin install django"
 echo ""

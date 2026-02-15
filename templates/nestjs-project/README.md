@@ -194,8 +194,8 @@ src/
 
 1. Install Smicolon plugins:
    ```bash
-   /plugin marketplace add https://github.com/smicolon/claude-infra
-   /plugin install smi-nestjs
+   /plugin marketplace add https://github.com/smicolon/ai-kit
+   /plugin install nestjs
    ```
 
 2. Configure MCP servers (project-scoped):
