@@ -8,6 +8,7 @@ import { readConfig, writeConfig, createDefaultConfig, mergeInstall } from '../c
 import { updateGitignore } from '../gitignore.js'
 import { installPack } from '../installer.js'
 import { getGlobalTools, saveGlobalTools } from '../global-config.js'
+import { getRegistryOptions } from '../global-opts.js'
 import type { ToolId, ComponentType } from '../types.js'
 
 export const initCommand = new Command('init')
@@ -65,10 +66,14 @@ export const initCommand = new Command('init')
     saveGlobalTools(selectedTools)
 
     // Step 2: Discover and select packs
+    const s = p.spinner()
     let packs
     try {
-      packs = discoverPacks()
+      s.start('Fetching available packs...')
+      packs = await discoverPacks(getRegistryOptions())
+      s.stop('Packs loaded.')
     } catch {
+      s.stop('Failed.')
       p.log.error('Could not find marketplace.json. Is ai-kit installed correctly?')
       p.outro('Setup failed.')
       return
@@ -130,8 +135,8 @@ export const initCommand = new Command('init')
     }
 
     // Step 4: Install
-    const s = p.spinner()
-    s.start('Installing packs...')
+    const installSpinner = p.spinner()
+    installSpinner.start('Installing packs...')
 
     let config = createDefaultConfig(selectedTools)
     const selectedPacks = packs.filter(p => selectedPackNames.includes(p.name))
@@ -150,7 +155,7 @@ export const initCommand = new Command('init')
     writeConfig(projectDir, config)
     updateGitignore(projectDir)
 
-    s.stop('Done!')
+    installSpinner.stop('Done!')
 
     // Summary
     p.log.success(`Installed ${selectedPacks.length} pack(s) for ${selectedTools.length} tool(s):`)

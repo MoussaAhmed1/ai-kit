@@ -5,6 +5,7 @@ import { findPack } from '../discovery.js'
 import { readConfig, writeConfig, mergeInstall } from '../config.js'
 import { updateGitignore } from '../gitignore.js'
 import { installPack, removePack } from '../installer.js'
+import { getRegistryOptions } from '../global-opts.js'
 import { initCommand } from './init.js'
 
 export const updateCommand = new Command('update')
@@ -21,6 +22,9 @@ export const updateCommand = new Command('update')
       return
     }
 
+    // Force re-download to check for updates
+    const registryOpts = { ...getRegistryOptions(), noCache: true }
+
     const packsToUpdate = packName
       ? [packName]
       : Object.keys(config.packs)
@@ -35,7 +39,7 @@ export const updateCommand = new Command('update')
         continue
       }
 
-      const available = findPack(name)
+      const available = await findPack(name, registryOpts)
       if (!available) {
         console.log(pc.yellow(`"${name}" not found in marketplace, skipping.`))
         skipped++

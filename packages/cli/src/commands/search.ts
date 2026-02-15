@@ -1,14 +1,15 @@
 import { Command } from 'commander'
 import pc from 'picocolors'
 import { discoverPacks } from '../discovery.js'
+import { getRegistryOptions } from '../global-opts.js'
 
 export const searchCommand = new Command('search')
   .description('Search available packs by name or keyword')
   .argument('<query>', 'Search term (matches name, description, keywords)')
-  .action((query: string) => {
+  .action(async (query: string) => {
     let packs
     try {
-      packs = discoverPacks()
+      packs = await discoverPacks(getRegistryOptions())
     } catch {
       console.error(pc.red('Could not find marketplace.json.'))
       process.exit(1)

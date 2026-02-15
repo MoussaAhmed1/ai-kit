@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type { MarketplaceJson, ResolvedPack } from './types.js'
+import { ensureRepo, type EnsureRepoOptions } from './registry.js'
 
 /**
  * Find marketplace.json by walking up from a starting directory.
@@ -64,20 +65,9 @@ function resolvePack(
 }
 
 /**
- * Discover all packs from marketplace.json.
- * Walks up from __dirname (or provided start) to find the marketplace root.
+ * Resolve packs from a given marketplace.json path.
  */
-export function discoverPacks(startDir?: string): ResolvedPack[] {
-  const start = startDir ?? path.dirname(new URL(import.meta.url).pathname)
-  const marketplacePath = findMarketplaceJson(start)
-
-  if (!marketplacePath) {
-    throw new Error(
-      'Could not find .claude-plugin/marketplace.json. ' +
-      'Make sure ai-kit is installed correctly.',
-    )
-  }
-
+function resolvePacksFromPath(marketplacePath: string): ResolvedPack[] {
   const marketplaceDir = path.dirname(path.dirname(marketplacePath))
   const raw = JSON.parse(fs.readFileSync(marketplacePath, 'utf-8')) as MarketplaceJson
 
@@ -87,8 +77,41 @@ export function discoverPacks(startDir?: string): ResolvedPack[] {
 }
 
 /**
+ * Discover all packs from marketplace.json.
+ * Tries local discovery first (dev mode), falls back to GitHub cache.
+ */
+export async function discoverPacks(
+  registryOptions?: EnsureRepoOptions,
+): Promise<ResolvedPack[]> {
+  // Try local first (for development when running from the repo)
+  const start = path.dirname(new URL(import.meta.url).pathname)
+  const localPath = findMarketplaceJson(start)
+
+  if (localPath) {
+    return resolvePacksFromPath(localPath)
+  }
+
+  // Fall back to cached GitHub repo
+  const repoDir = await ensureRepo(registryOptions)
+  const remotePath = path.join(repoDir, '.claude-plugin', 'marketplace.json')
+
+  if (!fs.existsSync(remotePath)) {
+    throw new Error(
+      'Could not find .claude-plugin/marketplace.json in cached repo. ' +
+      'Try running: ai-kit cache clear',
+    )
+  }
+
+  return resolvePacksFromPath(remotePath)
+}
+
+/**
  * Find a single pack by name.
  */
-export function findPack(name: string, startDir?: string): ResolvedPack | undefined {
-  return discoverPacks(startDir).find(p => p.name === name)
+export async function findPack(
+  name: string,
+  registryOptions?: EnsureRepoOptions,
+): Promise<ResolvedPack | undefined> {
+  const packs = await discoverPacks(registryOptions)
+  return packs.find(p => p.name === name)
 }

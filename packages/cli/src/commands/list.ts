@@ -2,12 +2,13 @@ import { Command } from 'commander'
 import pc from 'picocolors'
 import { discoverPacks } from '../discovery.js'
 import { readConfig } from '../config.js'
+import { getRegistryOptions } from '../global-opts.js'
 
 export const listCommand = new Command('list')
   .description('List available or installed packs')
   .option('--installed', 'Show only installed packs')
   .option('--cwd <dir>', 'Project directory')
-  .action((opts: { installed?: boolean; cwd?: string }) => {
+  .action(async (opts: { installed?: boolean; cwd?: string }) => {
     const projectDir = opts.cwd ? opts.cwd : process.cwd()
 
     if (opts.installed) {
@@ -32,7 +33,7 @@ export const listCommand = new Command('list')
     // Show available packs
     let packs
     try {
-      packs = discoverPacks()
+      packs = await discoverPacks(getRegistryOptions())
     } catch {
       console.error(pc.red('Could not find marketplace.json.'))
       process.exit(1)

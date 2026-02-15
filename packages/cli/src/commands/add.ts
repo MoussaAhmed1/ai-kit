@@ -7,6 +7,7 @@ import { readConfig, writeConfig, mergeInstall, createDefaultConfig } from '../c
 import { updateGitignore } from '../gitignore.js'
 import { installPack } from '../installer.js'
 import { getGlobalTools, saveGlobalTools } from '../global-config.js'
+import { getRegistryOptions } from '../global-opts.js'
 import { TOOL_REGISTRY, TOOL_IDS } from '../tools.js'
 import type { ToolId, ComponentType } from '../types.js'
 
@@ -68,11 +69,12 @@ export const addCommand = new Command('add')
   .option('--cwd <dir>', 'Project directory (for monorepo sub-packages)')
   .action(async (packName: string, opts: Record<string, unknown>) => {
     const projectDir = opts.cwd ? path.resolve(opts.cwd as string) : process.cwd()
+    const registryOpts = getRegistryOptions()
 
     // Resolve pack
-    const pack = findPack(packName)
+    const pack = await findPack(packName, registryOpts)
     if (!pack) {
-      const available = discoverPacks().map(p => p.name)
+      const available = (await discoverPacks(registryOpts)).map(p => p.name)
       console.error(
         pc.red(`Pack "${packName}" not found.`) +
         '\nAvailable: ' + available.join(', '),
