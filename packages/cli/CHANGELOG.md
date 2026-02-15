@@ -1,5 +1,14 @@
 # @smicolon/ai-kit
 
+## 0.3.2
+
+### Patch Changes
+
+- 5564a97: Fix plugin hooks not being detected on install (showing "Hooks: 0")
+
+  - Remove explicit hooks declarations from marketplace.json — Claude Code auto-discovers hooks/hooks.json by convention
+  - Remove empty hono hooks directory
+
 ## 0.3.1
 
 ### Patch Changes
