@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "AI coding tool pack manager for Smicolon standards",
   "type": "module",
-  "bin": { "ai-kit": "./dist/index.js" },
+  "bin": {
+    "ai-kit": "./dist/index.js"
+  },
   "main": "./dist/index.js",
   "files": ["dist", "packs"],
   "scripts": {
@@ -11,5 +13,17 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit"
   },
-  "engines": { "node": ">=22" }
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.0.1",
+    "commander": "^14.0.3",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
 }

@@ -12,6 +12,9 @@ test/
 tmp/
 *.tmp
 
+# Dependencies
+node_modules/
+
 # Build artifacts
 dist/
 *.tar.gz

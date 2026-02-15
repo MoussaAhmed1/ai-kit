@@ -1,0 +1,78 @@
+import { Command } from 'commander'
+import path from 'node:path'
+import pc from 'picocolors'
+import { findPack, discoverPacks } from '../discovery.js'
+import { readConfig, writeConfig, mergeInstall } from '../config.js'
+import { updateGitignore } from '../gitignore.js'
+import { installPack, getWrittenDirs } from '../installer.js'
+import type { ToolId, ComponentType } from '../types.js'
+
+export const addCommand = new Command('add')
+  .description('Add a pack to your project')
+  .argument('<pack>', 'Pack name (e.g., django, nextjs)')
+  .option('--skills-only', 'Only install skills')
+  .option('--agents-only', 'Only install agents')
+  .option('--rules-only', 'Only install rules')
+  .option('--commands-only', 'Only install commands')
+  .option('--hooks-only', 'Only install hooks')
+  .option('--tools <tools>', 'Comma-separated tool IDs (overrides config)')
+  .option('--cwd <dir>', 'Project directory (for monorepo sub-packages)')
+  .action(async (packName: string, opts: Record<string, unknown>) => {
+    const projectDir = opts.cwd ? path.resolve(opts.cwd as string) : process.cwd()
+    const config = readConfig(projectDir)
+
+    if (!config) {
+      console.error(
+        pc.red('No .ai-kit.json found. Run ') +
+        pc.cyan('ai-kit init') +
+        pc.red(' first.'),
+      )
+      process.exit(1)
+    }
+
+    // Resolve pack
+    const pack = findPack(packName)
+    if (!pack) {
+      const available = discoverPacks().map(p => p.name)
+      console.error(
+        pc.red(`Pack "${packName}" not found.`) +
+        '\nAvailable: ' + available.join(', '),
+      )
+      process.exit(1)
+    }
+
+    // Determine tools
+    const tools: ToolId[] = opts.tools
+      ? (opts.tools as string).split(',').map(t => t.trim()) as ToolId[]
+      : config.tools
+
+    // Determine filter
+    let filter: ComponentType[] | undefined
+    if (opts.skillsOnly) filter = ['skills']
+    else if (opts.agentsOnly) filter = ['agents']
+    else if (opts.rulesOnly) filter = ['rules']
+    else if (opts.commandsOnly) filter = ['commands']
+    else if (opts.hooksOnly) filter = ['hooks']
+
+    // Install
+    const result = installPack({ pack, tools, filter, projectDir })
+
+    // Update config + gitignore
+    const updated = mergeInstall(config, result)
+    updated.packs[pack.name].version = pack.version
+    writeConfig(projectDir, updated)
+    updateGitignore(projectDir, getWrittenDirs(tools, result.installed.skills > 0))
+
+    // Summary
+    const parts: string[] = []
+    for (const [type, count] of Object.entries(result.installed)) {
+      if (count > 0) parts.push(`${count} ${type}`)
+    }
+
+    console.log(
+      pc.green(`+ ${pack.name}`) +
+      pc.dim(` v${pack.version}`) +
+      (parts.length ? ` (${parts.join(', ')})` : ''),
+    )
+    console.log(pc.dim(`  → ${tools.map(t => t).join(', ')}`))
+  })
