@@ -3,6 +3,13 @@ import path from 'node:path'
 
 const MANAGED_COMMENT = '# AI coding tools (managed by @smicolon/ai-kit)'
 
+/** Files that should always be gitignored — local/personal only */
+const LOCAL_PATTERNS = [
+  '.ai-kit.json',
+  '**/*.local.*',
+  '**/*.local.md',
+]
+
 /**
  * Find the git root by walking up looking for .git directory.
  * Returns null if not in a git repo.
@@ -54,29 +61,23 @@ function appendToGitignore(gitignorePath: string, entries: string[]): void {
 }
 
 /**
- * Ensure directories written during install are in .gitignore.
- * Supports monorepos: updates both project-level and git-root .gitignore.
+ * Add gitignore entries for local/personal files only.
+ * Installed packs (skills, agents, commands, rules) are NOT ignored —
+ * they should be committed so the whole team gets them.
  *
- * In a monorepo where projectDir != gitRoot:
- * - Project .gitignore gets the entries directly (e.g., `.claude/`)
- * - Git root .gitignore gets prefixed entries (e.g., `packages/app/.claude/`)
- *   only if there's no project-level .gitignore already covering them
+ * Only ignores: .ai-kit.json, *.local.*, *.local.md
  */
-export function updateGitignore(projectDir: string, dirs: string[]): void {
-  if (dirs.length === 0) return
-
-  const entries = dirs.map(d => (d.endsWith('/') ? d : `${d}/`))
-  entries.push('.ai-kit.json')
-
-  // Always update .gitignore in the project directory
+export function updateGitignore(projectDir: string): void {
   const projectGitignore = path.join(projectDir, '.gitignore')
-  appendToGitignore(projectGitignore, entries)
+  appendToGitignore(projectGitignore, LOCAL_PATTERNS)
 
   // If we're in a monorepo (projectDir != gitRoot), also update root .gitignore
   const gitRoot = findGitRoot(projectDir)
   if (gitRoot && path.resolve(gitRoot) !== path.resolve(projectDir)) {
     const relFromRoot = path.relative(gitRoot, projectDir)
-    const rootEntries = entries.map(e => `${relFromRoot}/${e}`)
+    const rootEntries = LOCAL_PATTERNS.map(e =>
+      e.startsWith('**/')  ? e : `${relFromRoot}/${e}`,
+    )
     appendToGitignore(path.join(gitRoot, '.gitignore'), rootEntries)
   }
 }

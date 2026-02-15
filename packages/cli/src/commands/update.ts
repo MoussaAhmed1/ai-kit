@@ -4,7 +4,7 @@ import pc from 'picocolors'
 import { findPack } from '../discovery.js'
 import { readConfig, writeConfig, mergeInstall } from '../config.js'
 import { updateGitignore } from '../gitignore.js'
-import { installPack, removePack, getWrittenDirs } from '../installer.js'
+import { installPack, removePack } from '../installer.js'
 import { initCommand } from './init.js'
 
 export const updateCommand = new Command('update')
@@ -27,8 +27,6 @@ export const updateCommand = new Command('update')
 
     let updated = 0
     let skipped = 0
-    let hadSkills = false
-
     for (const name of packsToUpdate) {
       const installed = config.packs[name]
       if (!installed) {
@@ -66,8 +64,6 @@ export const updateCommand = new Command('update')
       merged.packs[name].version = available.version
       Object.assign(config, merged)
 
-      if (result.installed.skills > 0) hadSkills = true
-
       console.log(
         pc.green(`  ${name}`) +
         ` ${pc.dim(installed.version)} → ${pc.cyan(available.version)}`,
@@ -76,7 +72,7 @@ export const updateCommand = new Command('update')
     }
 
     writeConfig(projectDir, config)
-    updateGitignore(projectDir, getWrittenDirs(config.tools, hadSkills))
+    updateGitignore(projectDir)
 
     if (updated > 0) {
       console.log(pc.green(`\nUpdated ${updated} pack(s).`))

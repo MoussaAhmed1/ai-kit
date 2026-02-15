@@ -20,8 +20,9 @@ dist/
 *.tar.gz
 *.zip
 
-# Claude Code - ignore local directory entirely
-.claude/
+# Local-only files (personal settings, session data)
+**/*.local.*
+**/*.local.md
 
 # Speckit - ignore local directory
 .specify/
@@ -43,3 +44,6 @@ agent-artifacts/
 
 # Ignore claude-mem generated files inside plugins
 packs/**/CLAUDE.md
+
+# AI coding tools (managed by @smicolon/ai-kit)
+.ai-kit.json

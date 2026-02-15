@@ -6,7 +6,7 @@ import { TOOL_REGISTRY, TOOL_IDS } from '../tools.js'
 import { discoverPacks } from '../discovery.js'
 import { readConfig, writeConfig, createDefaultConfig, mergeInstall } from '../config.js'
 import { updateGitignore } from '../gitignore.js'
-import { installPack, getWrittenDirs } from '../installer.js'
+import { installPack } from '../installer.js'
 import { getGlobalTools, saveGlobalTools } from '../global-config.js'
 import type { ToolId, ComponentType } from '../types.js'
 
@@ -135,8 +135,6 @@ export const initCommand = new Command('init')
 
     let config = createDefaultConfig(selectedTools)
     const selectedPacks = packs.filter(p => selectedPackNames.includes(p.name))
-    let hadSkills = false
-
     for (const pack of selectedPacks) {
       const result = installPack({
         pack,
@@ -146,12 +144,11 @@ export const initCommand = new Command('init')
       })
 
       config = mergeInstall(config, result)
-      if (result.installed.skills > 0) hadSkills = true
     }
 
     // Step 5: Write config + gitignore
     writeConfig(projectDir, config)
-    updateGitignore(projectDir, getWrittenDirs(selectedTools, hadSkills))
+    updateGitignore(projectDir)
 
     s.stop('Done!')
 

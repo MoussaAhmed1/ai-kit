@@ -5,7 +5,7 @@ import * as p from '@clack/prompts'
 import { findPack, discoverPacks } from '../discovery.js'
 import { readConfig, writeConfig, mergeInstall, createDefaultConfig } from '../config.js'
 import { updateGitignore } from '../gitignore.js'
-import { installPack, getWrittenDirs } from '../installer.js'
+import { installPack } from '../installer.js'
 import { getGlobalTools, saveGlobalTools } from '../global-config.js'
 import { TOOL_REGISTRY, TOOL_IDS } from '../tools.js'
 import type { ToolId, ComponentType } from '../types.js'
@@ -105,7 +105,7 @@ export const addCommand = new Command('add')
     const updated = mergeInstall(config, result)
     updated.packs[pack.name].version = pack.version
     writeConfig(projectDir, updated)
-    updateGitignore(projectDir, getWrittenDirs(tools, result.installed.skills > 0))
+    updateGitignore(projectDir)
 
     // Summary
     const parts: string[] = []

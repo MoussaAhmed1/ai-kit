@@ -292,23 +292,3 @@ function isSymlink(p: string): boolean {
   }
 }
 
-/**
- * Collect all unique top-level directories written to during installs.
- */
-export function getWrittenDirs(tools: ToolId[], hadSkills: boolean): string[] {
-  const dirs = new Set<string>()
-
-  if (hadSkills) {
-    dirs.add(CANONICAL_SKILLS_DIR)
-  }
-
-  for (const toolId of tools) {
-    const config = TOOL_REGISTRY[toolId]
-    for (const dir of Object.values(config.components)) {
-      const topLevel = dir.split('/')[0]
-      dirs.add(topLevel)
-    }
-  }
-
-  return [...dirs]
-}
