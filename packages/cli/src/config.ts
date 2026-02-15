@@ -19,13 +19,11 @@ export function writeConfig(projectDir: string, config: AiKitConfig): void {
 }
 
 export function mergeInstall(config: AiKitConfig, result: InstallResult): AiKitConfig {
-  const existing = config.packs[result.pack]
-  const components = existing?.components ?? {}
+  const components: Record<string, string[]> = {}
 
-  // Merge component counts into file lists (we track names, not counts)
   for (const [type, count] of Object.entries(result.installed)) {
     if (count > 0) {
-      components[type as keyof typeof components] = [`${count} files`]
+      components[type] = [`${count} files`]
     }
   }
 
@@ -37,9 +35,15 @@ export function mergeInstall(config: AiKitConfig, result: InstallResult): AiKitC
         version: config.packs[result.pack]?.version ?? '0.0.0',
         installedAt: new Date().toISOString(),
         components,
+        files: result.files,
       },
     },
   }
+}
+
+export function removePack(config: AiKitConfig, packName: string): AiKitConfig {
+  const { [packName]: _, ...rest } = config.packs
+  return { ...config, packs: rest }
 }
 
 export function createDefaultConfig(tools: AiKitConfig['tools']): AiKitConfig {

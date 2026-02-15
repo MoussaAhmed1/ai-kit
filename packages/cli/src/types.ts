@@ -51,6 +51,7 @@ export interface PackConfig {
   version: string
   installedAt: string
   components: Partial<Record<ComponentType, string[]>>
+  files?: string[]  // All files/symlinks created (relative to projectDir)
 }
 
 export interface InstallOptions {
@@ -64,4 +65,5 @@ export interface InstallResult {
   pack: string
   tools: ToolId[]
   installed: Record<ComponentType, number>
+  files: string[]  // All files/symlinks created (relative to projectDir)
 }

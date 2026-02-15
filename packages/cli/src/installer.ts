@@ -2,6 +2,15 @@ import fs from 'node:fs'
 import path from 'node:path'
 import type { ComponentType, InstallOptions, InstallResult, ToolId } from './types.js'
 import { TOOL_REGISTRY, CANONICAL_SKILLS_DIR } from './tools.js'
+import { convertToMdc } from './converters/cursor-mdc.js'
+
+/** Tracks all created files relative to projectDir */
+let trackedFiles: string[] = []
+let currentProjectDir = ''
+
+function trackFile(absPath: string): void {
+  trackedFiles.push(path.relative(currentProjectDir, absPath))
+}
 
 function ensureDir(dir: string): void {
   fs.mkdirSync(dir, { recursive: true })
@@ -10,6 +19,7 @@ function ensureDir(dir: string): void {
 function copyFile(src: string, dest: string): void {
   ensureDir(path.dirname(dest))
   fs.copyFileSync(src, dest)
+  trackFile(dest)
 }
 
 function copyDir(src: string, dest: string): void {
@@ -21,29 +31,23 @@ function copyDir(src: string, dest: string): void {
       copyDir(srcPath, destPath)
     } else {
       fs.copyFileSync(srcPath, destPath)
+      trackFile(destPath)
     }
   }
 }
 
-/**
- * Create a symlink, using junction type on Windows for directory links.
- */
 function createSymlink(target: string, linkPath: string): void {
   ensureDir(path.dirname(linkPath))
   if (fs.existsSync(linkPath)) {
     const stat = fs.lstatSync(linkPath)
     if (stat.isSymbolicLink()) fs.unlinkSync(linkPath)
-    else return // Real file/dir exists, don't overwrite
+    else return
   }
   const type = process.platform === 'win32' ? 'junction' : undefined
   fs.symlinkSync(target, linkPath, type)
+  trackFile(linkPath)
 }
 
-/**
- * Install skills using canonical + symlink strategy.
- * First tool gets files copied to canonical dir.
- * Additional tools get symlinks from their skillsDir to canonical.
- */
 function installSkills(
   skillDirs: string[],
   tools: ToolId[],
@@ -51,14 +55,12 @@ function installSkills(
 ): number {
   if (skillDirs.length === 0 || tools.length === 0) return 0
 
-  // Determine which tools support skills
   const skillTools = tools.filter(t => TOOL_REGISTRY[t].components.skills)
   if (skillTools.length === 0) return 0
 
   const canonicalBase = path.join(projectDir, CANONICAL_SKILLS_DIR)
   let count = 0
 
-  // Copy each skill directory to canonical location
   for (const skillDir of skillDirs) {
     const skillName = path.basename(skillDir)
     const canonicalDest = path.join(canonicalBase, skillName)
@@ -69,11 +71,8 @@ function installSkills(
     }
   }
 
-  // Create symlinks for each tool's skill directory
   for (const toolId of skillTools) {
     const toolSkillsDir = path.join(projectDir, TOOL_REGISTRY[toolId].skillsDir)
-
-    // If this tool's skillsDir IS the canonical dir, skip symlinks
     if (path.resolve(toolSkillsDir) === path.resolve(canonicalBase)) continue
 
     ensureDir(toolSkillsDir)
@@ -90,18 +89,15 @@ function installSkills(
   return count
 }
 
-/**
- * Install .md files (agents, commands, rules) to each tool's target directory.
- */
 function installMdFiles(
   files: string[],
   componentType: ComponentType,
   tools: ToolId[],
   projectDir: string,
+  packName?: string,
 ): number {
   if (files.length === 0) return 0
 
-  let count = 0
   for (const toolId of tools) {
     const targetDir = TOOL_REGISTRY[toolId].components[componentType]
     if (!targetDir) continue
@@ -110,12 +106,21 @@ function installMdFiles(
     ensureDir(dest)
 
     for (const file of files) {
-      copyFile(file, path.join(dest, path.basename(file)))
-      count++
+      // Convert rules to .mdc for Cursor
+      if (componentType === 'rules' && toolId === 'cursor') {
+        const mdcContent = convertToMdc(file, packName ?? 'unknown')
+        const mdcName = path.basename(file, '.md') + '.mdc'
+        const destPath = path.join(dest, mdcName)
+        ensureDir(path.dirname(destPath))
+        fs.writeFileSync(destPath, mdcContent)
+        trackFile(destPath)
+      } else {
+        copyFile(file, path.join(dest, path.basename(file)))
+      }
     }
   }
 
-  return files.length // Return unique file count, not per-tool duplicates
+  return files.length
 }
 
 interface HooksJson {
@@ -123,11 +128,6 @@ interface HooksJson {
   [key: string]: unknown
 }
 
-/**
- * Install hooks for Claude Code.
- * Reads hooks.json from pack, rewrites paths, copies scripts,
- * and merges into .claude/hooks.json.
- */
 function installHooks(
   hookFiles: string[],
   tools: ToolId[],
@@ -147,21 +147,17 @@ function installHooks(
 
     const hookSourceDir = path.dirname(hookFile)
 
-    // Copy any script files referenced in the hooks
     const scriptFiles = findScriptFiles(hookSourceDir)
     for (const script of scriptFiles) {
       const relPath = path.relative(hookSourceDir, script)
       const destPath = path.join(targetHooksDir, relPath)
       copyFile(script, destPath)
-      // Make scripts executable
       fs.chmodSync(destPath, 0o755)
     }
 
-    // Rewrite ${CLAUDE_PLUGIN_ROOT} paths to point to copied scripts
     const rewritten = JSON.stringify(raw.hooks)
       .replace(/\$\{CLAUDE_PLUGIN_ROOT\}\/hooks/g, '.claude/hooks')
 
-    // Merge into existing .claude/hooks.json
     const projectHooksPath = path.join(projectDir, '.claude', 'hooks.json')
     let existing: Record<string, unknown[]> = {}
 
@@ -181,6 +177,7 @@ function installHooks(
       projectHooksPath,
       JSON.stringify({ hooks: existing }, null, 2) + '\n',
     )
+    trackFile(projectHooksPath)
 
     count++
   }
@@ -188,9 +185,6 @@ function installHooks(
   return count
 }
 
-/**
- * Find all script files (.sh, .js, .ts) in a directory recursively.
- */
 function findScriptFiles(dir: string): string[] {
   const scripts: string[] = []
   if (!fs.existsSync(dir)) return scripts
@@ -212,6 +206,11 @@ function findScriptFiles(dir: string): string[] {
  */
 export function installPack(options: InstallOptions): InstallResult {
   const { pack, tools, filter, projectDir } = options
+
+  // Reset file tracker
+  trackedFiles = []
+  currentProjectDir = projectDir
+
   const installed: Record<ComponentType, number> = {
     agents: 0,
     skills: 0,
@@ -231,7 +230,7 @@ export function installPack(options: InstallOptions): InstallResult {
   }
 
   if (should('rules')) {
-    installed.rules = installMdFiles(pack.rules, 'rules', tools, projectDir)
+    installed.rules = installMdFiles(pack.rules, 'rules', tools, projectDir, pack.name)
   }
 
   if (should('skills')) {
@@ -242,12 +241,59 @@ export function installPack(options: InstallOptions): InstallResult {
     installed.hooks = installHooks(pack.hooks, tools, projectDir)
   }
 
-  return { pack: pack.name, tools, installed }
+  return { pack: pack.name, tools, installed, files: [...trackedFiles] }
 }
 
 /**
- * Collect all unique directories that were written to during installs.
- * Used by gitignore updater.
+ * Remove all files installed by a pack.
+ * Deletes tracked files and cleans up empty parent directories.
+ */
+export function removePack(projectDir: string, files: string[]): number {
+  let removed = 0
+
+  for (const relFile of files) {
+    const absPath = path.join(projectDir, relFile)
+    if (!fs.existsSync(absPath) && !isSymlink(absPath)) continue
+
+    if (isSymlink(absPath)) {
+      fs.unlinkSync(absPath)
+    } else if (fs.statSync(absPath).isDirectory()) {
+      fs.rmSync(absPath, { recursive: true })
+    } else {
+      fs.unlinkSync(absPath)
+    }
+    removed++
+
+    // Clean up empty parent dirs (up to projectDir)
+    let parent = path.dirname(absPath)
+    while (parent !== projectDir && parent.length > projectDir.length) {
+      try {
+        const entries = fs.readdirSync(parent)
+        if (entries.length === 0) {
+          fs.rmdirSync(parent)
+        } else {
+          break
+        }
+      } catch {
+        break
+      }
+      parent = path.dirname(parent)
+    }
+  }
+
+  return removed
+}
+
+function isSymlink(p: string): boolean {
+  try {
+    return fs.lstatSync(p).isSymbolicLink()
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Collect all unique top-level directories written to during installs.
  */
 export function getWrittenDirs(tools: ToolId[], hadSkills: boolean): string[] {
   const dirs = new Set<string>()
@@ -259,7 +305,6 @@ export function getWrittenDirs(tools: ToolId[], hadSkills: boolean): string[] {
   for (const toolId of tools) {
     const config = TOOL_REGISTRY[toolId]
     for (const dir of Object.values(config.components)) {
-      // Add the top-level tool directory (e.g., .claude, .cursor)
       const topLevel = dir.split('/')[0]
       dirs.add(topLevel)
     }
