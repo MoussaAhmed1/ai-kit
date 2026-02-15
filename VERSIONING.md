@@ -125,12 +125,22 @@ All notable changes to this plugin will be documented in this file.
 - 8 skills for convention enforcement
 ```
 
+## Automatic Patch Bumps (CI)
+
+Patch versions are **automatically bumped** in CI for any plugin whose files under `packs/<name>/` changed since the last commit. The release workflow runs `scripts/bump-plugin-versions.js` before the changeset version step, so:
+
+- **Patch bumps** — handled automatically; no manual version change needed for bug fixes, typo corrections, or doc updates to plugin files.
+- **MINOR / MAJOR bumps** — still require a manual version update in `marketplace.json` and a changelog entry. The auto-bump script will not downgrade a manually-bumped version (it only increments patch).
+
+If you manually bump a version in the same PR that changes plugin files, the CI script will bump it one additional patch. To avoid this, either rely on auto-bump for patches or set the version to one patch below your target (e.g., set `1.3.0` and let CI make it `1.3.1` — but this is unusual; for MINOR/MAJOR bumps just accept the extra patch or commit the version bump separately from plugin file changes).
+
 ## Version Bump Checklist
 
 Before committing changes to a plugin:
 
-- [ ] Updated version in `.claude-plugin/marketplace.json`
-- [ ] Added entry to `packs/{name}/CHANGELOG.md`
+- [ ] **Patch**: No action needed — CI auto-bumps patch versions for changed plugins
+- [ ] **Minor/Major**: Update version in `.claude-plugin/marketplace.json` manually
+- [ ] **Minor/Major**: Add entry to `packs/{name}/CHANGELOG.md`
 - [ ] Used correct bump type (patch/minor/major)
 - [ ] Updated marketplace version if adding new plugin
 
@@ -138,17 +148,19 @@ Before committing changes to a plugin:
 
 | Plugin | Version | Status | Notes |
 |--------|---------|--------|-------|
-| django | 2.1.0 | Mature | Production-tested |
-| nestjs | 2.1.0 | Mature | Production-tested |
-| nextjs | 2.1.0 | Mature | Production-tested |
-| nuxtjs | 2.1.0 | Mature | Production-tested |
-| dev-loop | 1.1.0 | Stable | TDD automation |
+| django | 2.1.1 | Mature | Production-tested |
+| nestjs | 2.1.1 | Mature | Production-tested |
+| nextjs | 2.1.1 | Mature | Production-tested |
+| nuxtjs | 2.1.1 | Mature | Production-tested |
+| dev-loop | 1.2.2 | Stable | TDD automation |
 | architect | 1.0.0 | Stable | Diagram generation |
-| failure-log | 1.0.0 | Stable | Failure memory |
-| hono | 0.1.0 | New | Needs testing |
-| flutter | 0.1.0 | New | Needs testing |
+| failure-log | 1.0.1 | Stable | Failure memory |
+| hono | 0.1.1 | New | Needs testing |
+| flutter | 0.1.1 | New | Needs testing |
 | tanstack-router | 0.1.0 | New | Needs testing |
-| better-auth | 0.1.0 | New | Needs testing |
+| better-auth | 0.1.1 | New | Needs testing |
+| worktree | 0.1.1 | New | Git worktree manager |
+| onboard | 0.1.0 | New | Engineer onboarding |
 
 ## Promotion Criteria
 

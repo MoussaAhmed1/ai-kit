@@ -453,8 +453,9 @@ claude @frontend-visual
 3. Update rules in `packs/*/rules/` directory if path-specific
 4. Test with sample project
 5. Update plugin's README.md if visible changes
-6. Bump version in `.claude-plugin/marketplace.json` (see VERSIONING.md for bump type)
-7. Add changelog entry to `packs/{name}/CHANGELOG.md`
+6. **Patch versions auto-bump in CI** — no manual bump needed for bug fixes/typos
+7. For MINOR/MAJOR bumps: manually update version in `.claude-plugin/marketplace.json`
+8. For MINOR/MAJOR bumps: add changelog entry to `packs/{name}/CHANGELOG.md`
 
 ### Creating New Plugins
 
@@ -522,14 +523,14 @@ See **VERSIONING.md** for complete strategy. Key points:
 | 2.x.x+ | Mature | Battle-tested, widely used |
 
 **Semantic Versioning:**
-- **PATCH** (x.x.+1): Bug fixes, typos, no behavior change
-- **MINOR** (x.+1.0): New features, backward compatible
-- **MAJOR** (+1.0.0): Breaking changes
+- **PATCH** (x.x.+1): Bug fixes, typos, no behavior change — **auto-bumped in CI**
+- **MINOR** (x.+1.0): New features, backward compatible — manual bump required
+- **MAJOR** (+1.0.0): Breaking changes — manual bump required
 
 **Before Committing Plugin Changes:**
-1. Bump version in `.claude-plugin/marketplace.json`
-2. Add entry to `packs/{name}/CHANGELOG.md`
-3. Use correct bump type (patch/minor/major)
+1. **Patch**: No action needed — CI auto-bumps via `scripts/bump-plugin-versions.js`
+2. **Minor/Major**: Manually bump version in `.claude-plugin/marketplace.json`
+3. **Minor/Major**: Add entry to `packs/{name}/CHANGELOG.md`
 
 **Promotion to 1.0.0 requires:**
 - Used in 2+ real projects
