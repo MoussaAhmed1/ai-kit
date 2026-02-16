@@ -36,7 +36,68 @@ export const initCommand = new Command('init')
       }
 
       if (action === 'add') {
-        p.outro(`Run ${pc.cyan('ai-kit add <pack>')} to add packs.`)
+        // Show interactive pack selector with already-installed packs excluded
+        const s = p.spinner()
+        let packs
+        try {
+          s.start('Fetching available packs...')
+          packs = await discoverPacks(getRegistryOptions())
+          s.stop('Packs loaded.')
+        } catch {
+          s.stop('Failed.')
+          p.log.error('Could not fetch packs.')
+          p.outro('Failed.')
+          return
+        }
+
+        const installedNames = Object.keys(existing.packs)
+        const available = packs.filter(pk => !installedNames.includes(pk.name))
+
+        if (available.length === 0) {
+          p.outro('All packs are already installed!')
+          return
+        }
+
+        const packSelection = await p.autocompleteMultiselect({
+          message: 'Which packs do you want to add? (type to filter)',
+          options: available.map(pk => ({
+            value: pk.name,
+            label: pk.name,
+            hint: pk.description,
+          })),
+          required: true,
+        })
+
+        if (p.isCancel(packSelection)) {
+          p.outro('Cancelled.')
+          return
+        }
+
+        const selectedNames = packSelection as string[]
+        const installSpinner = p.spinner()
+        installSpinner.start('Installing packs...')
+
+        let config = existing
+        const selectedPacks = packs.filter(pk => selectedNames.includes(pk.name))
+        for (const pack of selectedPacks) {
+          const result = installPack({
+            pack,
+            tools: existing.tools,
+            projectDir,
+          })
+          config = mergeInstall(config, result)
+          config.packs[pack.name].version = pack.version
+        }
+
+        writeConfig(projectDir, config)
+        updateGitignore(projectDir)
+        installSpinner.stop('Done!')
+
+        for (const pack of selectedPacks) {
+          p.log.message(`  ${pc.green('+')} ${pack.name} ${pc.dim(`v${pack.version}`)}`)
+        }
+
+        p.outro(`Added ${selectedPacks.length} pack(s).`)
         return
       }
     }
