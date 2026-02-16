@@ -1,5 +1,11 @@
 # @smicolon/ai-kit
 
+## 0.4.0
+
+### Minor Changes
+
+- 37c098f: Runtime GitHub fetching: packs are downloaded from GitHub at runtime instead of being bundled in the npm package. Adds standalone binary builds (brew, curl install script), cache management, and --no-cache/--branch flags.
+
 ## 0.3.2
 
 ### Patch Changes
