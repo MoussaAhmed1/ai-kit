@@ -86,12 +86,90 @@ jobs:
           git commit -m "chore: release packages" || exit 0
           git push
 
+      - name: Build standalone binaries
+        if: steps.check.outputs.has_changesets == 'true'
+        working-directory: packages/cli
+        run: |
+          bun build src/index.ts --compile --target=bun-darwin-arm64 --outfile dist/ai-kit-darwin-arm64
+          bun build src/index.ts --compile --target=bun-darwin-x64 --outfile dist/ai-kit-darwin-x64
+          bun build src/index.ts --compile --target=bun-linux-x64 --outfile dist/ai-kit-linux-x64
+          bun build src/index.ts --compile --target=bun-linux-arm64 --outfile dist/ai-kit-linux-arm64
+          gzip -k dist/ai-kit-darwin-arm64
+          gzip -k dist/ai-kit-darwin-x64
+          gzip -k dist/ai-kit-linux-x64
+          gzip -k dist/ai-kit-linux-arm64
+
       - name: Create GitHub release
         if: steps.check.outputs.has_changesets == 'true'
         run: |
           VERSION=$(node -p "require('./packages/cli/package.json').version")
           gh release create "v${VERSION}" \
             --title "v${VERSION}" \
-            --generate-notes
+            --generate-notes \
+            packages/cli/dist/ai-kit-darwin-arm64.gz \
+            packages/cli/dist/ai-kit-darwin-x64.gz \
+            packages/cli/dist/ai-kit-linux-x64.gz \
+            packages/cli/dist/ai-kit-linux-arm64.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Homebrew formula
+        if: steps.check.outputs.has_changesets == 'true'
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          SHA_DARWIN_ARM64=$(sha256sum packages/cli/dist/ai-kit-darwin-arm64.gz | cut -d' ' -f1)
+          SHA_DARWIN_X64=$(sha256sum packages/cli/dist/ai-kit-darwin-x64.gz | cut -d' ' -f1)
+          SHA_LINUX_ARM64=$(sha256sum packages/cli/dist/ai-kit-linux-arm64.gz | cut -d' ' -f1)
+          SHA_LINUX_X64=$(sha256sum packages/cli/dist/ai-kit-linux-x64.gz | cut -d' ' -f1)
+
+          cat > /tmp/ai-kit.rb << FORMULA
+          class AiKit < Formula
+            desc "AI coding tool pack manager for Smicolon standards"
+            homepage "https://github.com/smicolon/ai-kit"
+            version "${VERSION}"
+            license "MIT"
+
+            on_macos do
+              on_arm do
+                url "https://github.com/smicolon/ai-kit/releases/download/v${VERSION}/ai-kit-darwin-arm64.gz"
+                sha256 "${SHA_DARWIN_ARM64}"
+              end
+              on_intel do
+                url "https://github.com/smicolon/ai-kit/releases/download/v${VERSION}/ai-kit-darwin-x64.gz"
+                sha256 "${SHA_DARWIN_X64}"
+              end
+            end
+
+            on_linux do
+              on_arm do
+                url "https://github.com/smicolon/ai-kit/releases/download/v${VERSION}/ai-kit-linux-arm64.gz"
+                sha256 "${SHA_LINUX_ARM64}"
+              end
+              on_intel do
+                url "https://github.com/smicolon/ai-kit/releases/download/v${VERSION}/ai-kit-linux-x64.gz"
+                sha256 "${SHA_LINUX_X64}"
+              end
+            end
+
+            def install
+              bin.install "ai-kit"
+            end
+
+            test do
+              assert_match "AI coding tool pack manager", shell_output("#{bin}/ai-kit --help")
+            end
+          end
+          FORMULA
+
+          # Push to homebrew-tap repo
+          git clone https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/smicolon/homebrew-tap.git /tmp/homebrew-tap
+          mkdir -p /tmp/homebrew-tap/Formula
+          cp /tmp/ai-kit.rb /tmp/homebrew-tap/Formula/ai-kit.rb
+          cd /tmp/homebrew-tap
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/ai-kit.rb
+          git commit -m "ai-kit ${VERSION}"
+          git push
+        env:
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
