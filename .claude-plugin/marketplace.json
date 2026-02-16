@@ -1,6 +1,6 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "Official marketplace for Smicolon development standards - 13 plugins with 28 agents, 40 skills, TanStack SPA, Better Auth, onboarding, and TDD dev loops",
   "license": "MIT",
   "metadata": {
@@ -433,7 +433,7 @@
     },
     {
       "name": "worktree",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "description": "Git worktree manager for parallel development with automatic env copying and dependency installation",
       "source": "./packs/worktree",
       "author": {
