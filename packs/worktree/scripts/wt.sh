@@ -481,11 +481,11 @@ parse_docker_compose_container_names() {
         if (line == "" || substr(line, 1, 1) == "#") next
     }
     indent == 0 && line == "services:" { in_services = 1; next }
-    indent == 0 && /^[a-zA-Z]/ { in_services = 0; next }
-    in_services && indent == 2 && /^[[:space:]]*[a-zA-Z_][a-zA-Z0-9_-]*:/ {
+    indent == 0 && line ~ /^[a-zA-Z]/ { in_services = 0; next }
+    in_services && indent == 2 && line ~ /^[a-zA-Z_][a-zA-Z0-9_-]*:/ {
         svc = line; gsub(/:.*/, "", svc); current_service = svc; next
     }
-    in_services && indent == 4 && /^container_name:/ {
+    in_services && indent == 4 && line ~ /^container_name:/ {
         cn = line
         gsub(/^container_name:[[:space:]]*/, "", cn)
         gsub(/"/, "", cn)
