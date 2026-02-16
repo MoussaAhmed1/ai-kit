@@ -620,6 +620,72 @@ HEADER
     echo "$override_file"
 }
 
+# Upsert a key=value in an env file (create file if missing, update if key exists, append if not)
+_upsert_env_var() {
+    local env_file="$1"
+    local key="$2"
+    local value="$3"
+
+    if [[ -f "$env_file" ]]; then
+        if grep -q "^${key}=" "$env_file" 2>/dev/null; then
+            local tmpfile
+            tmpfile=$(mktemp)
+            while IFS= read -r line || [[ -n "$line" ]]; do
+                if [[ "$line" =~ ^${key}= ]]; then
+                    printf '%s=%s\n' "$key" "$value"
+                else
+                    printf '%s\n' "$line"
+                fi
+            done < "$env_file" > "$tmpfile"
+            mv "$tmpfile" "$env_file"
+        else
+            printf '%s=%s\n' "$key" "$value" >> "$env_file"
+        fi
+    else
+        printf '%s=%s\n' "$key" "$value" > "$env_file"
+    fi
+}
+
+# Patch package.json scripts that use explicit `docker compose -f <compose_file>`
+# to also include `-f <override_file>` and `-p <project_name>`.
+# Uses literal sed replacement — finds exact string "docker compose -f <compose_rel>"
+# and appends the override file and project name.
+_patch_compose_scripts() {
+    local wt_path="$1"
+    local compose_rel="$2"
+    local override_rel="$3"
+    local project_name="$4"
+
+    local compose_dir
+    compose_dir=$(dirname "$compose_rel")
+    local override_basename
+    override_basename=$(basename "$override_rel")
+
+    # Build the override path to use in scripts (same dir prefix as original)
+    local override_in_script
+    if [[ "$compose_dir" == "." ]]; then
+        override_in_script="$override_basename"
+    else
+        override_in_script="${compose_dir}/${override_basename}"
+    fi
+
+    local search="docker compose -f ${compose_rel}"
+    local replace="docker compose -f ${compose_rel} -f ${override_in_script} -p ${project_name}"
+
+    while IFS= read -r -d '' pkg_json; do
+        grep -q "$search" "$pkg_json" 2>/dev/null || continue
+        # Skip if already patched
+        grep -q "$override_basename" "$pkg_json" 2>/dev/null && continue
+
+        # sed -i.bak works on both macOS and Linux
+        sed -i.bak "s|${search}|${replace}|g" "$pkg_json"
+        rm -f "${pkg_json}.bak"
+
+        local pkg_rel="${pkg_json#"$wt_path"/}"
+        success "Patched $pkg_rel (added -f override + project name)"
+    done < <(find "$wt_path" -maxdepth 3 -name 'package.json' -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 2>/dev/null)
+}
+
 # Orchestrate Docker isolation: detect, offset, generate override, update .env
 setup_docker_isolation() {
     local wt_path="$1"
@@ -653,47 +719,30 @@ setup_docker_isolation() {
     local override_rel="${override_file#"$wt_path"/}"
     success "Generated $override_rel"
 
-    # Determine where to write COMPOSE_FILE/.env
-    # If compose is nested (e.g. apps/backend/docker-compose.local.yml), write .env
-    # next to the compose file with relative filenames so `cd apps/backend && docker compose up` works.
+    # Determine compose dir for .env placement
     local compose_dir
     compose_dir=$(dirname "$compose_rel")
+    local project_name="${REPO_NAME}_${branch_slug}"
+
+    # Strategy: set COMPOSE_FILE in .env AND patch package.json scripts that use -f
+    # (docker compose -f flags override COMPOSE_FILE env var, so both are needed)
+
+    # 1. Write COMPOSE_FILE and COMPOSE_PROJECT_NAME to .env next to compose file
     local target_env compose_file_val
     if [[ "$compose_dir" == "." ]]; then
-        # Root-level compose — use full relative paths from root
         target_env="$wt_path/.env"
         compose_file_val="${compose_rel}:${override_rel}"
     else
-        # Nested compose — write .env next to compose file with just filenames
         target_env="$wt_path/$compose_dir/.env"
         compose_file_val="$(basename "$compose_rel"):$(basename "$override_rel")"
     fi
-    local project_name="${REPO_NAME}_${branch_slug}"
 
-    # Append or update COMPOSE_FILE in .env
-    if [[ -f "$target_env" ]]; then
-        local tmpfile
-        tmpfile=$(mktemp)
-        local found_cf=false
-        local found_cpn=false
-        while IFS= read -r line || [[ -n "$line" ]]; do
-            if [[ "$line" =~ ^COMPOSE_FILE= ]]; then
-                printf 'COMPOSE_FILE=%s\n' "$compose_file_val"
-                found_cf=true
-            elif [[ "$line" =~ ^COMPOSE_PROJECT_NAME= ]]; then
-                printf 'COMPOSE_PROJECT_NAME=%s\n' "$project_name"
-                found_cpn=true
-            else
-                printf '%s\n' "$line"
-            fi
-        done < "$target_env" > "$tmpfile"
-        [[ "$found_cf" == false ]] && printf 'COMPOSE_FILE=%s\n' "$compose_file_val" >> "$tmpfile"
-        [[ "$found_cpn" == false ]] && printf 'COMPOSE_PROJECT_NAME=%s\n' "$project_name" >> "$tmpfile"
-        mv "$tmpfile" "$target_env"
-    else
-        printf 'COMPOSE_FILE=%s\n' "$compose_file_val" > "$target_env"
-        printf 'COMPOSE_PROJECT_NAME=%s\n' "$project_name" >> "$target_env"
-    fi
+    _upsert_env_var "$target_env" "COMPOSE_FILE" "$compose_file_val"
+    _upsert_env_var "$target_env" "COMPOSE_PROJECT_NAME" "$project_name"
+
+    # 2. Patch package.json scripts that use explicit -f with compose file
+    #    (because -f overrides COMPOSE_FILE env var entirely)
+    _patch_compose_scripts "$wt_path" "$compose_rel" "$override_rel" "$project_name"
 
     # Print port mapping summary
     local ports_data
