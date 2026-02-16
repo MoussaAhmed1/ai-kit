@@ -151,5 +151,6 @@ It generates structured prompts with:
 
 - **Hook Type**: Stop hook with bash command
 - **State File**: `.claude/dev-loop.local.md` (gitignored)
+- **Plan File**: `.claude/dev-plan.local.md` (gitignored)
 - **Default Iterations**: 50
 - **Default Promise**: "DONE"
