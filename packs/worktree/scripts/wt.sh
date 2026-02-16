@@ -250,7 +250,18 @@ rewrite_env_file() {
         if [[ "$line" == *'{{BRANCH}}'* ]]; then
             newline="${line//\{\{BRANCH\}\}/$branch_slug}"
             changed=true
-        elif [[ "$has_auto" == true ]]; then
+        fi
+
+        # Template: replace {{PORT:N}} — adds WT_PORT_OFFSET to base port N
+        while [[ "$newline" =~ \{\{PORT:([0-9]+)\}\} ]]; do
+            local base_port="${BASH_REMATCH[1]}"
+            local resolved_port=$((base_port + ${WT_PORT_OFFSET:-0}))
+            # Replace first occurrence
+            newline="${newline/\{\{PORT:${base_port}\}\}/$resolved_port}"
+            changed=true
+        done
+
+        if [[ "$newline" == "$line" ]] && [[ "$has_auto" == true ]]; then
             # Auto-detect known keys (only lines with = that aren't comments)
             if [[ "$line" =~ ^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*)=(.*) ]]; then
                 local key="${BASH_REMATCH[1]}"
@@ -331,6 +342,20 @@ branch_to_port_offset() {
     local hash
     hash=$(printf '%s' "$branch" | cksum | awk '{print $1}')
     echo $(( (hash % 100) + 1 ))
+}
+
+# Compute port offset from branch + docker config, sets WT_PORT_OFFSET global.
+# Call before env rewriting so {{PORT:N}} templates can resolve.
+compute_port_offset() {
+    local branch="$1"
+    WT_PORT_OFFSET=$(branch_to_port_offset "$branch")
+
+    # Check for custom port_offset in [docker] config
+    for line in "${WT_DOCKER_LINES[@]+"${WT_DOCKER_LINES[@]}"}"; do
+        if [[ "$line" =~ ^port_offset=([0-9]+) ]]; then
+            WT_PORT_OFFSET="${BASH_REMATCH[1]}"
+        fi
+    done
 }
 
 # Minimal YAML parser: extract host ports from docker-compose services
@@ -518,15 +543,7 @@ setup_docker_isolation() {
     }
 
     local compose_full="$wt_path/$compose_rel"
-    local offset
-    offset=$(branch_to_port_offset "$branch")
-
-    # Check for custom port_offset
-    for line in "${WT_DOCKER_LINES[@]}"; do
-        if [[ "$line" =~ ^port_offset=([0-9]+) ]]; then
-            offset="${BASH_REMATCH[1]}"
-        fi
-    done
+    local offset="${WT_PORT_OFFSET:-$(branch_to_port_offset "$branch")}"
 
     info "Docker isolation: $compose_rel (port offset +$offset)"
 
@@ -757,6 +774,9 @@ cmd_create() {
     local branch_slug
     branch_slug=$(sanitize_branch_for_suffix "$branch")
 
+    # Compute port offset early so {{PORT:N}} templates resolve during rewriting
+    compute_port_offset "$branch"
+
     if [[ ${#WT_REWRITE_LINES[@]} -gt 0 ]]; then
         info "Rewriting env vars (suffix: _$branch_slug)..."
         local rewrite_count
@@ -973,7 +993,8 @@ cmd_help() {
     echo "  Sections:"
     echo "    (top)       Glob patterns for files to copy (e.g., .env*)"
     echo "    [rewrite]   'auto' to suffix DB_NAME, DATABASE_URL, etc."
-    echo "                Use {{BRANCH}} for custom templates"
+    echo "                {{BRANCH}} → branch slug"
+    echo "                {{PORT:N}} → base port N + docker offset"
     echo "    [docker]    'auto' to generate port-offset override"
     echo "                'file=path' for custom compose file"
     echo ""
