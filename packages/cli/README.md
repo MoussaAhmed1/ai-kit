@@ -2,13 +2,29 @@
 
 AI coding tool pack manager. Install convention packs (agents, skills, commands, rules, hooks) for any AI coding tool.
 
-## Quick Start
+## Install
+
+### Homebrew (macOS/Linux)
+
+```bash
+brew install smicolon/tap/ai-kit
+```
+
+### Standalone Binary
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/smicolon/ai-kit/main/scripts/install.sh | sh
+```
+
+Downloads a self-contained binary. Override install location with `AI_KIT_INSTALL_DIR=~/.local/bin`.
+
+### npm
 
 ```bash
 npx @smicolon/ai-kit@latest init
 ```
 
-This walks you through selecting your AI tools and stack, then installs the right files in the right places.
+Requires Node.js 22+.
 
 ## Commands
 
@@ -17,8 +33,8 @@ This walks you through selecting your AI tools and stack, then installs the righ
 Interactive first-time setup. Prompts for your AI tools, stack, and component preferences.
 
 ```bash
-npx @smicolon/ai-kit@latest init
-npx @smicolon/ai-kit@latest init --cwd apps/web  # monorepo sub-package
+ai-kit init
+ai-kit init --cwd apps/web  # monorepo sub-package
 ```
 
 ### `add <pack>`
@@ -26,11 +42,11 @@ npx @smicolon/ai-kit@latest init --cwd apps/web  # monorepo sub-package
 Add a pack to your project.
 
 ```bash
-npx @smicolon/ai-kit@latest add django
-npx @smicolon/ai-kit@latest add django --skills-only
-npx @smicolon/ai-kit@latest add django --agents-only
-npx @smicolon/ai-kit@latest add django --rules-only
-npx @smicolon/ai-kit@latest add django --tools claude-code,cursor
+ai-kit add django
+ai-kit add django --skills-only
+ai-kit add django --agents-only
+ai-kit add django --rules-only
+ai-kit add django --tools claude-code,cursor
 ```
 
 ### `list`
@@ -38,8 +54,8 @@ npx @smicolon/ai-kit@latest add django --tools claude-code,cursor
 Show available or installed packs.
 
 ```bash
-npx @smicolon/ai-kit@latest list              # available packs
-npx @smicolon/ai-kit@latest list --installed   # installed packs
+ai-kit list              # available packs
+ai-kit list --installed  # installed packs
 ```
 
 ### `remove <pack>`
@@ -47,7 +63,7 @@ npx @smicolon/ai-kit@latest list --installed   # installed packs
 Remove a pack and all its installed files.
 
 ```bash
-npx @smicolon/ai-kit@latest remove django
+ai-kit remove django
 ```
 
 ### `search <query>`
@@ -55,9 +71,9 @@ npx @smicolon/ai-kit@latest remove django
 Search packs by name or keyword.
 
 ```bash
-npx @smicolon/ai-kit@latest search auth
-npx @smicolon/ai-kit@latest search frontend
-npx @smicolon/ai-kit@latest search tdd
+ai-kit search auth
+ai-kit search frontend
+ai-kit search tdd
 ```
 
 ### `update [pack]`
@@ -65,9 +81,47 @@ npx @smicolon/ai-kit@latest search tdd
 Update installed packs to latest versions.
 
 ```bash
-npx @smicolon/ai-kit@latest update          # update all
-npx @smicolon/ai-kit@latest update django   # update one
+ai-kit update          # update all
+ai-kit update django   # update one
 ```
+
+### `cache`
+
+Manage the local pack cache.
+
+```bash
+ai-kit cache clear     # force re-download on next run
+```
+
+## Global Options
+
+```bash
+ai-kit --no-cache <command>      # skip cache, always fetch latest from GitHub
+ai-kit --branch dev <command>    # use a specific branch (default: main)
+```
+
+## How It Works
+
+Packs are fetched from GitHub at runtime and cached locally at `~/.config/ai-kit/cache/`. Every command checks for updates by comparing `marketplace.json` — if packs have changed upstream, they're re-downloaded automatically. No stale data when you're online.
+
+Skills use a **canonical + symlink** strategy:
+
+```
+your-project/
+├── .agents/skills/          # canonical copies
+│   ├── import-convention-enforcer/
+│   └── model-entity-validator/
+├── .claude/skills/          # symlinks → .agents/skills/*
+├── .cursor/skills/          # symlinks → .agents/skills/*
+├── .claude/agents/          # copied .md files
+├── .claude/commands/        # copied .md files
+├── .claude/rules/           # copied .md files
+├── .cursor/rules/           # converted .mdc files
+├── .ai-kit.json             # tracks installed packs + files
+└── .gitignore               # auto-updated
+```
+
+Tool preferences are stored globally at `~/.config/ai-kit/config.json` (pick once, works in all projects). Local `.ai-kit.json` tracks installed packs and files for clean removal — it's auto-added to `.gitignore`.
 
 ## Supported AI Tools
 
@@ -107,34 +161,13 @@ npx @smicolon/ai-kit@latest update django   # update one
 | worktree | - | 1 | 1 | - |
 | onboard | 1 | 1 | 1 | - |
 
-## How It Works
-
-Skills use a **canonical + symlink** strategy:
-
-```
-your-project/
-├── .agents/skills/          # canonical copies
-│   ├── import-convention-enforcer/
-│   └── model-entity-validator/
-├── .claude/skills/          # symlinks → .agents/skills/*
-├── .cursor/skills/          # symlinks → .agents/skills/*
-├── .claude/agents/          # copied .md files
-├── .claude/commands/        # copied .md files
-├── .claude/rules/           # copied .md files
-├── .cursor/rules/           # converted .mdc files
-├── .ai-kit.json             # tracks installed packs + files
-└── .gitignore               # auto-updated
-```
-
-Tool preferences are stored globally at `~/.config/ai-kit/config.json` (pick once, works in all projects). Local `.ai-kit.json` tracks installed packs and files for clean removal — it's auto-added to `.gitignore`.
-
 ## Monorepo Support
 
 Use `--cwd` to target a sub-package. Both the sub-package and root `.gitignore` are updated.
 
 ```bash
-npx @smicolon/ai-kit@latest init --cwd apps/web
-npx @smicolon/ai-kit@latest add django --cwd apps/web
+ai-kit init --cwd apps/web
+ai-kit add django --cwd apps/web
 ```
 
 ## License

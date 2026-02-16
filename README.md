@@ -8,19 +8,29 @@
 
 ## Quick Start
 
-### Any AI Tool (CLI)
+### Install the CLI
 
 ```bash
+# Homebrew (macOS/Linux — no dependencies)
+brew install smicolon/tap/ai-kit
+
+# Or standalone binary (no dependencies)
+curl -fsSL https://raw.githubusercontent.com/smicolon/ai-kit/main/scripts/install.sh | sh
+
+# Or via npm (requires Node.js 22+)
 npx @smicolon/ai-kit@latest init
 ```
 
-This walks you through selecting your AI tools and stack, then installs the right files in the right places.
+### Set up your project
 
 ```bash
+# Interactive setup — pick your AI tools and stack
+ai-kit init
+
 # Or non-interactively
-npx @smicolon/ai-kit@latest add django
-npx @smicolon/ai-kit@latest add django --skills-only
-npx @smicolon/ai-kit@latest add django --tools claude-code,cursor
+ai-kit add django
+ai-kit add django --skills-only
+ai-kit add django --tools claude-code,cursor
 ```
 
 ### Claude Code (native plugin)
@@ -448,25 +458,57 @@ See [MCP_SETUP.md](MCP_SETUP.md) for setup instructions.
 
 ## Installation
 
-### CLI (any AI tool)
+### Homebrew (macOS/Linux)
+
+```bash
+brew install smicolon/tap/ai-kit
+```
+
+Zero dependencies. Auto-updates with `brew upgrade`.
+
+### Standalone Binary
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/smicolon/ai-kit/main/scripts/install.sh | sh
+```
+
+Downloads a self-contained binary to `/usr/local/bin`. Override with `AI_KIT_INSTALL_DIR=~/.local/bin`.
+
+### npm
+
+```bash
+npx @smicolon/ai-kit@latest init
+```
+
+Requires Node.js 22+.
+
+### CLI Usage
 
 ```bash
 # Interactive setup — pick your tools and stack
-npx @smicolon/ai-kit@latest init
+ai-kit init
 
 # Add packs
-npx @smicolon/ai-kit@latest add django
-npx @smicolon/ai-kit@latest add nextjs --skills-only
+ai-kit add django
+ai-kit add nextjs --skills-only
 
 # Manage packs
-npx @smicolon/ai-kit@latest list              # available packs
-npx @smicolon/ai-kit@latest list --installed   # installed packs
-npx @smicolon/ai-kit@latest update             # update all
-npx @smicolon/ai-kit@latest remove django      # remove a pack
+ai-kit list              # available packs
+ai-kit list --installed  # installed packs
+ai-kit update            # update all
+ai-kit remove django     # remove a pack
+ai-kit search auth       # search packs
+
+# Cache management
+ai-kit cache clear       # force re-download on next run
+
+# Options
+ai-kit --no-cache add django   # skip cache, fetch latest
+ai-kit --branch dev list       # use a specific branch
 
 # Monorepo support
-npx @smicolon/ai-kit@latest init --cwd apps/web
-npx @smicolon/ai-kit@latest add django --cwd apps/web
+ai-kit init --cwd apps/web
+ai-kit add django --cwd apps/web
 ```
 
 ### Claude Code plugin (native)
@@ -661,15 +703,18 @@ ai-kit/
 ├── .claude-plugin/
 │   └── marketplace.json          # Pack metadata (single source of truth)
 ├── packages/
-│   └── cli/                      # @smicolon/ai-kit CLI (npm)
+│   └── cli/                      # @smicolon/ai-kit CLI (npm + standalone binary)
 │       └── src/
 │           ├── index.ts          # CLI entry (commander)
-│           ├── commands/         # init, add, list, remove, update
+│           ├── commands/         # init, add, list, remove, update, cache
 │           ├── converters/       # Rule format converters (e.g., .md → .mdc)
 │           ├── installer.ts      # Copy, symlink, hook rewrite
-│           ├── discovery.ts      # Read marketplace.json, resolve packs
+│           ├── discovery.ts      # Resolve packs (local or GitHub cache)
+│           ├── registry.ts       # GitHub tarball download + caching
 │           ├── tools.ts          # 15 AI tool registry
 │           └── config.ts         # .ai-kit.json management
+├── scripts/
+│   └── install.sh                # curl install script for standalone binary
 ├── packs/
 │   ├── django/                   # 5 agents, 3 commands, 8 skills, 6 rules
 │   ├── nestjs/                   # 3 agents, 1 command, 2 skills, 4 rules
@@ -740,8 +785,11 @@ npm run dev
 
 ```bash
 # CLI
-npx @smicolon/ai-kit@latest update          # update all packs
-npx @smicolon/ai-kit@latest update django   # update one pack
+ai-kit update          # update all packs
+ai-kit update django   # update one pack
+
+# Homebrew
+brew upgrade ai-kit
 
 # Claude Code plugin
 /plugin update django
