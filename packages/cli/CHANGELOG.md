@@ -1,5 +1,11 @@
 # @smicolon/ai-kit
 
+## 0.4.1
+
+### Patch Changes
+
+- ca43bc4: Show interactive pack selector when choosing "Add more packs" from init, and fix brew formula binary rename
+
 ## 0.4.0
 
 ### Minor Changes
