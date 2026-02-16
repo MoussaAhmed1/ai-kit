@@ -92,24 +92,51 @@ generate_default_worktreeinclude() {
     local target="$REPO_ROOT/.worktreeinclude"
     [[ -f "$target" ]] && return 0
 
-    cat > "$target" << 'TEMPLATE'
-# .worktreeinclude — Files to copy to new worktrees
-# Commit this file so your team shares the same config
-.env*
+    # Detect which monorepo dirs have .env* files
+    local monorepo_patterns=""
+    if is_monorepo "$REPO_ROOT"; then
+        for dir in apps packages services; do
+            if [[ -d "$REPO_ROOT/$dir" ]]; then
+                # Check if any subdir contains .env* files
+                local has_envs=false
+                for sub in "$REPO_ROOT/$dir"/*/; do
+                    [[ -d "$sub" ]] || continue
+                    compgen -G "$sub".env* > /dev/null 2>&1 && { has_envs=true; break; }
+                done
+                if [[ "$has_envs" == true ]]; then
+                    monorepo_patterns+="${dir}/*/.env*"$'\n'
+                else
+                    monorepo_patterns+="# ${dir}/*/.env*"$'\n'
+                fi
+            fi
+        done
+    fi
 
-# Monorepo (uncomment as needed)
-# apps/*/.env*
-# packages/*/.env*
-# services/*/.env*
+    {
+        echo '# .worktreeinclude — Files to copy to new worktrees'
+        echo '# Commit this file so your team shares the same config'
+        echo '.env*'
+        if [[ -n "$monorepo_patterns" ]]; then
+            echo ''
+            echo '# Monorepo'
+            printf '%s' "$monorepo_patterns"
+        else
+            echo ''
+            echo '# Monorepo (uncomment as needed)'
+            echo '# apps/*/.env*'
+            echo '# packages/*/.env*'
+            echo '# services/*/.env*'
+        fi
+        echo ''
+        echo '[rewrite]'
+        echo 'auto'
+        echo ''
+        echo '[docker]'
+        echo 'auto'
+        echo '# file=apps/backend/docker-compose.local.yml'
+        echo '# port_offset=10'
+    } > "$target"
 
-[rewrite]
-auto
-
-[docker]
-auto
-# file=apps/backend/docker-compose.local.yml
-# port_offset=10
-TEMPLATE
     info "Generated .worktreeinclude (commit this file)"
 }
 
