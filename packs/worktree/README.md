@@ -46,6 +46,7 @@ Auto-generated on first `wt create` if missing. Commit this file so your team sh
 
 [rewrite]
 auto
+# NEXT_PUBLIC_API_URL=http://localhost:{{PORT:8000}}
 
 [docker]
 auto
@@ -74,12 +75,16 @@ config/local.yml
 | `DATABASE_URL` | `postgres://...host/myapp` | `postgres://...host/myapp_feature_auth` |
 | `COMPOSE_PROJECT_NAME` | `myapp` | `myapp_feature_auth` |
 
-**Template mode** uses `{{BRANCH}}` for custom vars:
+**Template mode** uses `{{BRANCH}}` and `{{PORT:N}}` for custom vars:
 
 ```bash
 MY_CUSTOM_DB=app_{{BRANCH}}
 REDIS_PREFIX={{BRANCH}}_
+NEXT_PUBLIC_API_URL=http://localhost:{{PORT:8000}}
+VITE_WS_URL=ws://localhost:{{PORT:3001}}
 ```
+
+`{{PORT:N}}` adds the docker port offset to base port N (e.g., `{{PORT:8000}}` with offset 11 → `8011`). This keeps frontend env vars in sync with backend docker port offsets.
 
 Both modes work together — template takes precedence over auto.
 

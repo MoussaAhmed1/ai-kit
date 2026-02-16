@@ -4,6 +4,19 @@ All notable changes to worktree will be documented in this file.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-02-16
+
+### Added
+
+- `{{PORT:N}}` template in `[rewrite]` section — resolves to base port + docker offset (e.g., `{{PORT:8000}}` with offset 11 → `8011`)
+- `compute_port_offset()` runs before env rewriting so port templates resolve in Step 4
+
+### Fixed
+
+- Docker compose parser rewrites as indentation-aware state machine — no longer misidentifies `env_file:`, `volumes:`, `depends_on:` as service names
+- `.worktreeinclude` auto-detects monorepo dirs with `.env*` files (apps/, packages/, services/) and uncomments matching patterns
+- Docker `.env` with COMPOSE_FILE is written next to nested compose files (e.g., `apps/backend/.env`) instead of always at root
+
 ## [0.2.0] - 2026-02-15
 
 ### Added
