@@ -1,6 +1,6 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "Official marketplace for Smicolon development standards - 13 plugins with 28 agents, 40 skills, TanStack SPA, Better Auth, onboarding, and TDD dev loops",
   "license": "MIT",
   "metadata": {
@@ -15,7 +15,7 @@
   "plugins": [
     {
       "name": "dev-loop",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "description": "Autonomous TDD development loops with planning phase and iterative coding",
       "source": "./packs/dev-loop",
       "author": {
@@ -27,13 +27,22 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "automation",
-      "keywords": ["dev-loop", "automation", "tdd", "iterative", "ralph-wiggum", "planning"],
+      "keywords": [
+        "dev-loop",
+        "automation",
+        "tdd",
+        "iterative",
+        "ralph-wiggum",
+        "planning"
+      ],
       "commands": [
         "./commands/dev-loop.md",
         "./commands/dev-plan.md",
         "./commands/cancel-dev.md"
       ],
-      "skills": ["./skills/tdd-planner/SKILL.md"]
+      "skills": [
+        "./skills/tdd-planner/SKILL.md"
+      ]
     },
     {
       "name": "django",
@@ -49,7 +58,16 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "backend",
-      "keywords": ["django", "python", "backend", "testing", "tdd", "architecture", "security", "performance"],
+      "keywords": [
+        "django",
+        "python",
+        "backend",
+        "testing",
+        "tdd",
+        "architecture",
+        "security",
+        "performance"
+      ],
       "agents": [
         "./agents/django-architect.md",
         "./agents/django-builder.md",
@@ -87,13 +105,22 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "backend",
-      "keywords": ["nestjs", "typescript", "backend", "testing", "architecture", "barrel-exports"],
+      "keywords": [
+        "nestjs",
+        "typescript",
+        "backend",
+        "testing",
+        "architecture",
+        "barrel-exports"
+      ],
       "agents": [
         "./agents/nestjs-architect.md",
         "./agents/nestjs-builder.md",
         "./agents/nestjs-tester.md"
       ],
-      "commands": ["./commands/module-create.md"],
+      "commands": [
+        "./commands/module-create.md"
+      ],
       "skills": [
         "./skills/barrel-export-manager/SKILL.md",
         "./skills/import-convention-enforcer/SKILL.md"
@@ -113,14 +140,24 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "frontend",
-      "keywords": ["nextjs", "react", "frontend", "typescript", "visual-qa", "accessibility", "forms"],
+      "keywords": [
+        "nextjs",
+        "react",
+        "frontend",
+        "typescript",
+        "visual-qa",
+        "accessibility",
+        "forms"
+      ],
       "agents": [
         "./agents/nextjs-architect.md",
         "./agents/nextjs-modular.md",
         "./agents/frontend-visual.md",
         "./agents/frontend-tester.md"
       ],
-      "commands": ["./commands/component-create.md"],
+      "commands": [
+        "./commands/component-create.md"
+      ],
       "skills": [
         "./skills/accessibility-validator/SKILL.md",
         "./skills/react-form-validator/SKILL.md",
@@ -141,13 +178,24 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "frontend",
-      "keywords": ["nuxtjs", "vue", "vue3", "frontend", "typescript", "visual-qa", "accessibility", "forms"],
+      "keywords": [
+        "nuxtjs",
+        "vue",
+        "vue3",
+        "frontend",
+        "typescript",
+        "visual-qa",
+        "accessibility",
+        "forms"
+      ],
       "agents": [
         "./agents/nuxtjs-architect.md",
         "./agents/frontend-visual.md",
         "./agents/frontend-tester.md"
       ],
-      "commands": ["./commands/component-create.md"],
+      "commands": [
+        "./commands/component-create.md"
+      ],
       "skills": [
         "./skills/accessibility-validator/SKILL.md",
         "./skills/veevalidate-form-validator/SKILL.md",
@@ -168,9 +216,20 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "architecture",
-      "keywords": ["architecture", "diagrams", "eraser", "erd", "flowchart", "cloud-architecture"],
-      "agents": ["./agents/system-architect.md"],
-      "commands": ["./commands/diagram-create.md"]
+      "keywords": [
+        "architecture",
+        "diagrams",
+        "eraser",
+        "erd",
+        "flowchart",
+        "cloud-architecture"
+      ],
+      "agents": [
+        "./agents/system-architect.md"
+      ],
+      "commands": [
+        "./commands/diagram-create.md"
+      ]
     },
     {
       "name": "failure-log",
@@ -186,12 +245,20 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "automation",
-      "keywords": ["failure-log", "memory", "learning", "mistakes", "conventions"],
+      "keywords": [
+        "failure-log",
+        "memory",
+        "learning",
+        "mistakes",
+        "conventions"
+      ],
       "commands": [
         "./commands/failure-add.md",
         "./commands/failure-list.md"
       ],
-      "skills": ["./skills/failure-log-manager/SKILL.md"]
+      "skills": [
+        "./skills/failure-log-manager/SKILL.md"
+      ]
     },
     {
       "name": "flutter",
@@ -207,7 +274,16 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "mobile",
-      "keywords": ["flutter", "dart", "mobile", "ios", "android", "fastlane", "app-store", "google-play"],
+      "keywords": [
+        "flutter",
+        "dart",
+        "mobile",
+        "ios",
+        "android",
+        "fastlane",
+        "app-store",
+        "google-play"
+      ],
       "agents": [
         "./agents/flutter-architect.md",
         "./agents/flutter-builder.md",
@@ -240,7 +316,15 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "backend",
-      "keywords": ["hono", "bun", "cloudflare-workers", "edge", "typescript", "api", "rpc"],
+      "keywords": [
+        "hono",
+        "bun",
+        "cloudflare-workers",
+        "edge",
+        "typescript",
+        "api",
+        "rpc"
+      ],
       "agents": [
         "./agents/hono-architect.md",
         "./agents/hono-builder.md",
@@ -274,7 +358,18 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "frontend",
-      "keywords": ["tanstack", "react", "router", "query", "form", "table", "virtual", "spa", "typescript", "bun"],
+      "keywords": [
+        "tanstack",
+        "react",
+        "router",
+        "query",
+        "form",
+        "table",
+        "virtual",
+        "spa",
+        "typescript",
+        "bun"
+      ],
       "agents": [
         "./agents/tanstack-architect.md",
         "./agents/tanstack-builder.md",
@@ -314,7 +409,15 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "authentication",
-      "keywords": ["better-auth", "authentication", "oauth", "2fa", "passkeys", "social-login", "session"],
+      "keywords": [
+        "better-auth",
+        "authentication",
+        "oauth",
+        "2fa",
+        "passkeys",
+        "social-login",
+        "session"
+      ],
       "agents": [
         "./agents/auth-architect.md"
       ],
@@ -342,9 +445,19 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "automation",
-      "keywords": ["git", "worktree", "parallel-development", "branch-management", "monorepo"],
-      "commands": ["./commands/wt.md"],
-      "skills": ["./skills/worktree-manager/SKILL.md"]
+      "keywords": [
+        "git",
+        "worktree",
+        "parallel-development",
+        "branch-management",
+        "monorepo"
+      ],
+      "commands": [
+        "./commands/wt.md"
+      ],
+      "skills": [
+        "./skills/worktree-manager/SKILL.md"
+      ]
     },
     {
       "name": "onboard",
@@ -360,10 +473,22 @@
       "repository": "https://github.com/smicolon/ai-kit",
       "license": "MIT",
       "category": "onboarding",
-      "keywords": ["onboarding", "learning", "personalization", "guidance", "ramp-up"],
-      "agents": ["./agents/onboard-guide.md"],
-      "commands": ["./commands/onboard.md"],
-      "skills": ["./skills/onboard-context-provider/SKILL.md"]
+      "keywords": [
+        "onboarding",
+        "learning",
+        "personalization",
+        "guidance",
+        "ramp-up"
+      ],
+      "agents": [
+        "./agents/onboard-guide.md"
+      ],
+      "commands": [
+        "./commands/onboard.md"
+      ],
+      "skills": [
+        "./skills/onboard-context-provider/SKILL.md"
+      ]
     }
   ]
 }
