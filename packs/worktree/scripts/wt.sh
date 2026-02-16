@@ -97,7 +97,6 @@ generate_default_worktreeinclude() {
     if is_monorepo "$REPO_ROOT"; then
         for dir in apps packages services; do
             if [[ -d "$REPO_ROOT/$dir" ]]; then
-                # Check if any subdir contains .env* files
                 local has_envs=false
                 for sub in "$REPO_ROOT/$dir"/*/; do
                     [[ -d "$sub" ]] || continue
@@ -108,6 +107,39 @@ generate_default_worktreeinclude() {
                 else
                     monorepo_patterns+="# ${dir}/*/.env*"$'\n'
                 fi
+            fi
+        done
+    fi
+
+    # Auto-detect compose file for [docker] file= directive
+    local compose_candidates=(
+        "local.yml"
+        "docker-compose.local.yml"
+        "docker-compose.yml"
+        "docker-compose.yaml"
+        "compose.yml"
+        "compose.yaml"
+    )
+    local detected_compose=""
+    # Check nested dirs first (more specific = better default)
+    for subdir in apps services; do
+        [[ -d "$REPO_ROOT/$subdir" ]] || continue
+        for app_dir in "$REPO_ROOT/$subdir"/*/; do
+            [[ -d "$app_dir" ]] || continue
+            for candidate in "${compose_candidates[@]}"; do
+                if [[ -f "$app_dir$candidate" ]]; then
+                    detected_compose="${app_dir#"$REPO_ROOT"/}$candidate"
+                    break 3
+                fi
+            done
+        done
+    done
+    # Fall back to root
+    if [[ -z "$detected_compose" ]]; then
+        for candidate in "${compose_candidates[@]}"; do
+            if [[ -f "$REPO_ROOT/$candidate" ]]; then
+                detected_compose="$candidate"
+                break
             fi
         done
     fi
@@ -133,7 +165,11 @@ generate_default_worktreeinclude() {
         echo ''
         echo '[docker]'
         echo 'auto'
-        echo '# file=apps/backend/docker-compose.local.yml'
+        if [[ -n "$detected_compose" ]]; then
+            echo "file=$detected_compose"
+        else
+            echo '# file=apps/backend/docker-compose.local.yml'
+        fi
         echo '# port_offset=10'
     } > "$target"
 
@@ -825,7 +861,10 @@ cmd_create() {
         local file_count
         file_count=$(copy_matched_files "$REPO_ROOT" "$wt_path")
         if [[ "$file_count" -gt 0 ]]; then
-            success "Copied $file_count file(s)"
+            success "Copied $file_count file(s):"
+            for rel in "${MATCHED_FILES[@]+"${MATCHED_FILES[@]}"}"; do
+                echo -e "    ${CYAN}${rel}${NC}"
+            done
         else
             warn "No matching files found to copy"
         fi
@@ -882,6 +921,25 @@ cmd_create() {
     success "Worktree ready!"
     echo ""
     echo -e "${GREEN}cd ${wt_path}${NC}"
+}
+
+cmd_init() {
+    get_repo_info
+    local target="$REPO_ROOT/.worktreeinclude"
+
+    if [[ -f "$target" ]]; then
+        warn ".worktreeinclude already exists: $target"
+        echo ""
+        echo "Edit it and then run 'wt create <branch>'"
+        return 0
+    fi
+
+    generate_default_worktreeinclude
+    echo ""
+    success "Created: $target"
+    echo ""
+    echo "  Edit the file to configure which files to copy, then run:"
+    echo -e "  ${GREEN}wt create <branch>${NC}"
 }
 
 cmd_list() {
@@ -1042,6 +1100,7 @@ cmd_help() {
     echo "Usage: wt <command> [args]"
     echo ""
     echo "Commands:"
+    echo "  init, i                Generate .worktreeinclude (edit before first create)"
     echo "  create, c <branch>     Create worktree with isolation (env, docker, db)"
     echo "  list, ls               List all worktrees for current repo"
     echo "  remove, rm <branch>    Remove worktree (add -d to delete branch too)"
@@ -1053,7 +1112,7 @@ cmd_help() {
     echo "  WT_EDITOR              Default editor (cursor, agy, code)"
     echo ""
     echo "Isolation (.worktreeinclude):"
-    echo "  Auto-generated on first 'wt create' if missing."
+    echo "  Run 'wt init' to generate, or auto-created on first 'wt create'."
     echo "  Controls which files to copy and how to isolate services."
     echo ""
     echo "  Sections:"
@@ -1088,6 +1147,9 @@ main() {
     shift || true
 
     case "$cmd" in
+        init|i)
+            cmd_init "$@"
+            ;;
         create|c)
             cmd_create "$@"
             ;;
