@@ -1,3 +1,25 @@
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│        ___    ____     __ __ __________                          │
+│       /   |  /  _/    / //_//  _/_  __/                         │
+│      / /| |  / /_____/ ,<   / /  / /                            │
+│     / ___ |_/ /_____/ /| |_/ /  / /                             │
+│    /_/  |_/___/    /_/ |_/___/ /_/                              │
+│                                                                 │
+│    Convention packs for any AI coding tool.                      │
+│    by @smicolon                                                  │
+│                                                                 │
+├───────────────┬────────────────┬────────────────┬───────────────┤
+│   28 Agents   │   40 Skills    │  24 Commands   │   15 Tools    │
+├───────────────┴────────────────┴────────────────┴───────────────┤
+│                                                                 │
+│   Django · NestJS · Next.js · Nuxt.js · Hono · Flutter          │
+│   TanStack Router · Better Auth · Architect · Dev Loop          │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
 # @smicolon/ai-kit
 
 **Convention packs for any AI coding tool.** Install agents, skills, commands, rules, and hooks for 15 AI tools including Claude Code, Cursor, Windsurf, Copilot, and more.
@@ -32,6 +54,10 @@ ai-kit add django
 ai-kit add django --skills-only
 ai-kit add django --tools claude-code,cursor
 ```
+
+<p align="center">
+  <img src="public/ai-kit-demo.gif" alt="ai-kit init demo" width="720" />
+</p>
 
 ### Claude Code (native plugin)
 
