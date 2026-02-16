@@ -307,12 +307,13 @@ branch_to_port_offset() {
 }
 
 # Minimal YAML parser: extract host ports from docker-compose services
+# Uses indentation-aware state machine — no exclusion list needed
 # Output format: service_name:host_port:container_port (one per line)
 parse_docker_compose_ports() {
     local compose_file="$1"
     awk '
-    /^[[:space:]]*[a-zA-Z_][a-zA-Z0-9_-]*:/ && !/^\s*-/ && !/ports:/ && !/image:/ && !/container_name:/ {
-        # Top-level or nested service name
+    {
+        # Calculate indent level (number of leading spaces)
         indent = 0
         for (i = 1; i <= length($0); i++) {
             if (substr($0, i, 1) == " ") indent++
@@ -320,27 +321,57 @@ parse_docker_compose_ports() {
         }
         line = $0
         gsub(/^[[:space:]]+/, "", line)
-        gsub(/:.*/, "", line)
-        if (indent <= 4) current_service = line
+        gsub(/[[:space:]]+$/, "", line)
+
+        # Skip blank lines and comments
+        if (line == "" || substr(line, 1, 1) == "#") next
     }
-    /ports:/ {
+
+    # "services:" at indent 0 → enter services block
+    indent == 0 && line == "services:" {
+        in_services = 1
+        next
+    }
+
+    # Any other indent-0 key → leave services block
+    indent == 0 && /^[a-zA-Z]/ {
+        in_services = 0
+        next
+    }
+
+    # Service name = indent-2 key inside services block
+    in_services && indent == 2 && /^[[:space:]]*[a-zA-Z_][a-zA-Z0-9_-]*:/ {
+        svc = line
+        gsub(/:.*/, "", svc)
+        current_service = svc
+        in_ports = 0
+        next
+    }
+
+    # "ports:" at indent 4 inside a service
+    in_services && indent == 4 && line == "ports:" {
         in_ports = 1
         next
     }
-    in_ports && /^[[:space:]]*-[[:space:]]*"?[0-9]/ {
-        line = $0
-        gsub(/^[[:space:]]*-[[:space:]]*/, "", line)
-        gsub(/"/, "", line)
-        gsub(/[[:space:]].*/, "", line)
-        # line is now like "5432:5432" or "8025:8025"
-        split(line, parts, ":")
+
+    # Any other indent-4 key → leave ports
+    in_services && indent == 4 && line != "ports:" {
+        in_ports = 0
+        next
+    }
+
+    # Port entry at indent 6 (list item under ports)
+    in_ports && indent == 6 && /^[[:space:]]*-[[:space:]]*"?[0-9]/ {
+        entry = line
+        gsub(/^-[[:space:]]*/, "", entry)
+        gsub(/"/, "", entry)
+        gsub(/[[:space:]].*/, "", entry)
+        # entry is now like "5432:5432" or "8025:8025"
+        split(entry, parts, ":")
         if (length(parts) >= 2) {
             print current_service ":" parts[1] ":" parts[2]
         }
         next
-    }
-    in_ports && /^[[:space:]]*[^-[:space:]]/ {
-        in_ports = 0
     }
     ' "$compose_file"
 }
