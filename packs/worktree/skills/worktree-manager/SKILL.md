@@ -61,10 +61,10 @@ auto
 - **`auto`**: Suffixes DB_NAME, POSTGRES_DB, DATABASE_URL, COMPOSE_PROJECT_NAME with branch slug
 - **`{{BRANCH}}`**: Template placeholder for custom vars
 
-### Layer 3: `[docker]` — Docker Compose Override
+### Layer 3: `[docker]` — Docker Compose Env Var Isolation
 
-- Generates `docker-compose.worktree.yml` with port offsets
-- Sets `COMPOSE_FILE` and `COMPOSE_PROJECT_NAME` in `.env`
+- Patches compose file with `${WT_PORT_*:-default}` and `${WT_CONTAINER_PREFIX:-default}` syntax
+- Writes port/container env vars + `COMPOSE_PROJECT_NAME` to `.env`
 - Auto-creates databases in running Postgres
 
 ## Auto-Setup Features
@@ -74,7 +74,7 @@ When creating a worktree, the following happens automatically:
 1. **Branch handling**: Creates new branch or checks out existing (local/remote)
 2. **File copying**: Copies files matching `.worktreeinclude` patterns
 3. **Env rewriting**: Suffixes database names and URLs with branch slug
-4. **Docker isolation**: Generates port-offset override, sets compose config
+4. **Docker isolation**: Patches compose with env var interpolation, writes `.env`
 5. **Database creation**: Creates database in running Postgres (idempotent)
 6. **Package manager**: Detects bun/pnpm/yarn/npm from lockfiles
 7. **Dependencies**: Runs install at root (monorepo-aware)
@@ -101,7 +101,7 @@ When user asks about worktrees or parallel development:
 
 **User**: "My worktrees are conflicting on port 5432"
 
-**Response**: The `.worktreeinclude` file's `[docker]` section handles this. With `auto` enabled, `wt create` generates a `docker-compose.worktree.yml` override that offsets all ports. Each worktree gets a deterministic offset based on the branch name. Run `docker compose config` to verify the merged ports.
+**Response**: The `.worktreeinclude` file's `[docker]` section handles this. With `auto` enabled, `wt create` patches your compose file with `${WT_PORT_*:-default}` env var interpolation and writes offset values to `.env`. Each worktree gets a deterministic offset based on the branch name. The compose file defaults still work on main.
 
 **User**: "How do I customize which files are copied to worktrees?"
 

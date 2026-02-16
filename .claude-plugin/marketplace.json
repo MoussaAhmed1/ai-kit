@@ -433,7 +433,7 @@
     },
     {
       "name": "worktree",
-      "version": "0.4.3",
+      "version": "0.5.0",
       "description": "Git worktree manager for parallel development with automatic env copying and dependency installation",
       "source": "./packs/worktree",
       "author": {

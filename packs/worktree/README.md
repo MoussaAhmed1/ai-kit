@@ -7,7 +7,7 @@ Git worktree manager for parallel development with automatic environment isolati
 - **Sibling naming**: `project--branch-name/` convention
 - **`.worktreeinclude`**: Configurable file copying (replaces hardcoded `.env*`)
 - **Env rewriting**: Auto-suffixes DB names, URLs, and compose project names per branch
-- **Docker isolation**: Port-offset overrides so worktrees don't conflict
+- **Docker isolation**: Env var interpolation for ports and container names
 - **Database auto-creation**: Creates Postgres databases for rewritten DB names
 - **Package manager detection**: bun → pnpm → yarn → npm
 - **Monorepo aware**: Detects workspaces, turbo, nx, lerna
@@ -30,7 +30,7 @@ Git worktree manager for parallel development with automatic environment isolati
 # → Creates worktree at ~/code/project--feature-auth/
 # → Copies files per .worktreeinclude (lists each path)
 # → Rewrites DB_NAME, DATABASE_URL with branch suffix
-# → Generates docker-compose.worktree.yml with offset ports + container names
+# → Patches compose file with env var isolation for ports + container names
 # → Creates database in running Postgres
 # → Installs dependencies
 ```
@@ -96,7 +96,7 @@ Branch slug: `feature/auth-v2` → `feature_auth_v2` (lowercase, special chars �
 
 ### `[docker]` — Docker Compose Isolation
 
-Generates a `docker-compose.worktree.yml` override with port offsets:
+Patches your compose file with `${VAR:-default}` interpolation so worktrees use different ports and container names:
 
 - **`auto`**: Auto-detects compose file (`local.yml` → `docker-compose.local.yml` → `docker-compose.yml` → etc.)
 - **`file=path`**: Specify compose file path (supports nested monorepo paths)
@@ -112,13 +112,15 @@ file=apps/backend/docker-compose.local.yml
 
 1. Parses ports and `container_name` from your compose file
 2. Calculates a deterministic offset from branch name (1-100 via `cksum`)
-3. Generates `docker-compose.worktree.yml` next to the original with:
-   - Port offsets (e.g., `5432` → `5443`)
-   - Container name suffixes (e.g., `guardix-redis` → `guardix-redis_feat_auth`)
-4. Sets `COMPOSE_FILE=original.yml:docker-compose.worktree.yml` in `.env` (next to compose file for nested paths)
-5. Sets `COMPOSE_PROJECT_NAME` for volume/network isolation
+3. Patches compose file with env var interpolation (idempotent):
+   - `"8000:8000"` → `"${WT_PORT_DJANGO_8000:-8000}:8000"`
+   - `container_name: guardix-redis` → `container_name: ${WT_CONTAINER_PREFIX:-guardix}-redis`
+4. Writes env vars to `.env` next to compose file:
+   - `WT_PORT_DJANGO_8000=8036` (port + offset)
+   - `WT_CONTAINER_PREFIX=guardix_feat_auth`
+   - `COMPOSE_PROJECT_NAME=myapp_feat_auth`
 
-After setup, `docker compose up -d` in the worktree automatically picks up both files.
+The compose file defaults still work on `main` (no env vars needed). Commit the patched compose file so future worktrees auto-isolate.
 
 **Auto-creates databases** in running Postgres containers (Docker or local). Idempotent — safe to run multiple times.
 

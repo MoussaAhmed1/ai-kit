@@ -4,6 +4,18 @@ All notable changes to worktree will be documented in this file.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-02-16
+
+### Changed
+
+- Docker isolation uses env var interpolation instead of override file
+  - Patches compose file with `${WT_PORT_*:-default}` and `${WT_CONTAINER_PREFIX:-default}` syntax
+  - Writes `WT_PORT_*`, `WT_CONTAINER_PREFIX`, `COMPOSE_PROJECT_NAME` to `.env` next to compose file
+  - No more `docker-compose.worktree.yml` override — works with any `docker compose` invocation (including `-f` flags)
+  - Patched compose file still works on main (defaults kick in when env vars are absent)
+- `wt remove` uses COMPOSE_PROJECT_NAME (not COMPOSE_FILE) for `docker compose down`
+- Port parser handles bind-address ports (e.g., `0.0.0.0:8000:8000`)
+
 ## [0.3.0] - 2026-02-16
 
 ### Added
@@ -29,7 +41,7 @@ All notable changes to worktree will be documented in this file.
 - Auto-generates `.worktreeinclude` with sensible defaults on first `wt create`
 - `[rewrite]` section — auto-suffixes DB_NAME, DATABASE_URL, COMPOSE_PROJECT_NAME per branch
 - `{{BRANCH}}` template support for custom env var rewriting
-- `[docker]` section — generates `docker-compose.worktree.yml` with port offsets
+- `[docker]` section — docker compose isolation with port offsets
 - Deterministic port offset via branch name hash (1-100 range)
 - Custom compose file path via `file=` directive (supports monorepo nested paths)
 - Auto-creates Postgres databases (Docker containers or local)

@@ -70,7 +70,7 @@ Run the worktree manager script:
 1. Loads `.worktreeinclude` (generates default if missing)
 2. Copies files matching glob patterns
 3. Rewrites env vars (DB_NAME, DATABASE_URL, etc.) with branch suffix
-4. Generates `docker-compose.worktree.yml` with port offsets
+4. Patches compose file with env var isolation (ports + container names)
 5. Auto-creates database in running Postgres
 6. Detects package manager (bun → pnpm → yarn → npm)
 7. Runs install at root (monorepo-aware)
