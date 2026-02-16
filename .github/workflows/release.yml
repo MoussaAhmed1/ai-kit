@@ -86,12 +86,14 @@ jobs:
           git commit -m "chore: release packages" || exit 0
           git push
 
-      # Binaries and brew — always run on push to main, independent of changesets
+      # Binaries and brew — only when CLI code changes (changeset present)
       - name: Get version
+        if: steps.check.outputs.has_changesets == 'true'
         id: version
         run: echo "version=$(node -p "require('./packages/cli/package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Build standalone binaries
+        if: steps.check.outputs.has_changesets == 'true'
         working-directory: packages/cli
         run: |
           bun build src/index.ts --compile --target=bun-darwin-arm64 --outfile dist/ai-kit-darwin-arm64
@@ -104,6 +106,7 @@ jobs:
           gzip -k dist/ai-kit-linux-arm64
 
       - name: Create or update GitHub release
+        if: steps.check.outputs.has_changesets == 'true'
         run: |
           VERSION=${{ steps.version.outputs.version }}
           if gh release view "v${VERSION}" >/dev/null 2>&1; then
@@ -126,6 +129,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Homebrew formula
+        if: steps.check.outputs.has_changesets == 'true'
         run: |
           VERSION=${{ steps.version.outputs.version }}
           SHA_DARWIN_ARM64=$(sha256sum packages/cli/dist/ai-kit-darwin-arm64.gz | cut -d' ' -f1)
