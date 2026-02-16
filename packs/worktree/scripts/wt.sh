@@ -539,13 +539,25 @@ setup_docker_isolation() {
     local override_rel="${override_file#"$wt_path"/}"
     success "Generated $override_rel"
 
-    # Set COMPOSE_FILE and COMPOSE_PROJECT_NAME in root .env
-    local root_env="$wt_path/.env"
-    local compose_file_val="${compose_rel}:${override_rel}"
+    # Determine where to write COMPOSE_FILE/.env
+    # If compose is nested (e.g. apps/backend/docker-compose.local.yml), write .env
+    # next to the compose file with relative filenames so `cd apps/backend && docker compose up` works.
+    local compose_dir
+    compose_dir=$(dirname "$compose_rel")
+    local target_env compose_file_val
+    if [[ "$compose_dir" == "." ]]; then
+        # Root-level compose — use full relative paths from root
+        target_env="$wt_path/.env"
+        compose_file_val="${compose_rel}:${override_rel}"
+    else
+        # Nested compose — write .env next to compose file with just filenames
+        target_env="$wt_path/$compose_dir/.env"
+        compose_file_val="$(basename "$compose_rel"):$(basename "$override_rel")"
+    fi
     local project_name="${REPO_NAME}_${branch_slug}"
 
     # Append or update COMPOSE_FILE in .env
-    if [[ -f "$root_env" ]]; then
+    if [[ -f "$target_env" ]]; then
         local tmpfile
         tmpfile=$(mktemp)
         local found_cf=false
@@ -560,13 +572,13 @@ setup_docker_isolation() {
             else
                 printf '%s\n' "$line"
             fi
-        done < "$root_env" > "$tmpfile"
+        done < "$target_env" > "$tmpfile"
         [[ "$found_cf" == false ]] && printf 'COMPOSE_FILE=%s\n' "$compose_file_val" >> "$tmpfile"
         [[ "$found_cpn" == false ]] && printf 'COMPOSE_PROJECT_NAME=%s\n' "$project_name" >> "$tmpfile"
-        mv "$tmpfile" "$root_env"
+        mv "$tmpfile" "$target_env"
     else
-        printf 'COMPOSE_FILE=%s\n' "$compose_file_val" > "$root_env"
-        printf 'COMPOSE_PROJECT_NAME=%s\n' "$project_name" >> "$root_env"
+        printf 'COMPOSE_FILE=%s\n' "$compose_file_val" > "$target_env"
+        printf 'COMPOSE_PROJECT_NAME=%s\n' "$project_name" >> "$target_env"
     fi
 
     # Print port mapping summary
