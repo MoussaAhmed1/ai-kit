@@ -8,14 +8,18 @@ All notable changes to worktree will be documented in this file.
 
 ### Added
 
+- `wt init` command — pre-generates `.worktreeinclude` so you can edit before first `wt create`
 - `{{PORT:N}}` template in `[rewrite]` section — resolves to base port + docker offset (e.g., `{{PORT:8000}}` with offset 11 → `8011`)
-- `compute_port_offset()` runs before env rewriting so port templates resolve in Step 4
+- Default template auto-detects compose file path for `file=` directive
+- File copy report now lists each copied file path
+- Container name isolation — services with explicit `container_name` get suffixed in worktree override
 
 ### Fixed
 
-- Docker compose parser rewrites as indentation-aware state machine — no longer misidentifies `env_file:`, `volumes:`, `depends_on:` as service names
+- Docker compose parser rewritten as indentation-aware state machine — no longer misidentifies `env_file:`, `volumes:`, `depends_on:` as service names
 - `.worktreeinclude` auto-detects monorepo dirs with `.env*` files (apps/, packages/, services/) and uncomments matching patterns
 - Docker `.env` with COMPOSE_FILE is written next to nested compose files (e.g., `apps/backend/.env`) instead of always at root
+- `wt remove` finds COMPOSE_FILE in nested `.env` files for proper `docker compose down`
 
 ## [0.2.0] - 2026-02-15
 

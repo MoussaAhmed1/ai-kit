@@ -22,18 +22,22 @@ Git worktree manager for parallel development with automatic environment isolati
 ## Quick Start
 
 ```bash
+# Generate .worktreeinclude first (optional — auto-created on first wt create)
+/wt init
+
+# Edit .worktreeinclude to match your project, then:
 /wt create feature/auth
 # → Creates worktree at ~/code/project--feature-auth/
-# → Copies files per .worktreeinclude
+# → Copies files per .worktreeinclude (lists each path)
 # → Rewrites DB_NAME, DATABASE_URL with branch suffix
-# → Generates docker-compose.worktree.yml with offset ports
+# → Generates docker-compose.worktree.yml with offset ports + container names
 # → Creates database in running Postgres
 # → Installs dependencies
 ```
 
 ## `.worktreeinclude`
 
-Auto-generated on first `wt create` if missing. Commit this file so your team shares the same config.
+Run `wt init` to generate, or auto-created on first `wt create`. Commit this file so your team shares the same config.
 
 ```ini
 # .worktreeinclude — Files to copy to new worktrees
@@ -106,17 +110,28 @@ file=apps/backend/docker-compose.local.yml
 
 **How it works:**
 
-1. Parses ports from your compose file
+1. Parses ports and `container_name` from your compose file
 2. Calculates a deterministic offset from branch name (1-100 via `cksum`)
-3. Generates `docker-compose.worktree.yml` next to the original
-4. Sets `COMPOSE_FILE=original.yml:docker-compose.worktree.yml` in `.env`
-5. Sets `COMPOSE_PROJECT_NAME` for container/volume/network isolation
+3. Generates `docker-compose.worktree.yml` next to the original with:
+   - Port offsets (e.g., `5432` → `5443`)
+   - Container name suffixes (e.g., `guardix-redis` → `guardix-redis_feat_auth`)
+4. Sets `COMPOSE_FILE=original.yml:docker-compose.worktree.yml` in `.env` (next to compose file for nested paths)
+5. Sets `COMPOSE_PROJECT_NAME` for volume/network isolation
 
 After setup, `docker compose up -d` in the worktree automatically picks up both files.
 
 **Auto-creates databases** in running Postgres containers (Docker or local). Idempotent — safe to run multiple times.
 
 ## Usage
+
+### Initialize Config
+
+```bash
+/wt init    # generates .worktreeinclude with auto-detected settings
+/wt i       # short form
+```
+
+Auto-detects monorepo dirs with `.env*` files and compose file paths. Edit the generated file before creating worktrees.
 
 ### Create Worktree
 
