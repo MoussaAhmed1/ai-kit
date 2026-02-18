@@ -1,6 +1,6 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "Official marketplace for Smicolon development standards - 14 plugins with 29 agents, 43 skills, Infisical secret management, TanStack SPA, Better Auth, onboarding, and TDD dev loops",
   "license": "MIT",
   "metadata": {
@@ -492,7 +492,7 @@
     },
     {
       "name": "infisical",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Infisical secret management with 1 agent, 3 auto-enforcing skills, and CI/CD integration for cloud and self-hosted instances",
       "source": "./packs/infisical",
       "author": {
