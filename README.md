@@ -11,11 +11,11 @@
 │    by @smicolon                                                  │
 │                                                                 │
 ├───────────────┬────────────────┬────────────────┬───────────────┤
-│   28 Agents   │   40 Skills    │  24 Commands   │   15 Tools    │
+│   29 Agents   │   43 Skills    │  29 Commands   │   15 Tools    │
 ├───────────────┴────────────────┴────────────────┴───────────────┤
 │                                                                 │
 │   Django · NestJS · Next.js · Nuxt.js · Hono · Flutter          │
-│   TanStack Router · Better Auth · Architect · Dev Loop          │
+│   TanStack Router · Better Auth · Infisical · Architect         │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -24,7 +24,7 @@
 
 **Convention packs for any AI coding tool.** Install agents, skills, commands, rules, and hooks for 15 AI tools including Claude Code, Cursor, Windsurf, Copilot, and more.
 
-13 packs for Django, NestJS, Next.js, Nuxt.js, Hono, TanStack Router, Better Auth, Flutter, system architecture, dev loops, failure memory, worktree management, and engineer onboarding.
+14 packs for Django, NestJS, Next.js, Nuxt.js, Hono, TanStack Router, Better Auth, Infisical, Flutter, system architecture, dev loops, failure memory, worktree management, and engineer onboarding.
 
 ---
 
@@ -71,14 +71,14 @@ ai-kit add django --tools claude-code,cursor
 /plugin install tanstack-router # TanStack SPA (3 agents)
 
 # Or install everything
-/plugin install django nestjs nextjs nuxtjs hono tanstack-router better-auth flutter architect dev-loop failure-log onboard
+/plugin install django nestjs nextjs nuxtjs hono tanstack-router better-auth infisical flutter architect dev-loop failure-log onboard
 ```
 
 ---
 
 ## Table of Contents
 
-- [13 Available Plugins](#13-available-plugins)
+- [14 Available Plugins](#14-available-plugins)
 - [What You Get](#what-you-get)
 - [Installation Methods](#installation-methods)
 - [Usage Examples](#usage-examples)
@@ -91,7 +91,7 @@ ai-kit add django --tools claude-code,cursor
 
 ---
 
-## 13 Available Plugins
+## 14 Available Plugins
 
 ### 🐍 django (5 agents, 3 commands, 8 skills)
 
@@ -373,6 +373,32 @@ Better Auth authentication integration
 
 - Better Auth MCP server for documentation access
 
+### 🔐 infisical (1 agent, 5 commands, 3 skills)
+
+Infisical secret management for cloud and self-hosted instances
+
+```bash
+/plugin install infisical
+```
+
+**Agent:**
+
+- `@infisical-ops` - Secret management operations, auth configuration, CLI guidance, CI/CD integration
+
+**Commands:**
+
+- `/infisical-init` - Initialize project with Infisical (install CLI, configure workspace)
+- `/infisical-auth` - Configure authentication (user, machine, or CI context)
+- `/infisical-scan` - Scan codebase for exposed secrets and hardcoded credentials
+- `/infisical-env-sync` - Export/sync secrets to .env files or other formats
+- `/infisical-ci-setup` - Generate CI/CD pipeline configs (GitHub, GitLab, CircleCI, Jenkins, Bitbucket)
+
+**Skills (Auto-Enforcing):**
+
+- `infisical-patterns` - Secret naming, folder organization, auth selection, local dev workflows
+- `infisical-ci-integration` - CI/CD pipeline secret injection patterns
+- `secret-hygiene` - Detects hardcoded secrets, enforces .env best practices
+
 ### 🚀 onboard (1 agent, 1 command, 1 skill)
 
 Intelligent engineer onboarding with personalized guidance
@@ -397,7 +423,7 @@ Intelligent engineer onboarding with personalized guidance
 
 ## What You Get
 
-### Specialized Agents (28 total)
+### Specialized Agents (29 total)
 
 Each plugin includes agents specialized for that tech stack with deep knowledge of:
 
@@ -407,7 +433,7 @@ Each plugin includes agents specialized for that tech stack with deep knowledge 
 - Security requirements
 - Performance optimization
 
-### Auto-Enforcing Skills (40 total)
+### Auto-Enforcing Skills (43 total)
 
 Skills automatically activate based on context:
 
@@ -422,9 +448,10 @@ Skills automatically activate based on context:
 - **Edge Framework Patterns** - Hono, Cloudflare bindings, RPC
 - **TanStack Ecosystem** - Router, Query, Form, Table, Virtual
 - **Authentication Patterns** - Better Auth, OAuth, sessions
+- **Secret Management** - Infisical patterns, CI integration, secret hygiene
 - **Mobile Development** - Flutter architecture, Fastlane, store publishing
 
-### Interactive Commands (24 total)
+### Interactive Commands (29 total)
 
 Slash commands provide step-by-step interactive workflows:
 
@@ -452,6 +479,11 @@ Slash commands provide step-by-step interactive workflows:
 - `/fastlane-setup` - Initialize Fastlane
 - `/signing-setup` - Configure code signing
 - `/auth-setup` - Initialize Better Auth
+- `/infisical-init` - Initialize Infisical workspace
+- `/infisical-auth` - Configure auth method
+- `/infisical-scan` - Scan for exposed secrets
+- `/infisical-env-sync` - Sync secrets to .env
+- `/infisical-ci-setup` - Generate CI/CD pipeline configs
 
 ### Multi-Agent Workflows
 
@@ -754,7 +786,8 @@ ai-kit/
 │   ├── dev-loop/                 # 3 commands, 1 skill, 1 hook
 │   ├── failure-log/              # 2 commands, 1 skill, 1 hook
 │   ├── worktree/                 # 1 command, 1 skill
-│   └── onboard/                  # 1 agent, 1 command, 1 skill
+│   ├── onboard/                  # 1 agent, 1 command, 1 skill
+│   └── infisical/                # 1 agent, 5 commands, 3 skills
 ├── workflows/                    # Multi-agent orchestration workflows
 └── .github/workflows/            # CI + release (changesets → npm)
 ```
