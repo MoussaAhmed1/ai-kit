@@ -1,5 +1,11 @@
 # @smicolon/ai-kit
 
+## 0.4.2
+
+### Patch Changes
+
+- 43400aa: Add infisical plugin to README documentation with agent, commands, skills, and updated counts
+
 ## 0.4.1
 
 ### Patch Changes
