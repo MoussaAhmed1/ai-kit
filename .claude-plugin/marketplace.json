@@ -1,10 +1,10 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.6.5",
-  "description": "Official marketplace for Smicolon development standards - 13 plugins with 28 agents, 40 skills, TanStack SPA, Better Auth, onboarding, and TDD dev loops",
+  "version": "2.7.0",
+  "description": "Official marketplace for Smicolon development standards - 14 plugins with 29 agents, 43 skills, Infisical secret management, TanStack SPA, Better Auth, onboarding, and TDD dev loops",
   "license": "MIT",
   "metadata": {
-    "description": "Official marketplace for Smicolon development standards - 13 plugins with 28 specialized agents, 40 auto-enforcing skills, intelligent engineer onboarding, TanStack Router SPA development, Better Auth integration, Hono Edge framework, Flutter mobile, git worktree management, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Hono, Flutter, TanStack, and system architecture"
+    "description": "Official marketplace for Smicolon development standards - 14 plugins with 29 specialized agents, 43 auto-enforcing skills, Infisical secret management, intelligent engineer onboarding, TanStack Router SPA development, Better Auth integration, Hono Edge framework, Flutter mobile, git worktree management, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Hono, Flutter, TanStack, and system architecture"
   },
   "owner": {
     "name": "Smicolon Development Team",
@@ -488,6 +488,46 @@
       ],
       "skills": [
         "./skills/onboard-context-provider/SKILL.md"
+      ]
+    },
+    {
+      "name": "infisical",
+      "version": "0.1.0",
+      "description": "Infisical secret management with 1 agent, 3 auto-enforcing skills, and CI/CD integration for cloud and self-hosted instances",
+      "source": "./packs/infisical",
+      "author": {
+        "name": "Smicolon",
+        "email": "dev@smicolon.com",
+        "url": "https://github.com/smicolon"
+      },
+      "homepage": "https://github.com/smicolon/ai-kit",
+      "repository": "https://github.com/smicolon/ai-kit",
+      "license": "MIT",
+      "category": "devops",
+      "keywords": [
+        "infisical",
+        "secrets",
+        "secret-management",
+        "env",
+        "dotenv",
+        "ci-cd",
+        "devops",
+        "security"
+      ],
+      "agents": [
+        "./agents/infisical-ops.md"
+      ],
+      "commands": [
+        "./commands/infisical-init.md",
+        "./commands/infisical-auth.md",
+        "./commands/infisical-scan.md",
+        "./commands/infisical-env-sync.md",
+        "./commands/infisical-ci-setup.md"
+      ],
+      "skills": [
+        "./skills/infisical-patterns/SKILL.md",
+        "./skills/infisical-ci-integration/SKILL.md",
+        "./skills/secret-hygiene/SKILL.md"
       ]
     }
   ]
