@@ -42,45 +42,63 @@ stripe.secret.key    # dotted
 
 ## Folder Organization
 
-Organize secrets into logical folders:
+Organize secrets by **consumer/service** so each folder maps directly to an `infisical run --path=` invocation and machine identity scope.
+
+### Pattern A: By Consumer/Service (Recommended)
+
+Best for multi-service projects. Each service gets exactly the secrets it needs via `--path`.
+
+```
+/ (root)                → Shared secrets (DATABASE_URL, REDIS_URL)
+├── /backend            → Backend-only (JWT_SECRET, INTERNAL_API_KEY, SENTRY_DSN)
+├── /frontend           → Frontend-only (NEXT_PUBLIC_API_URL, NEXT_PUBLIC_STRIPE_KEY)
+├── /mobile             → Mobile-only (PUSH_NOTIFICATION_KEY, DEEP_LINK_SECRET)
+└── /ci                 → CI/CD-only (DEPLOY_KEY, DOCKER_TOKEN, CODECOV_TOKEN)
+```
+
+Why this works:
+- `infisical run --path=/backend` injects root secrets + `/backend` secrets — exactly what backend needs
+- Machine identities scoped to `/backend` can't read `/ci` secrets
+- Maps to team ownership and deployment targets
+
+```bash
+# Backend gets shared + backend-only secrets
+infisical run --env=production --path=/backend -- node server.js
+
+# Frontend gets shared + frontend-only secrets
+infisical run --env=production --path=/frontend -- npm run build
+
+# CI gets shared + CI-only secrets
+infisical run --env=production --path=/ci -- ./deploy.sh
+
+# Set a secret in a service folder
+infisical secrets set JWT_SECRET=supersecret --env=production --path=/backend
+
+# List secrets for a specific service
+infisical secrets --env=production --path=/backend
+```
+
+### Pattern B: By Function/Type (Single-service only)
+
+Acceptable for monoliths where everything runs as one process. All folders collapse under `--path=/` since the single service needs all secrets anyway.
 
 ```
 / (root)
-├── DATABASE_URL
-├── REDIS_URL
-├── APP_SECRET_KEY
-├── /database
-│   ├── DB_HOST
-│   ├── DB_PORT
-│   ├── DB_NAME
-│   ├── DB_USER
-│   └── DB_PASSWORD
-├── /api-keys
-│   ├── STRIPE_SECRET_KEY
-│   ├── SENDGRID_API_KEY
-│   └── TWILIO_AUTH_TOKEN
-├── /auth
-│   ├── JWT_SECRET
-│   ├── OAUTH_GOOGLE_CLIENT_ID
-│   ├── OAUTH_GOOGLE_CLIENT_SECRET
-│   └── SESSION_SECRET
-└── /third-party
-    ├── SENTRY_DSN
-    ├── DATADOG_API_KEY
-    └── SLACK_WEBHOOK_URL
+├── /database           → DB_HOST, DB_PASSWORD
+├── /api-keys           → STRIPE_KEY, SENDGRID_KEY
+├── /auth               → JWT_SECRET, SESSION_SECRET
 ```
 
-Access secrets from folders:
-```bash
-# List folder secrets
-infisical secrets --env=production --path=/database
+Note: `infisical run --path=/database` only injects `/database` secrets, not `/api-keys` or `/auth`. For a service needing all of them, use `--path=/` which makes the folders purely organizational.
 
-# Set secret in folder
-infisical secrets set DB_HOST=db.internal --env=production --path=/database
+### When to Choose
 
-# Run with folder secrets included
-infisical run --env=production --path=/ -- npm start
-```
+| Scenario | Pattern | Reason |
+|----------|---------|--------|
+| Multiple services (API + web + mobile) | By consumer | Each service uses `--path=/service` |
+| Microservices | By consumer | Per-service machine identity scoping |
+| Monolith / single process | By function | One `--path=/` anyway, folders are just organization |
+| Monorepo with shared infra | By consumer | Map folders to deployment targets |
 
 ## Local Development Pattern
 

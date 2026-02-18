@@ -126,8 +126,8 @@ infisical run -- npm start
 # Run with specific environment
 infisical run --env=production -- node server.js
 
-# Run with specific path
-infisical run --env=production --path=/api -- ./start.sh
+# Run with specific service path
+infisical run --env=production --path=/backend -- ./start.sh
 
 # Run with secret overrides
 infisical run --env=production -- docker compose up
@@ -278,22 +278,28 @@ infisical run -- npm start
 
 ## Project Hierarchy
 
+Folders are organized by **consumer/service** so each maps to an `infisical run --path=` invocation:
+
 ```
 Organization
   └── Project (workspace)
        ├── Environment: dev
-       │     ├── / (root secrets)
-       │     ├── /database
-       │     └── /api-keys
+       │     ├── / (root — shared secrets: DATABASE_URL, REDIS_URL)
+       │     ├── /backend   (JWT_SECRET, INTERNAL_API_KEY)
+       │     └── /frontend  (NEXT_PUBLIC_API_URL)
        ├── Environment: staging
-       │     ├── / (root secrets)
-       │     └── /database
+       │     ├── / (root — shared secrets)
+       │     ├── /backend
+       │     └── /frontend
        └── Environment: production
-             ├── / (root secrets)
-             ├── /database
-             ├── /api-keys
-             └── /third-party
+             ├── / (root — shared secrets)
+             ├── /backend
+             ├── /frontend
+             ├── /mobile
+             └── /ci
 ```
+
+Each service runs with `--path=/service` to get root + service-specific secrets. Machine identities are scoped to specific paths (e.g., CI identity only has access to `/ci`).
 
 ## Deliverables
 

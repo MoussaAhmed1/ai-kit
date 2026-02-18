@@ -75,21 +75,17 @@ STRIPE_SECRET_KEY
 AWS_ACCESS_KEY_ID
 ```
 
-### Folder Organization
+### Folder Organization (By Consumer/Service)
 
 ```
-/ (root)
-├── DATABASE_URL
-├── /database
-│   ├── DB_HOST
-│   └── DB_PASSWORD
-├── /api-keys
-│   ├── STRIPE_SECRET_KEY
-│   └── SENDGRID_API_KEY
-└── /auth
-    ├── JWT_SECRET
-    └── SESSION_SECRET
+/ (root)              → Shared secrets (DATABASE_URL, REDIS_URL)
+├── /backend          → Backend-only (JWT_SECRET, SENTRY_DSN)
+├── /frontend         → Frontend-only (NEXT_PUBLIC_API_URL)
+├── /mobile           → Mobile-only (PUSH_NOTIFICATION_KEY)
+└── /ci               → CI/CD-only (DEPLOY_KEY, DOCKER_TOKEN)
 ```
+
+Each service uses `infisical run --path=/service` to get root + its folder secrets.
 
 ### Runtime Injection (Preferred)
 
