@@ -35,8 +35,11 @@ jobs:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Upgrade npm for trusted publishing
-        run: npm install -g npm@latest
+      - name: Enable corepack and install fresh npm
+        run: |
+          corepack enable
+          corepack prepare npm@11.4.2 --activate
+          npm --version
 
       - name: Auto-bump plugin patch versions
         id: autobump
