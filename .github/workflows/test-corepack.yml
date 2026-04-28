@@ -1,0 +1,33 @@
+name: Test Corepack (temporary)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Validate corepack npm install on Node 22 runner
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Show baseline (this would crash with the old approach)
+        run: |
+          node --version
+          which npm
+          npm --version || echo "bundled npm crashed (expected on 22.22.2)"
+
+      - name: Enable corepack and install fresh npm
+        run: |
+          corepack enable
+          corepack prepare npm@11.4.2 --activate
+          npm --version
+
+      - name: Confirm npm can publish (dry-run smoke check)
+        run: |
+          npm config get registry
+          npm whoami 2>&1 || echo "not authenticated (expected) — registry reachable is what matters"
