@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smicolon.com/schemas/clarify/execution-context-v1.json",
+  "title": "ClarifyExecutionContext",
+  "description": "Canonical machine-readable execution context produced by the clarify pack. Consumed by downstream packs (dev-loop, failure-log) and by humans via the .local.md sibling.",
+  "type": "object",
+  "required": ["task", "entity", "trigger", "action", "flow", "failure_handling", "out_of_scope", "metadata"],
+  "additionalProperties": false,
+  "properties": {
+    "task": {
+      "type": "object",
+      "required": ["title", "slug"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "source": { "type": ["string", "null"], "description": "Ticket reference (e.g. ENG-123) or null for free-text input" },
+        "slug": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 60 }
+      }
+    },
+    "entity": {
+      "type": "string",
+      "description": "Primary domain entity the task acts on (User, Tenant, Order, etc.)"
+    },
+    "trigger": {
+      "type": "object",
+      "required": ["event", "timing"],
+      "additionalProperties": false,
+      "properties": {
+        "event": { "type": "string", "description": "Specific event name (e.g. user.signed_in, order.created)" },
+        "timing": { "type": "string", "enum": ["before", "after", "on"] },
+        "preconditions": { "type": "array", "items": { "type": "string" }, "default": [] }
+      }
+    },
+    "action": {
+      "type": "object",
+      "required": ["verb", "channel", "recipient"],
+      "additionalProperties": false,
+      "properties": {
+        "verb": { "type": "string", "description": "send, notify, sync, dispatch, log, etc." },
+        "channel": { "type": "string", "description": "email, in-app, push, sms, slack, webhook, etc." },
+        "recipient": { "type": "string", "description": "Who receives the action (e.g. signing-in user, tenant owner, #engineering)" }
+      }
+    },
+    "flow": {
+      "type": "object",
+      "required": ["services", "mode"],
+      "additionalProperties": false,
+      "properties": {
+        "services": { "type": "array", "items": { "type": "string" }, "description": "Real services involved (e.g. auth-service, notification-service)" },
+        "mode": { "type": "string", "enum": ["sync", "async"] },
+        "transport": { "type": ["string", "null"], "description": "queue, http, websocket, etc., or null for in-process" }
+      }
+    },
+    "failure_handling": {
+      "type": "object",
+      "required": ["strategy", "details"],
+      "additionalProperties": false,
+      "properties": {
+        "strategy": { "type": "string", "enum": ["retry", "silent", "block", "escalate"] },
+        "details": { "type": "string", "description": "Concrete policy (e.g. '3 attempts with exponential backoff, then log to failure-log')" }
+      }
+    },
+    "out_of_scope": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Adjacent flows explicitly NOT covered by this clarification"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["created_at", "created_by"],
+      "additionalProperties": false,
+      "properties": {
+        "created_at": { "type": "string", "format": "date-time" },
+        "created_by": { "type": "string", "description": "clarify@<version>" }
+      }
+    }
+  }
+}
