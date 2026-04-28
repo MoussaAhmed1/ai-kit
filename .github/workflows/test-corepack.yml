@@ -1,7 +1,8 @@
 name: Test Corepack (temporary)
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [fix/release-npm-corepack]
 
 jobs:
   test:
