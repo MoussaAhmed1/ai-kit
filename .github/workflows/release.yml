@@ -36,7 +36,10 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       - name: Upgrade npm for trusted publishing
-        run: npm install -g npm@latest
+        # Install v10.9.8 first as workaround for nodejs/node#62425
+        run: |
+          npm install -g npm@10.9.8
+          npm install -g npm@latest
 
       - name: Auto-bump plugin patch versions
         id: autobump
