@@ -1,6 +1,6 @@
 {
   "name": "smicolon-marketplace",
-  "version": "2.9.1",
+  "version": "2.9.2",
   "description": "Official marketplace for Smicolon development standards - 16 plugins with 30 agents, 46 skills, four-axis React/Next.js branch review, pre-implementation clarification, Infisical secret management, TanStack SPA, Better Auth, onboarding, and TDD dev loops",
   "metadata": {
     "description": "Official marketplace for Smicolon development standards - 16 plugins with 30 specialized agents, 46 auto-enforcing skills, four-axis React/Next.js branch review (architecture, performance, accessibility, UI), pre-implementation flow clarification, Infisical secret management, intelligent engineer onboarding, TanStack Router SPA development, Better Auth integration, Hono Edge framework, Flutter mobile, git worktree management, persistent failure memory, and TDD-based dev loops for Django, NestJS, Next.js, Nuxt.js, Hono, Flutter, TanStack, and system architecture"
@@ -202,7 +202,7 @@
     },
     {
       "name": "architect",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "description": "System architecture, diagram-as-code with Eraser.io, and code explanation",
       "source": "./packs/architect",
       "author": {
