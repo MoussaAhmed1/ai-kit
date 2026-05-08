@@ -202,8 +202,8 @@
     },
     {
       "name": "architect",
-      "version": "1.0.0",
-      "description": "System architecture and diagram-as-code with Eraser.io integration",
+      "version": "1.1.0",
+      "description": "System architecture, diagram-as-code with Eraser.io, and code explanation",
       "source": "./packs/architect",
       "author": {
         "name": "Smicolon",
@@ -220,13 +220,16 @@
         "eraser",
         "erd",
         "flowchart",
-        "cloud-architecture"
+        "cloud-architecture",
+        "explain",
+        "code-comprehension"
       ],
       "agents": [
         "./agents/system-architect.md"
       ],
       "commands": [
-        "./commands/diagram-create.md"
+        "./commands/diagram-create.md",
+        "./commands/explain-code.md"
       ]
     },
     {

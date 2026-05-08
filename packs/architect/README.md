@@ -18,6 +18,11 @@ Smicolon company standards for system architecture and diagram-as-code.
 
 - `@system-architect` - Eraser.io diagram-as-code specialist
 
+### 2 Slash Commands
+
+- `/diagram-create` - Generate Eraser.io diagrams (ERD, flowchart, cloud, sequence, BPMN)
+- `/explain-code [target]` - Explain code with an analogy, ASCII diagram, walkthrough, architecture context, gotchas, and a tiny example. Optional target can be a file path, symbol, or concept.
+
 ### Supported Diagram Types
 
 The agent can create:
@@ -43,6 +48,11 @@ All diagrams are generated as code using Eraser.io syntax.
 
 # Business process
 @system-architect "Create BPMN diagram for order fulfillment process"
+
+# Explain code with diagram + walkthrough
+/explain-code packs/architect/commands/diagram-create.md
+/explain-code useAuth hook
+/explain-code "React Suspense boundaries"
 ```
 
 ## Output

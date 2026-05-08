@@ -8,6 +8,12 @@ All notable changes to the smi-architect plugin will be documented in this file.
 - Renamed from `smi-architect` to `architect` as part of ai-kit migration
 - Moved from `plugins/smi-architect/` to `packs/architect/`
 
+## [1.1.0] - 2026-05-08
+
+### Added
+- New command `/explain-code` — explains code with an analogy, ASCII diagram, execution walkthrough, architecture context, gotchas, perf/security notes, and a tiny example
+- Optional argument support: `/explain-code <file path | symbol | concept>` to scope the explanation; bare invocation explains the most recently discussed code
+
 ## [1.0.0] - 2024-12-01
 
 ### Added
