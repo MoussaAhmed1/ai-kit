@@ -1,5 +1,11 @@
 # @smicolon/ai-kit
 
+## 0.5.0
+
+### Minor Changes
+
+- e80e01a: Add react-review pack: four-axis branch review commands (/review-arch, /review-perf, /review-a11y, /review-ui) for React and Next.js codebases. Review-only, produces inline comments, prioritized summaries, and action checklists.
+
 ## 0.4.2
 
 ### Patch Changes
